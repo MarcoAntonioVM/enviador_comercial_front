@@ -15,6 +15,7 @@ import {
     X
 } from 'lucide-react';
 import { paths } from '../../routes/paths';
+import { useLogout } from '@/features/auth';
 
 const menuItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: paths.DASHBOARD },
@@ -35,10 +36,10 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
     const location = useLocation();
+    const { mutate: logout, isPending: isLoggingOut } = useLogout();
 
     const handleLogout = () => {
-        localStorage.removeItem('auth');
-        window.location.href = '/login';
+        logout();
     };
 
     return (
@@ -100,7 +101,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
                     <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-gray-200 bg-gray-50">
                         <button
                             onClick={handleLogout}
-                            className="flex items-center w-full px-3 py-2 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors group"
+                            disabled={isLoggingOut}
+                            className="flex items-center w-full px-3 py-2 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <LogOut className="w-5 h-5 text-gray-500 group-hover:text-gray-900 transition-colors" />
                             <span className="ms-3">Cerrar sesión</span>
