@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+.p-toast,
+.p-toast * {
+  box-sizing: border-box;
+}
