@@ -3,6 +3,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { AuthLayout } from '../layouts/AuthLayout';
 import { LoginPage } from '../features/auth/pages/LoginPage';
+import { ForgotPasswordPage } from '../features/auth/pages/ForgotPasswordPage';
+import { ResetPasswordPage } from '../features/auth/pages/ResetPasswordPage';
 import { DashboardHome } from '../pages/DashboardHome';
 import { CampaignsPage } from '../features/campaigns/pages/CampaignsPage';
 import { ProspectsPage } from '../features/prospects/pages/ProspectsPage';
@@ -19,6 +21,8 @@ export const AppRoutes: React.FC = () => {
         <Routes>
             <Route element={<AuthLayout />}>
                 <Route path={paths.LOGIN} element={<LoginPage />} />
+                <Route path={paths.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
+                <Route path={paths.RESET_PASSWORD} element={<ResetPasswordPage />} />
             </Route>
 
             <Route element={<DashboardLayout />}>
