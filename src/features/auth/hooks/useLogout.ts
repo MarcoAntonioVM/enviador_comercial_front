@@ -10,15 +10,15 @@ export const useLogout = () => {
     return useMutation({
         mutationFn: () => authService.logout(),
         onSuccess: () => {
-            // Limpiar token
-            localStorage.removeItem('token');
+            // Limpiar todo el localStorage (token, user, etc.)
+            localStorage.clear();
             // Invalidar queries del usuario
             queryClient.removeQueries({ queryKey: ['me'] });
             navigate(paths.LOGIN);
         },
         onError: () => {
             // Aunque falle el logout en el server, limpiamos localmente
-            localStorage.removeItem('token');
+            localStorage.clear();
             queryClient.removeQueries({ queryKey: ['me'] });
             navigate(paths.LOGIN);
         },
