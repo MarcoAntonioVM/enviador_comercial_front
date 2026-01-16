@@ -4,7 +4,7 @@ export type { User, LoginPayload, LoginResponse, AuthState } from './auth.types'
 // Hooks
 export { useLogin } from './hooks/useLogin';
 export { useLogout } from './hooks/useLogout';
-export { useMe } from './hooks/useMe';
+// `useMe` está comentado/not implemented. Se removió la re-exportación para evitar errores de import.
 
 // Schemas
 export { loginSchema, forgotPasswordSchema, resetPasswordSchema } from './auth.schema';
