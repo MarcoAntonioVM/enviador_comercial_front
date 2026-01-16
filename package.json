@@ -14,6 +14,8 @@
     "@tanstack/react-query": "^5.90.18",
     "clsx": "^2.1.1",
     "lucide-react": "^0.562.0",
+    "primeicons": "^7.0.0",
+    "primereact": "^10.9.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.71.1",
