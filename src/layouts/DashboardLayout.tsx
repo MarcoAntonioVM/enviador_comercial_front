@@ -3,10 +3,11 @@ import { Outlet, Navigate } from 'react-router-dom';
 import { Sidebar, SidebarToggle } from '../components/Sidebar/Sidebar';
 
 export const DashboardLayout: React.FC = () => {
-    const isAuthenticated = localStorage.getItem('auth') === 'true';
+    const token = localStorage.getItem('token');
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    if (!isAuthenticated) {
+    // Si no está autenticado, redirigir al login
+    if (!token) {
         return <Navigate to="/login" replace />;
     }
 

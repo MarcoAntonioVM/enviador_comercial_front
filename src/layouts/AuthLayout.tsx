@@ -2,9 +2,10 @@ import React from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 
 export const AuthLayout: React.FC = () => {
-    const isAuthenticated = localStorage.getItem('auth') === 'true';
+    const token = localStorage.getItem('token');
 
-    if (isAuthenticated) {
+    // Si ya está autenticado, redirigir al dashboard
+    if (token) {
         return <Navigate to="/" replace />;
     }
 
