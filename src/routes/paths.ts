@@ -1,5 +1,9 @@
 export const paths = {
+    // Auth
     LOGIN: '/login',
+    FORGOT_PASSWORD: '/forgot-password',
+    RESET_PASSWORD: '/reset-password',
+    // Dashboard
     DASHBOARD: '/',
     CAMPAIGNS: '/campaigns',
     PROSPECTS: '/prospects',
