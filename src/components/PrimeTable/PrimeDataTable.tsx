@@ -62,7 +62,7 @@ export const PrimeDataTable: React.FC<PrimeDataTableProps> = ({
                     <Column key={col.field} field={col.field} header={col.header} body={col.body} style={col.style} />
                 ))}
 
-                {showActions && <Column header="Actions" body={actionsBody} style={{ width: '120px' }} />}
+                {showActions && <Column header="Acciones" body={actionsBody} style={{ width: '120px' }} />}
             </DataTable>
         </div>
     );

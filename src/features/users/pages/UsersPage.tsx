@@ -34,22 +34,22 @@ export const UsersPage: React.FC = () => {
 
     const columns: PrimeColumn[] = [
         { field: 'id', header: 'ID' },
-        { field: 'name', header: 'Name' },
-        { field: 'email', header: 'Email' },
-        { field: 'role', header: 'Role' },
-        { field: 'status', header: 'Status' },
+        { field: 'name', header: 'Nombre' },
+        { field: 'email', header: 'Correo Electrónico' },
+        { field: 'role', header: 'Rol' },
+        { field: 'status', header: 'Estado' },
         {
             field: 'createdAt',
-            header: 'Created At',
+            header: 'Fecha de creación',
             body: (rowData: any) => new Date(rowData.createdAt).toLocaleDateString(),
         },
-        // actions handled by PrimeDataTable via onEdit / onDelete
+        // acciones manejadas por PrimeDataTable vía onEdit / onDelete
     ];
 
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-4">Users</h1>
+            <h1 className="text-2xl font-bold mb-4">Usuarios</h1>
 
             <div className="card bg-white p-6 rounded-lg shadow-sm">
                 <div className="flex items-center justify-between mb-4">
