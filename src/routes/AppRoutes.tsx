@@ -8,6 +8,7 @@ import { ResetPasswordPage } from '../features/auth/pages/ResetPasswordPage';
 import { DashboardHome } from '../pages/DashboardHome';
 import { CampaignsPage } from '../features/campaigns/pages/CampaignsPage';
 import { ProspectsPage } from '../features/prospects/pages/ProspectsPage';
+import ProspectFormPage from '../features/prospects/pages/ProspectFormPage';
 import { TemplatesPage } from '../features/templates/pages/TemplatesPage';
 import { SendersPage } from '../features/senders/pages/SendersPage';
 import { DocumentsPage } from '../features/documents/pages/DocumentsPage';
@@ -31,6 +32,8 @@ export const AppRoutes: React.FC = () => {
                 <Route path={paths.DASHBOARD} element={<DashboardHome />} />
                 <Route path={paths.CAMPAIGNS} element={<CampaignsPage />} />
                 <Route path={paths.PROSPECTS} element={<ProspectsPage />} />
+                <Route path={paths.PROSPECTS_NEW} element={<ProspectFormPage />} />
+                <Route path={paths.PROSPECTS_EDIT} element={<ProspectFormPage />} />
                 <Route path={paths.SECTORS} element={<SectorsPage />} />
                 <Route path={paths.TEMPLATES} element={<TemplatesPage />} />
                 <Route path={paths.SENDERS} element={<SendersPage />} />

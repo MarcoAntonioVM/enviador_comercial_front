@@ -7,6 +7,8 @@ export const paths = {
     DASHBOARD: '/',
     CAMPAIGNS: '/campaigns',
     PROSPECTS: '/prospects',
+    PROSPECTS_NEW: '/prospects/new',
+    PROSPECTS_EDIT: '/prospects/edit/:id',
     TEMPLATES: '/templates',
     SENDERS: '/senders',
     DOCUMENTS: '/documents',
