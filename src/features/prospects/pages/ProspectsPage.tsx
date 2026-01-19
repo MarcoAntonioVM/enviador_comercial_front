@@ -1,8 +1,10 @@
 import React from 'react';
 import PrimeDataTable, { type PrimeColumn } from '@/components/PrimeTable/PrimeDataTable';
-import prospects from '@/data/prospects';
+import { prospects } from '@/data/prospects';
 import { Button } from 'primereact/button';
 import { useAppToast } from '@/components/Toast/ToastProvider';
+import { useNavigate } from 'react-router-dom';
+import { paths } from '@/routes/paths';
 
 const columns: PrimeColumn[] = [
     { field: 'id', header: 'ID' },
@@ -21,9 +23,19 @@ const columns: PrimeColumn[] = [
 
 export const ProspectsPage: React.FC = () => {
     const { showInfo } = useAppToast();
+    const navigate = useNavigate();
 
     const handleAdd = () => {
-        showInfo('Abrir formulario para agregar prospecto', 'Agregar prospecto');
+        navigate(paths.PROSPECTS_NEW);
+    };
+
+    const handleEdit = (row: any) => {
+        navigate(paths.PROSPECTS_EDIT.replace(':id', row.id));
+    };
+
+    const handleDelete = (row: any) => {
+        if (!window.confirm(`Eliminar prospecto ${row.name}?`)) return;
+        console.log('Eliminar prospecto (mock):', row.id);
     };
 
     return (
@@ -41,7 +53,7 @@ export const ProspectsPage: React.FC = () => {
                     </div>
                 </div>
 
-                <PrimeDataTable value={prospects} columns={columns} paginator rows={10} />
+                <PrimeDataTable value={prospects} columns={columns} paginator rows={10} showActions onEdit={handleEdit} onDelete={handleDelete} />
             </div>
         </div>
     );
