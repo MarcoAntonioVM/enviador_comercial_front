@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { User, ChevronDown, LogOut, Settings } from 'lucide-react';
+import { User, ChevronDown, LogOut } from 'lucide-react';
 import { useLogout } from '@/features/auth';
 import type { User as UserType } from '@/features/auth/auth.types';
 
@@ -55,63 +55,57 @@ export const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
     };
 
     return (
-        <nav className={`h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between ${className}`}>
-            {/* Lado izquierdo - Título o breadcrumb */}
+        <nav className={`h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 flex items-center justify-between ${className}`}>
+            {/* Lado izquierdo - Título */}
             <div className="flex items-center">
-                <h1 className="text-lg font-medium text-gray-700">
+                <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-widest">
                     Panel de Control
-                </h1>
+                </h2>
             </div>
 
             {/* Lado derecho - Info del usuario */}
-            <div className="relative" ref={dropdownRef}>
+            <div className="relative flex items-center gap-4" ref={dropdownRef}>
+                {/* Nombre y rol */}
+                <div className="hidden sm:flex flex-col items-end">
+                    <span className="text-sm font-semibold text-slate-900">
+                        {user?.name || 'Usuario'}
+                    </span>
+                    <span className="text-xs text-slate-500">
+                        {user?.role === 'admin' ? 'Administrador' : 'Usuario'}
+                    </span>
+                </div>
+
                 <button
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    className="relative group"
                 >
                     {/* Avatar */}
-                    <div className="w-9 h-9 bg-gradient-to-br from-gray-700 to-gray-900 rounded-full flex items-center justify-center text-white text-sm font-semibold shadow-sm">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold border-2 border-blue-500/20 ring-2 ring-transparent group-hover:ring-blue-500 transition-all cursor-pointer shadow-lg shadow-blue-500/20">
                         {user?.name ? getInitials(user.name) : <User className="w-5 h-5" />}
                     </div>
-
-                    {/* Nombre y rol */}
-                    <div className="hidden sm:flex flex-col items-start">
-                        <span className="text-sm font-medium text-gray-900">
-                            {user?.name || 'Usuario'}
-                        </span>
-                        {/* <span className="text-xs text-gray-500 capitalize">
-                            {user?.role === 'admin' ? 'Administrador' : 'Usuario'}
-                        </span> */}
-                    </div>
-
-                    {/* Chevron */}
-                    <ChevronDown 
-                        className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
-                            isDropdownOpen ? 'rotate-180' : ''
-                        }`} 
-                    />
+                    {/* Indicador de estado online */}
+                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                 </button>
 
                 {/* Dropdown Menu */}
                 {isDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl shadow-slate-200/50 border border-slate-200 py-1 z-50">
                         {/* Header del dropdown */}
-                        <div className="px-4 py-3 border-b border-gray-100">
-                            <p className="text-sm font-medium text-gray-900 truncate">
+                        <div className="px-4 py-3 border-b border-slate-100">
+                            <p className="text-sm font-semibold text-slate-900 truncate">
                                 {user?.name || 'Usuario'}
                             </p>
-                            <p className="text-xs text-gray-500 truncate">
+                            <p className="text-xs text-slate-500 truncate">
                                 {user?.email || 'Sin correo'}
                             </p>
                         </div>
 
                         {/* Opciones del menú */}
                         <div className="py-1">
-
                             <button
                                 onClick={handleLogout}
                                 disabled={isLoggingOut}
-                                className="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-500 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <LogOut className="w-4 h-4" />
                                 {isLoggingOut ? 'Cerrando...' : 'Cerrar sesión'}

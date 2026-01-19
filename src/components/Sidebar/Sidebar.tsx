@@ -60,54 +60,60 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
                     isOpen ? 'translate-x-0' : '-translate-x-full'
                 } sm:translate-x-0`}
             >
-                <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 border-r border-gray-200">
+                <div className="h-full flex flex-col overflow-y-auto bg-slate-900 border-r border-slate-800">
                     {/* Header con logo */}
-                    <div className="flex items-center justify-between mb-5 px-2">
-                        <span className="text-xl font-semibold text-gray-900">
-                            Enviador
-                        </span>
-                        <button 
-                            onClick={onToggle}
-                            className="sm:hidden p-1 rounded hover:bg-gray-200"
-                        >
-                            <X className="w-5 h-5 text-gray-600" />
-                        </button>
+                    <div className="p-6">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+                                    <Send className="w-5 h-5" />
+                                </div>
+                                <h1 className="text-2xl font-bold text-white tracking-tight">
+                                    Enviador
+                                </h1>
+                            </div>
+                            <button 
+                                onClick={onToggle}
+                                className="sm:hidden p-1 rounded-lg hover:bg-white/5"
+                            >
+                                <X className="w-5 h-5 text-slate-400" />
+                            </button>
+                        </div>
                     </div>
 
                     {/* Menu items */}
-                    <ul className="space-y-1 font-medium">
+                    <nav className="flex-1 px-3 space-y-1">
                         {menuItems.map((item) => {
                             const isActive = location.pathname === item.path;
                             return (
-                                <li key={item.path}>
-                                    <Link
-                                        to={item.path}
-                                        onClick={() => window.innerWidth < 640 && onToggle()}
-                                        className={`flex items-center px-3 py-2 rounded-lg transition-colors group ${
-                                            isActive 
-                                                ? 'bg-gray-200 text-gray-900' 
-                                                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                                        }`}
-                                    >
-                                        <item.icon className={`w-5 h-5 transition-colors ${
-                                            isActive ? 'text-gray-900' : 'text-gray-500 group-hover:text-gray-900'
-                                        }`} />
-                                        <span className="ms-3">{item.label}</span>
-                                    </Link>
-                                </li>
+                                <Link
+                                    key={item.path}
+                                    to={item.path}
+                                    onClick={() => window.innerWidth < 640 && onToggle()}
+                                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                                        isActive 
+                                            ? 'text-white bg-blue-500/10 border-r-4 border-blue-500' 
+                                            : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                    }`}
+                                >
+                                    <item.icon className={`w-5 h-5 transition-colors ${
+                                        isActive ? 'text-blue-500' : ''
+                                    }`} />
+                                    <span className="font-medium">{item.label}</span>
+                                </Link>
                             );
                         })}
-                    </ul>
+                    </nav>
 
                     {/* Logout button at bottom */}
-                    <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-gray-200 bg-gray-50">
+                    <div className="p-4 border-t border-slate-800">
                         <button
                             onClick={handleLogout}
                             disabled={isLoggingOut}
-                            className="flex items-center w-full px-3 py-2 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-400/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            <LogOut className="w-5 h-5 text-gray-500 group-hover:text-gray-900 transition-colors" />
-                            <span className="ms-3">Cerrar sesión</span>
+                            <LogOut className="w-5 h-5" />
+                            <span className="font-medium">Cerrar sesión</span>
                         </button>
                     </div>
                 </div>
@@ -122,7 +128,7 @@ export const SidebarToggle: React.FC<{ onClick: () => void }> = ({ onClick }) =>
         <button
             onClick={onClick}
             type="button"
-            className="inline-flex items-center p-2 text-gray-600 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            className="inline-flex items-center p-2 text-slate-400 rounded-lg sm:hidden hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-700"
         >
             <span className="sr-only">Abrir menú</span>
             <Menu className="w-6 h-6" />
