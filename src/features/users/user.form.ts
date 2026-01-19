@@ -1,7 +1,7 @@
 import type { EntityFormConfig } from "@/components/entity/types";
 import { userFormSchema, type UserFormValues } from "./users.schema";
 import type { User } from "./users.types";
-import { usersService } from "./usersService";
+import { usersService } from "./users.service";
 import { paths } from "@/routes/paths";
 
 type UserPayload = {
