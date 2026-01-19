@@ -1,6 +1,11 @@
 import type { Prospect } from "./prospects.types";
 
 export const prospectsService = {
+  async list(): Promise<Prospect[]> {
+    const { prospects } = await import("@/data/prospects");
+    return prospects;
+  },
+
   async getById(id: string): Promise<Prospect> {
     const { prospects } = await import("@/data/prospects");
     const p = prospects.find((x: any) => x.id === id);
