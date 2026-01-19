@@ -9,4 +9,3 @@ export type Prospect = {
   createdAt: string;
 };
 
-export default Prospect;
