@@ -38,11 +38,6 @@ export const UsersPage: React.FC = () => {
         { field: 'email', header: 'Correo Electrónico' },
         { field: 'role', header: 'Rol' },
         { field: 'status', header: 'Estado' },
-        {
-            field: 'createdAt',
-            header: 'Fecha de creación',
-            body: (rowData: any) => new Date(rowData.createdAt).toLocaleDateString(),
-        },
         // acciones manejadas por PrimeDataTable vía onEdit / onDelete
     ];
 
