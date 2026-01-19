@@ -10,6 +10,7 @@ import { CampaignsPage } from '../features/campaigns/pages/CampaignsPage';
 import { ProspectsPage } from '../features/prospects/pages/ProspectsPage';
 import ProspectFormPage from '../features/prospects/pages/ProspectFormPage';
 import { TemplatesPage } from '../features/templates/pages/TemplatesPage';
+import TemplateFormPage from '../features/templates/pages/TemplateFormPage';
 import { SendersPage } from '../features/senders/pages/SendersPage';
 import { DocumentsPage } from '../features/documents/pages/DocumentsPage';
 import { EmailSendsPage } from '../features/emailSends/pages/EmailSendsPage';
@@ -36,6 +37,8 @@ export const AppRoutes: React.FC = () => {
                 <Route path={paths.PROSPECTS_EDIT} element={<ProspectFormPage />} />
                 <Route path={paths.SECTORS} element={<SectorsPage />} />
                 <Route path={paths.TEMPLATES} element={<TemplatesPage />} />
+                <Route path={paths.TEMPLATES_NEW} element={<TemplateFormPage />} />
+                <Route path={paths.TEMPLATES_EDIT} element={<TemplateFormPage />} />
                 <Route path={paths.SENDERS} element={<SendersPage />} />
                 <Route path={paths.DOCUMENTS} element={<DocumentsPage />} />
                 <Route path={paths.EMAIL_SENDS} element={<EmailSendsPage />} />

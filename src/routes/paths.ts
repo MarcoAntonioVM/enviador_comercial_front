@@ -10,6 +10,8 @@ export const paths = {
     PROSPECTS_NEW: '/prospects/new',
     PROSPECTS_EDIT: '/prospects/edit/:id',
     TEMPLATES: '/templates',
+    TEMPLATES_NEW: '/templates/new',
+    TEMPLATES_EDIT: '/templates/edit/:id',
     SENDERS: '/senders',
     DOCUMENTS: '/documents',
     EMAIL_SENDS: '/email-sends',
