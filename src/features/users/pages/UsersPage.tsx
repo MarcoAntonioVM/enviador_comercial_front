@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import PrimeDataTable, { type PrimeColumn } from '@/components/PrimeTable/PrimeDataTable';
 import { users } from '@/data/users';
 import { Button } from 'primereact/button';
+import { confirmDialog } from 'primereact/confirmdialog';
 import { paths } from '@/routes/paths';
 
 export const UsersPage: React.FC = () => {
@@ -17,9 +18,18 @@ export const UsersPage: React.FC = () => {
     };
 
     const handleDelete = (user: any) => {
-        // Datos mock: solo mostrar confirmación y loguear
-        if (!window.confirm(`Eliminar usuario ${user.name}?`)) return;
-        console.log('Eliminar usuario (mock):', user.id);
+        confirmDialog({
+            message: `¿Estás seguro de que deseas eliminar a ${user.name}?`,
+            header: 'Confirmar eliminación',
+            icon: 'pi pi-exclamation-triangle',
+            defaultFocus: 'reject',
+            acceptClassName: 'p-button-danger',
+            acceptLabel: 'Eliminar',
+            rejectLabel: 'Cancelar',
+            accept: () => {
+                console.log('Eliminar usuario (mock):', user.id);
+            }
+        });
     };
 
     const columns: PrimeColumn[] = [
