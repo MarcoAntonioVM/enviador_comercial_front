@@ -14,6 +14,7 @@ import { DocumentsPage } from '../features/documents/pages/DocumentsPage';
 import { EmailSendsPage } from '../features/emailSends/pages/EmailSendsPage';
 import { AnalyticsPage } from '../features/analytics/pages/AnalyticsPage';
 import { UsersPage } from '../features/users/pages/UsersPage';
+import { SectorsPage } from '../features/sectors/pages/SectorsPage';
 import { paths } from './paths';
 
 export const AppRoutes: React.FC = () => {
@@ -29,6 +30,7 @@ export const AppRoutes: React.FC = () => {
                 <Route path={paths.DASHBOARD} element={<DashboardHome />} />
                 <Route path={paths.CAMPAIGNS} element={<CampaignsPage />} />
                 <Route path={paths.PROSPECTS} element={<ProspectsPage />} />
+                <Route path={paths.SECTORS} element={<SectorsPage />} />
                 <Route path={paths.TEMPLATES} element={<TemplatesPage />} />
                 <Route path={paths.SENDERS} element={<SendersPage />} />
                 <Route path={paths.DOCUMENTS} element={<DocumentsPage />} />
