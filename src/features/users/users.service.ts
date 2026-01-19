@@ -2,6 +2,11 @@ import type { User } from "./users.types";
 
 // Simulamos un servicio para usuarios
 export const usersService = {
+  async list(): Promise<User[]> {
+    const { users } = await import("@/data/users");
+    return users;
+  },
+
   async getById(id: string): Promise<User> {
     // Simularemos buscar en los datos mock por ahora
     const { users } = await import("@/data/users");
