@@ -8,21 +8,16 @@ import { paths } from '@/routes/paths';
 
 const columns: PrimeColumn[] = [
     { field: 'id', header: 'ID' },
-    { field: 'email', header: 'Email' },
-    { field: 'name', header: 'Name' },
-    { field: 'company', header: 'Company' },
-    { field: 'sector_id', header: 'Sector ID' },
-    { field: 'status', header: 'Status' },
-    { field: 'metadata', header: 'Metadata', body: (row: any) => JSON.stringify(row.metadata || {}) },
-    {
-        field: 'createdAt',
-        header: 'Created At',
-        body: (rowData: any) => new Date(rowData.createdAt).toLocaleDateString(),
-    },
+    { field: 'email', header: 'Correo' },
+    { field: 'name', header: 'Nombre' },
+    { field: 'company', header: 'Empresa' },
+    { field: 'sector_id', header: 'Sector' },
+    { field: 'status', header: 'Estado' },
+    { field: 'metadata', header: 'Metadatos', body: (row: any) => JSON.stringify(row.metadata || {}) },
 ];
 
 export const ProspectsPage: React.FC = () => {
-    const { showInfo } = useAppToast();
+    useAppToast();
     const navigate = useNavigate();
 
     const handleAdd = () => {
@@ -40,7 +35,7 @@ export const ProspectsPage: React.FC = () => {
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-4">Prospects</h1>
+            <h1 className="text-2xl font-bold mb-4">Prospectos</h1>
 
             <div className="card bg-white p-6 rounded-lg shadow-sm">
                 <div className="flex items-center justify-between mb-4">
