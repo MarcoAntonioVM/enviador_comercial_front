@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppRoutes } from './routes/AppRoutes';
 import './index.css';
 import { ToastProvider } from './components/Toast/ToastProvider';
+import { AppConfirmDialog } from './components/ConfirmDialog/AppConfirmDialog';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,6 +18,7 @@ function App() {
     return (
         <QueryClientProvider client={queryClient}>
             <ToastProvider>
+                <AppConfirmDialog />
                 <BrowserRouter>
                     <AppRoutes />
                 </BrowserRouter>
