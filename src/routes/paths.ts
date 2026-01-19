@@ -13,5 +13,7 @@ export const paths = {
     EMAIL_SENDS: '/email-sends',
     ANALYTICS: '/analytics',
     USERS: '/users',
+    USERS_NEW: '/users/new',
+    USERS_EDIT: '/users/edit/:id',
     SECTORS: '/sectors',
 };

@@ -14,6 +14,7 @@ import { DocumentsPage } from '../features/documents/pages/DocumentsPage';
 import { EmailSendsPage } from '../features/emailSends/pages/EmailSendsPage';
 import { AnalyticsPage } from '../features/analytics/pages/AnalyticsPage';
 import { UsersPage } from '../features/users/pages/UsersPage';
+import UserFormPage from '../features/users/pages/UserFormPage';
 import { SectorsPage } from '../features/sectors/pages/SectorsPage';
 import { paths } from './paths';
 
@@ -37,6 +38,8 @@ export const AppRoutes: React.FC = () => {
                 <Route path={paths.EMAIL_SENDS} element={<EmailSendsPage />} />
                 <Route path={paths.ANALYTICS} element={<AnalyticsPage />} />
                 <Route path={paths.USERS} element={<UsersPage />} />
+                <Route path={paths.USERS_NEW} element={<UserFormPage />} />
+                <Route path={paths.USERS_EDIT} element={<UserFormPage />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />
