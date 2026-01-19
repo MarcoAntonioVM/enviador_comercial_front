@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import { Sidebar, SidebarToggle } from '../components/Sidebar/Sidebar';
+import { Navbar } from '../components/Navbar/Navbar';
 
 export const DashboardLayout: React.FC = () => {
     const token = localStorage.getItem('token');
@@ -21,10 +22,17 @@ export const DashboardLayout: React.FC = () => {
             <div className="sm:ml-64">
                 {/* Mobile header */}
                 <div className="sticky top-0 z-20 bg-white border-b border-gray-200 px-4 py-3 sm:hidden">
-                    <div className="flex items-center">
-                        <SidebarToggle onClick={toggleSidebar} />
-                        <span className="ml-3 text-lg font-semibold text-gray-900">Enviador</span>
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                            <SidebarToggle onClick={toggleSidebar} />
+                            <span className="ml-3 text-lg font-semibold text-gray-900">Enviador</span>
+                        </div>
                     </div>
+                </div>
+
+                {/* Desktop Navbar */}
+                <div className="hidden sm:block sticky top-0 z-20">
+                    <Navbar />
                 </div>
 
                 {/* Page content */}
