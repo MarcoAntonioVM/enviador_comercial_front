@@ -1,7 +1,7 @@
 import type { EntityFormConfig } from "@/components/entity/types";
 import { prospectFormSchema, type ProspectFormValues } from "./prospects.schema";
 import type { Prospect } from "./prospects.types";
-import { prospectsService } from "./prospectsService";
+import { prospectsService } from "./prospects.service";
 import { paths } from "@/routes/paths";
 
 type ProspectPayload = {

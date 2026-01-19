@@ -11,7 +11,7 @@ export { loginSchema, forgotPasswordSchema, resetPasswordSchema } from './auth.s
 export type { LoginFormData, ForgotPasswordFormData, ResetPasswordFormData } from './auth.schema';
 
 // Service
-export { authService } from './authService';
+export { authService } from './auth.service';
 
 // Pages (para rutas)
 export { LoginPage } from './pages/LoginPage';
