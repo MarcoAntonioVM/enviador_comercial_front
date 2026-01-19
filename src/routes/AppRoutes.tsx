@@ -13,7 +13,7 @@ import { TemplatesPage } from '../features/templates/pages/TemplatesPage';
 import { SendersPage } from '../features/senders/pages/SendersPage';
 import { DocumentsPage } from '../features/documents/pages/DocumentsPage';
 import { EmailSendsPage } from '../features/emailSends/pages/EmailSendsPage';
-import { AnalyticsPage } from '../features/analytics/pages/AnalyticsPage';
+import AnalyticsPage from '../features/analytics/pages/AnalyticsPage';
 import { UsersPage } from '../features/users/pages/UsersPage';
 import UserFormPage from '../features/users/pages/UserFormPage';
 import { SectorsPage } from '../features/sectors/pages/SectorsPage';
