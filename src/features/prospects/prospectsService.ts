@@ -8,14 +8,14 @@ export const prospectsService = {
     return p;
   },
 
-  async create(payload: { name: string; email: string; company?: string; sector_id?: string; status: string }): Promise<Prospect> {
+  async create(payload: { name: string; email: string; company?: string; sector_id?: string; status?: Prospect['status'] }): Promise<Prospect> {
     const newP: Prospect = {
       id: `p-${Date.now()}`,
       name: payload.name,
       email: payload.email,
       company: payload.company,
       sector_id: payload.sector_id,
-      status: (payload.status as any) || 'new',
+      status: payload.status ?? 'new',
       metadata: {},
       createdAt: new Date().toISOString(),
     };
@@ -23,7 +23,7 @@ export const prospectsService = {
     return newP;
   },
 
-  async update(id: string, payload: { name: string; email: string; company?: string; sector_id?: string; status: string }): Promise<Prospect> {
+  async update(id: string, payload: { name: string; email: string; company?: string; sector_id?: string; status: Prospect['status'] }): Promise<Prospect> {
     const existing = await this.getById(id);
     const updated: Prospect = {
       ...existing,
