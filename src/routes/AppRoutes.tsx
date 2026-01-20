@@ -18,6 +18,7 @@ import AnalyticsPage from '../features/analytics/pages/AnalyticsPage';
 import { UsersPage } from '../features/users/pages/UsersPage';
 import UserFormPage from '../features/users/pages/UserFormPage';
 import { SectorsPage } from '../features/sectors/pages/SectorsPage';
+import SectorFormPage from '../features/sectors/pages/SectorFormPage';
 import { paths } from './paths';
 
 export const AppRoutes: React.FC = () => {
@@ -36,6 +37,8 @@ export const AppRoutes: React.FC = () => {
                 <Route path={paths.PROSPECTS_NEW} element={<ProspectFormPage />} />
                 <Route path={paths.PROSPECTS_EDIT} element={<ProspectFormPage />} />
                 <Route path={paths.SECTORS} element={<SectorsPage />} />
+                <Route path={paths.SECTORS_NEW} element={<SectorFormPage />} />
+                <Route path={paths.SECTORS_EDIT} element={<SectorFormPage />} />
                 <Route path={paths.TEMPLATES} element={<TemplatesPage />} />
                 <Route path={paths.TEMPLATES_NEW} element={<TemplateFormPage />} />
                 <Route path={paths.TEMPLATES_EDIT} element={<TemplateFormPage />} />
