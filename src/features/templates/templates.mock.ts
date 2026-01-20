@@ -1,4 +1,4 @@
-import { Template } from './templates.types'
+import type { Template } from './templates.types'
 
 export const templatesMock: Template[] = [
   {

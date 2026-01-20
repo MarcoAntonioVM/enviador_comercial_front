@@ -10,7 +10,6 @@ const columns: PrimeColumn[] = [
     { field: 'id', header: 'ID' },
     { field: 'name', header: 'Nombre' },
     { field: 'subject', header: 'Asunto' },
-    { field: 'createdAt', header: 'Creado' },
 ];
 
 export const TemplatesPage: React.FC = () => {

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Template } from '../templates.types'
+import type { Template } from '../templates.types'
 import { templatesService } from '../templates.service'
 
 export default function useCreateTemplate() {
