@@ -8,12 +8,12 @@ import { paths } from '@/routes/paths';
 
 const columns: PrimeColumn[] = [
     { field: 'id', header: 'ID' },
-    { field: 'email', header: 'Correo' },
     { field: 'name', header: 'Nombre' },
     { field: 'company', header: 'Empresa' },
     { field: 'sector_id', header: 'Sector' },
     { field: 'status', header: 'Estado' },
-    { field: 'metadata', header: 'Metadatos', body: (row: any) => JSON.stringify(row.metadata || {}) },
+    { field: 'emails', header: 'Correos', body: (row: any) => (row.emails || []).join(', ') },
+    { field: 'metadata', header: 'Metadatos', body: (row: any) => (row.metadata || []).join(', ') },
 ];
 
 export const ProspectsPage: React.FC = () => {
