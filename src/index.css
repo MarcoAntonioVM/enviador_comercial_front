@@ -4,3 +4,29 @@
 .p-toast * {
   box-sizing: border-box;
 }
+
+/* Force PrimeReact Chips to use full width inside our grid */
+.p-chips {
+  width: 100% !important;
+}
+.p-chips .p-inputtext {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* Ensure the container padding doesn't collapse width */
+.field-chips-wrapper {
+  width: 100%;
+}
+
+/* Make inner input of PrimeReact Chips visually match our inputs */
+.field-chips-wrapper .p-chips {
+  display: block;
+}
+.field-chips-wrapper .p-chips .p-inputtext {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  height: auto !important;
+  color: inherit !important;
+}
