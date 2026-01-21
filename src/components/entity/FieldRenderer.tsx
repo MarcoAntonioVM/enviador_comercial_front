@@ -1,4 +1,6 @@
 import type { UseFormReturn } from "react-hook-form";
+import type React from 'react';
+import { Chips } from 'primereact/chips';
 import type { FieldConfig } from "./types";
 import { CheckCircle, XCircle } from "lucide-react";
 
@@ -50,6 +52,7 @@ export function FieldRenderer<TForm extends Record<string, any>>({
         return "pi-pencil";
       case "select": return "pi-tag";
       case "textarea": return "pi-file-edit";
+      case "chips": return "pi-tags";
       case "number": return "pi-hashtag";
       default: return "pi-pencil";
     }
@@ -143,6 +146,54 @@ export function FieldRenderer<TForm extends Record<string, any>>({
               placeholder={field.placeholder}
               {...register(field.name as any)}
             />
+          </div>
+        ) : field.type === "chips" ? (
+          <div className="relative">
+            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+              <i className={`pi ${getFieldIcon()} text-sm`}></i>
+            </span>
+            <div
+              className="pl-12 pr-4 py-3 field-chips-wrapper bg-slate-50 border border-slate-200 rounded-xl"
+              onPasteCapture={(e: React.ClipboardEvent<HTMLDivElement>) => {
+                try {
+                  e.preventDefault();
+                  const text = e.clipboardData?.getData?.('text') || '';
+                  const parts = text
+                    .split(/[,\s]+/)
+                    .map((s: string) => s.trim())
+                    .filter(Boolean);
+                  if (parts.length) {
+                    const current = watch(field.name as any) ?? [];
+                    setValue(field.name as any, Array.from(new Set([...current, ...parts])) as any);
+                  }
+                } catch (err) {
+                  // No bloquear si falla
+                }
+              }}
+              onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+                // Manejar espacio y coma como separadores
+                if (e.key === ' ' || e.key === ',') {
+                  const input = e.target as HTMLInputElement;
+                  const value = input.value?.trim().replace(/,$/, ''); // Quitar coma final si existe
+                  if (value) {
+                    e.preventDefault();
+                    const current = (watch(field.name as any) ?? []) as string[];
+                    if (!current.includes(value)) {
+                      setValue(field.name as any, [...current, value] as any);
+                    }
+                    input.value = '';
+                  }
+                }
+              }}
+            >
+              <Chips
+                className="w-full bg-transparent p-0"
+                value={watch(field.name as any) ?? []}
+                onChange={(e: any) => setValue(field.name as any, e.value)}
+                placeholder={field.placeholder}
+              />
+            </div>
+            <input type="hidden" {...register(field.name as any)} />
           </div>
         ) : (
           <div className="relative">
