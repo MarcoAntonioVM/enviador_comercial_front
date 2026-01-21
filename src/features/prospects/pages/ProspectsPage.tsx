@@ -1,6 +1,7 @@
 import React from 'react';
 import PrimeDataTable, { type PrimeColumn } from '@/components/PrimeTable/PrimeDataTable';
 import { prospects } from '@/data/prospects';
+import { sectorsMock } from '../../sectors/sectors.mock';
 import { Button } from 'primereact/button';
 import { useAppToast } from '@/components/Toast/ToastProvider';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +11,7 @@ const columns: PrimeColumn[] = [
     { field: 'id', header: 'ID' },
     { field: 'name', header: 'Nombre' },
     { field: 'company', header: 'Empresa' },
-    { field: 'sector_id', header: 'Sector' },
+    { field: 'sector_id', header: 'Sector', body: (row: any) => (sectorsMock.find(s => s.id === row.sector_id)?.name ?? row.sector_id ?? '') },
     { field: 'status', header: 'Estado' },
     { field: 'emails', header: 'Correos', body: (row: any) => (row.emails || []).join(', ') },
     { field: 'metadata', header: 'Metadatos', body: (row: any) => (row.metadata || []).join(', ') },

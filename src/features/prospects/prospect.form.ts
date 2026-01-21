@@ -2,6 +2,7 @@ import type { EntityFormConfig } from "@/components/entity/types";
 import { prospectFormSchema, type ProspectFormValues } from "./prospects.schema";
 import type { Prospect } from "./prospects.types";
 import { prospectsService } from "./prospects.service";
+import { sectorsMock } from "../sectors/sectors.mock";
 import { paths } from "@/routes/paths";
 
 type ProspectPayload = {
@@ -19,7 +20,13 @@ export const prospectFormConfig: EntityFormConfig<Prospect, ProspectFormValues, 
   fields: [
     { name: "name", label: "Nombre", type: "text", colSpan: 6, placeholder: "Ej. Ana López" },
     { name: "company", label: "Empresa", type: "text", colSpan: 6, placeholder: "Nombre empresa" },
-    { name: "sector_id", label: "Sector ID", type: "text", colSpan: 6, placeholder: "s-1000" },
+    {
+      name: "sector_id",
+      label: "Sector",
+      type: "select",
+      colSpan: 6,
+      options: sectorsMock.map((s) => ({ label: s.name, value: s.id })),
+    },
     {
       name: "status",
       label: "Estado",
