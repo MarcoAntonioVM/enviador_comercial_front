@@ -13,30 +13,31 @@ export const prospectsService = {
     return p;
   },
 
-  async create(payload: { name: string; email: string; company?: string; sector_id?: string; status?: Prospect['status'] }): Promise<Prospect> {
+  async create(payload: { name: string; emails: string[]; company?: string; sector_id?: string; status?: Prospect['status']; metadata?: string[] }): Promise<Prospect> {
     const newP: Prospect = {
       id: `p-${Date.now()}`,
       name: payload.name,
-      email: payload.email,
+      emails: payload.emails,
       company: payload.company,
       sector_id: payload.sector_id,
       status: payload.status ?? 'new',
-      metadata: {},
+      metadata: payload.metadata ?? [],
       createdAt: new Date().toISOString(),
     };
     console.log('Crear prospecto (mock):', newP);
     return newP;
   },
 
-  async update(id: string, payload: { name: string; email: string; company?: string; sector_id?: string; status: Prospect['status'] }): Promise<Prospect> {
+  async update(id: string, payload: { name: string; emails: string[]; company?: string; sector_id?: string; status: Prospect['status']; metadata?: string[] }): Promise<Prospect> {
     const existing = await this.getById(id);
     const updated: Prospect = {
       ...existing,
       name: payload.name,
-      email: payload.email,
+      emails: payload.emails,
       company: payload.company,
       sector_id: payload.sector_id,
       status: payload.status,
+      metadata: payload.metadata ?? existing.metadata,
     };
     console.log('Actualizar prospecto (mock):', updated);
     return updated;
