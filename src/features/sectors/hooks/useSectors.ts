@@ -6,8 +6,8 @@ export default function useSectors() {
   const [items, setItems] = useState<Sector[]>([]);
 
   useEffect(() => {
-    sectorsService.list().then(setItems);
+    sectorsService.list().then((res) => setItems(res.sectors ?? []));
   }, []);
 
-  return { items, refresh: () => sectorsService.list().then(setItems) };
+  return { items, refresh: () => sectorsService.list().then((res) => setItems(res.sectors ?? [])) };
 }
