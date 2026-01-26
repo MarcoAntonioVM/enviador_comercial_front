@@ -60,8 +60,9 @@ export function FieldRenderer<TForm extends Record<string, any>>({
 
   // Renderizado para status-toggle (Activo/Inactivo)
   if (field.type === "status-toggle") {
-    const currentValue = watch(field.name as any) || "active";
-    
+    // El valor en el formulario es booleano; default a true si es undefined
+    const currentValue: boolean = (watch(field.name as any) ?? true) as boolean;
+
     return (
       <div className={colClass}>
         <div className="space-y-2">
@@ -71,9 +72,9 @@ export function FieldRenderer<TForm extends Record<string, any>>({
           <div className="flex gap-2">
             <button
               type="button"
-              onClick={() => setValue(field.name as any, "active" as any)}
+              onClick={() => setValue(field.name as any, true as any)}
               className={`flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl border font-medium transition-all ${
-                currentValue === "active"
+                currentValue
                   ? "border-emerald-400 bg-emerald-50 text-emerald-600"
                   : "border-slate-200 bg-white text-slate-400 hover:border-slate-300"
               }`}
@@ -83,9 +84,9 @@ export function FieldRenderer<TForm extends Record<string, any>>({
             </button>
             <button
               type="button"
-              onClick={() => setValue(field.name as any, "inactive" as any)}
+              onClick={() => setValue(field.name as any, false as any)}
               className={`flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl border font-medium transition-all ${
-                currentValue === "inactive"
+                !currentValue
                   ? "border-slate-300 bg-white text-slate-600"
                   : "border-slate-200 bg-white text-slate-400 hover:border-slate-300"
               }`}
