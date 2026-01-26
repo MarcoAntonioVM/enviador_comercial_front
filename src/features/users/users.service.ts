@@ -1,56 +1,168 @@
-import type { User } from "./users.types";
+import type { User, UsersListResponse, UsersPagination } from "./users.types";
 
-// Simulamos un servicio para usuarios
+const API_URL = import.meta.env.VITE_API_URL;
+
+type ListParams = {
+  page?: number;
+  limit?: number;
+};
+
 export const usersService = {
-  async list(): Promise<User[]> {
-    const { users } = await import("@/data/users");
-    return users;
+  async list(params?: ListParams): Promise<UsersListResponse> {
+    const token = localStorage.getItem("token");
+    const searchParams = new URLSearchParams();
+    if (params?.page) searchParams.set("page", String(params.page));
+    if (params?.limit) searchParams.set("limit", String(params.limit));
+    
+    const queryString = searchParams.toString();
+    const url = `${API_URL}/users${queryString ? `?${queryString}` : ""}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al obtener usuarios";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al obtener usuarios";
+      throw new Error(msg);
+    }
+
+    const data = raw?.data ?? raw;
+    
+    if (!Array.isArray(data)) {
+      throw new Error("Respuesta inválida del servidor");
+    }
+
+    const users: User[] = data.map((u: any) => ({
+      id: String(u.id),
+      name: u.name,
+      email: u.email,
+      role: u.role ?? "user",
+      active: u.active ?? true,
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+    }));
+
+    const pagination: UsersPagination = raw?.pagination ?? {
+      page: 1,
+      limit: 10,
+      total: users.length,
+      totalPages: 1,
+    };
+
+    return { users, pagination };
   },
 
   async getById(id: string): Promise<User> {
-    // Simularemos buscar en los datos mock por ahora
-    const { users } = await import("@/data/users");
-    const user = users.find(u => u.id === id);
-    
-    if (!user) {
-      throw new Error("Usuario no encontrado");
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/users/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Usuario no encontrado";
+      throw new Error(msg);
     }
-    
-    return user;
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Usuario no encontrado";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data ?? raw;
+
+    return {
+      id: String(u.id),
+      name: u.name,
+      email: u.email,
+      role: u.role ?? "user",
+      active: u.active ?? true,
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+    };
   },
 
-  async create(payload: { name: string; email: string; role: "admin" | "user" | "viewer"; status?: "active" | "inactive" }): Promise<User> {
-    // Simulamos la creación
-    const newUser: User = {
-      id: `u-${Date.now()}`,
-      name: payload.name,
-      email: payload.email,
-      role: payload.role,
-      status: payload.status || "active",
-      createdAt: new Date().toISOString(),
-    };
+  async create(payload: { name: string; email: string; role: "admin" | "user" | "viewer" | "commercial"; active?: boolean }): Promise<User> {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify(payload),
+    });
 
-    // En un caso real, aquí haríamos un POST al API
-    console.log("Creating user:", newUser);
-    
-    return newUser;
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al crear usuario";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al crear usuario";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data ?? raw;
+
+    return {
+      id: String(u.id),
+      name: u.name,
+      email: u.email,
+      role: u.role ?? "user",
+      active: u.active ?? true,
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+    };
   },
 
-  async update(id: string, payload: { name: string; email: string; role: "admin" | "user" | "viewer"; status?: "active" | "inactive" }): Promise<User> {
-    // Simulamos la actualización
-    const existingUser = await this.getById(id);
-    
-    const updatedUser: User = {
-      ...existingUser,
-      name: payload.name,
-      email: payload.email,
-      role: payload.role,
-      status: payload.status || existingUser.status,
-    };
+  async update(id: string, payload: { name: string; email: string; role: "admin" | "user" | "viewer" | "commercial"; active?: boolean }): Promise<User> {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/users/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify(payload),
+    });
 
-    // En un caso real, aquí haríamos un PUT/PATCH al API
-    console.log("Updating user:", updatedUser);
-    
-    return updatedUser;
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al actualizar usuario";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al actualizar usuario";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data ?? raw;
+
+    return {
+      id: String(u.id),
+      name: u.name,
+      email: u.email,
+      role: u.role ?? "user",
+      active: u.active ?? true,
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+    };
   },
 };

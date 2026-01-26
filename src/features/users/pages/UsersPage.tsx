@@ -1,13 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PrimeDataTable, { type PrimeColumn } from '@/components/PrimeTable/PrimeDataTable';
-import { users } from '@/data/users';
+import useUsers from '../hooks/useUsers';
 import { Button } from 'primereact/button';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { paths } from '@/routes/paths';
 
 export const UsersPage: React.FC = () => {
     const navigate = useNavigate();
+    const { items: users } = useUsers();
 
     const handleAdd = () => {
         navigate(paths.USERS_NEW);
@@ -37,7 +38,15 @@ export const UsersPage: React.FC = () => {
         { field: 'name', header: 'Nombre' },
         { field: 'email', header: 'Correo Electrónico' },
         { field: 'role', header: 'Rol' },
-        { field: 'status', header: 'Estado' },
+        { 
+            field: 'active', 
+            header: 'Estado',
+            body: (rowData: any) => (
+                <span className={`px-2 py-1 rounded text-xs font-medium ${rowData.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {rowData.active ? 'Activo' : 'Inactivo'}
+                </span>
+            )
+        },
         // acciones manejadas por PrimeDataTable vía onEdit / onDelete
     ];
 
