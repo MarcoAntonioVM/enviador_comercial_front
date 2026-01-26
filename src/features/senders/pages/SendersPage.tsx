@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { paths } from '@/routes/paths';
 import { confirmDialog } from 'primereact/confirmdialog';
 import useSenders from '../hooks/useSenders';
+import useDeleteSender from '../hooks/useDeleteSender';
+import { useAppToast } from '@/components/Toast/ToastProvider';
 
 const columns: PrimeColumn[] = [
     { field: 'id', header: 'ID' },
@@ -14,7 +16,9 @@ const columns: PrimeColumn[] = [
 
 export const SendersPage: React.FC = () => {
     const navigate = useNavigate();
-    const { items } = useSenders();
+    const { items, refresh } = useSenders();
+    const { remove } = useDeleteSender();
+    const { showSuccess, showError } = useAppToast();
 
     const handleAdd = () => {
         navigate(paths.SENDERS_NEW);
@@ -33,8 +37,14 @@ export const SendersPage: React.FC = () => {
             acceptClassName: 'p-button-danger',
             acceptLabel: 'Eliminar',
             rejectLabel: 'Cancelar',
-            accept: () => {
-                console.log('Eliminar remitente (mock):', row.id);
+            accept: async () => {
+                try {
+                    await remove(row.id);
+                    showSuccess('Remitente eliminado correctamente');
+                    refresh();
+                } catch (e: any) {
+                    showError(e?.message || 'Error al eliminar remitente');
+                }
             }
         });
     };
