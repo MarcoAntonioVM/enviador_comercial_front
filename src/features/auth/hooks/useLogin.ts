@@ -12,9 +12,24 @@ export const useLogin = () => {
     return useMutation({
         mutationFn: (payload: LoginPayload) => authService.login(payload),
         onSuccess: (data) => {
-            // Guardar token y usuario en localStorage
             localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
+            // Guardar refreshToken sólo si viene; eliminar si no
+            if (data.refreshToken) {
+                localStorage.setItem('refreshToken', data.refreshToken);
+            } else {
+                localStorage.removeItem('refreshToken');
+            }
+
+            // Guardar campos necesarios unicamente
+            const minimalUser = {
+                id: data.user.id,
+                name: data.user.name,
+                role: data.user.role ?? 'user',
+                email: data.user.email ?? '',
+                createdAt: data.user.createdAt ?? new Date().toISOString(),
+            };
+
+            localStorage.setItem('user', JSON.stringify(minimalUser));
             // Mostrar toast de éxito
             try {
                 showSuccess(`Bienvenido ${data.user.name}`, 'Sesión iniciada');
@@ -24,7 +39,7 @@ export const useLogin = () => {
             navigate(paths.DASHBOARD);
         },
         onError: (error: Error) => {
-            console.error('Error en login:', error.message);
+            // console.error('Error en login:', error.message);
             try {
                 showError(error.message || 'Error al iniciar sesión', 'Error');
             } catch (e) {

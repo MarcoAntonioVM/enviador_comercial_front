@@ -7,8 +7,8 @@ import { paths } from "@/routes/paths";
 type UserPayload = {
   name: string;
   email: string;
-  role: "admin" | "user" | "viewer";
-  status: "active" | "inactive";
+  role: "admin" | "user" | "viewer" | "commercial";
+  active: boolean;
 };
 
 export const userFormConfig: EntityFormConfig<User, UserFormValues, UserPayload> = {
@@ -23,13 +23,14 @@ export const userFormConfig: EntityFormConfig<User, UserFormValues, UserPayload>
       type: "select",
       colSpan: 6,
       options: [
-        { label: "Usuario (user)", value: "user" },
-        { label: "Administrador (admin)", value: "admin" },
-        { label: "Visor (viewer)", value: "viewer" },
+        { label: "Usuario", value: "user" },
+        { label: "Administrador", value: "admin" },
+        { label: "Visor", value: "viewer" },
+        { label: "Comercial", value: "commercial" },
       ],
     },
     {
-      name: "status",
+      name: "active",
       label: "Estado de la cuenta", 
       type: "status-toggle",
       colSpan: 6,
@@ -40,7 +41,7 @@ export const userFormConfig: EntityFormConfig<User, UserFormValues, UserPayload>
   create: usersService.create,
   update: usersService.update,
 
-  toForm: (u) => ({ name: u.name, email: u.email, role: u.role, status: u.status || "active" }),
+  toForm: (u) => ({ name: u.name, email: u.email, role: u.role, active: u.active ?? true }),
   toPayload: (f) => ({ ...f }),
 
   listPath: paths.USERS,
@@ -49,6 +50,6 @@ export const userFormConfig: EntityFormConfig<User, UserFormValues, UserPayload>
     name: "",
     email: "",
     role: "user",
-    status: "active",
+    active: true,
   },
 };

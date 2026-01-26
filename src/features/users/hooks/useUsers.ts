@@ -1,13 +1,37 @@
 import { useEffect, useState } from 'react'
-import type { User } from '../users.types'
+import type { User, UsersPagination } from '../users.types'
 import { usersService } from '../users.service'
 
-export default function useUsers() {
+type UseUsersParams = {
+  page?: number;
+  limit?: number;
+};
+
+export default function useUsers(params?: UseUsersParams) {
   const [items, setItems] = useState<User[]>([])
+  const [pagination, setPagination] = useState<UsersPagination | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  const fetchUsers = async (fetchParams?: UseUsersParams) => {
+    setLoading(true)
+    try {
+      const response = await usersService.list(fetchParams ?? params)
+      setItems(response.users)
+      setPagination(response.pagination)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    usersService.list().then(setItems)
-  }, [])
+    fetchUsers()
+  }, [params?.page, params?.limit])
 
-  return { items, refresh: () => usersService.list().then(setItems) }
+  return { 
+    items, 
+    pagination,
+    loading,
+    refresh: () => fetchUsers(),
+    goToPage: (page: number) => fetchUsers({ ...params, page }),
+  }
 }
