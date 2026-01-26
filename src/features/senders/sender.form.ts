@@ -41,7 +41,7 @@ export const senderFormConfig: EntityFormConfig<Sender, SenderFormValues, Sender
   
   // Función para obtener un sender por ID (para editar)
   getById: async (id: string) => {
-    const sender = await sendersService.get(id);
+    const sender = await sendersService.getById(id);
     if (!sender) throw new Error("Remitente no encontrado");
     return sender;
   },
