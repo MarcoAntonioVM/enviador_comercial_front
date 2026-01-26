@@ -166,4 +166,38 @@ export const usersService = {
       createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
     };
   },
+
+  async delete(id: string): Promise<User> {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/users/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al eliminar usuario";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al eliminar usuario";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data ?? raw;
+
+    return {
+      id: String(u.id),
+      name: u.name,
+      email: u.email,
+      role: u.role ?? "user",
+      active: u.active ?? true,
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+    };
+  },
 };
