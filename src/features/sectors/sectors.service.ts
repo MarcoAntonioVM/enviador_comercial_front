@@ -1,5 +1,4 @@
 import type { Sector, SectorsListResponse, SectorsPagination } from './sectors.types';
-import { sectorsMock } from './sectors.mock';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -62,26 +61,137 @@ export const sectorsService = {
     return { sectors, pagination };
   },
 
-  get: async (id: string): Promise<Sector | undefined> => {
-    return sectorsMock.find((s) => s.id === id);
+  async getById(id: string): Promise<Sector> {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/sectors/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Sector no encontrado";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Sector no encontrado";
+      throw new Error(msg);
+    }
+
+    // La API devuelve { success, message, data: { sector: {...} } }
+    const u = raw?.data?.sector ?? raw?.data ?? raw;
+
+    return {
+      id: String(u.id),
+      name: u.name,
+      description: u.description ?? '',
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+    };
   },
 
   create: async (data: Partial<Sector>): Promise<Sector> => {
-    const newSector: Sector = {
-      id: `s-${Date.now()}`,
-      name: data.name || 'Sin nombre',
-      description: data.description || '',
-      createdAt: new Date().toISOString(),
-    };
-    sectorsMock.push(newSector);
-    return newSector;
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/sectors`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify(data),
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al crear sector";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al crear sector";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data?.sector ?? raw?.data ?? raw;
+
+    return {
+      id: String(u.id),
+      name: u.name,
+      description: u.description ?? '',
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+      updatedAt: u.updated_at ?? u.updatedAt,
+    } as Sector;
   },
 
-  update: async (id: string, data: Partial<Sector>): Promise<Sector | undefined> => {
-    const idx = sectorsMock.findIndex((s) => s.id === id);
-    if (idx === -1) return undefined;
-    const updated = { ...sectorsMock[idx], ...data, updatedAt: new Date().toISOString() };
-    sectorsMock[idx] = updated;
-    return updated;
+  update: async (id: string, data: Partial<Sector>): Promise<Sector> => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/sectors/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify(data),
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al actualizar sector";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al actualizar sector";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data?.sector ?? raw?.data ?? raw;
+
+    return {
+      id: String(u.id),
+      name: u.name,
+      description: u.description ?? '',
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+      updatedAt: u.updated_at ?? u.updatedAt,
+    } as Sector;
+  },
+
+  async delete(id: string): Promise<Sector> {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/sectors/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al eliminar sector";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al eliminar sector";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data?.sector ?? raw?.data ?? raw;
+
+    return {
+      id: String(u.id),
+      name: u.name,
+      description: u.description ?? '',
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+      updatedAt: u.updated_at ?? u.updatedAt,
+    } as Sector;
   },
 };
