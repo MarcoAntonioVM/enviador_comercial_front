@@ -1,5 +1,5 @@
 import type { EntityFormConfig } from "@/components/entity/types";
-import { userFormSchema, type UserFormValues } from "./users.schema";
+import { userFormSchema, userCreateSchema, type UserFormValues } from "./users.schema";
 import type { User } from "./users.types";
 import { usersService } from "./users.service";
 import { paths } from "@/routes/paths";
@@ -9,11 +9,13 @@ type UserPayload = {
   email: string;
   role: "admin" | "user" | "viewer" | "commercial";
   active: boolean;
+  password?: string;
 };
 
 export const userFormConfig: EntityFormConfig<User, UserFormValues, UserPayload> = {
   entityName: "Usuario",
   schema: userFormSchema,
+  createSchema: userCreateSchema,
   fields: [
     { name: "name", label: "Nombre Completo", type: "text", colSpan: 6, placeholder: "Ej. María Gómez" },
     { name: "email", label: "Correo Electrónico", type: "email", colSpan: 6, placeholder: "maria.gomez@example.com" },
@@ -23,12 +25,12 @@ export const userFormConfig: EntityFormConfig<User, UserFormValues, UserPayload>
       type: "select",
       colSpan: 6,
       options: [
-        { label: "Usuario", value: "user" },
         { label: "Administrador", value: "admin" },
         { label: "Visor", value: "viewer" },
         { label: "Comercial", value: "commercial" },
       ],
     },
+    { name: "password", label: "Contraseña", type: "password", colSpan: 6, placeholder: "Ingrese una contraseña", hiddenWhenEdit: true },
     {
       name: "active",
       label: "Estado de la cuenta", 
@@ -51,5 +53,6 @@ export const userFormConfig: EntityFormConfig<User, UserFormValues, UserPayload>
     email: "",
     role: "user",
     active: true,
+    password: "",
   },
 };
