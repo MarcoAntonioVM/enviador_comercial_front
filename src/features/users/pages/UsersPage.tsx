@@ -2,13 +2,17 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PrimeDataTable, { type PrimeColumn } from '@/components/PrimeTable/PrimeDataTable';
 import useUsers from '../hooks/useUsers';
+import useDeleteUser from '../hooks/useDeleteUser';
+import { useAppToast } from '@/components/Toast/ToastProvider';
 import { Button } from 'primereact/button';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { paths } from '@/routes/paths';
 
 export const UsersPage: React.FC = () => {
     const navigate = useNavigate();
-    const { items: users } = useUsers();
+    const { items: users, refresh } = useUsers();
+    const { remove, loading: deleting } = useDeleteUser();
+    const { showSuccess, showError } = useAppToast();
 
     const handleAdd = () => {
         navigate(paths.USERS_NEW);
@@ -27,8 +31,14 @@ export const UsersPage: React.FC = () => {
             acceptClassName: 'p-button-danger',
             acceptLabel: 'Eliminar',
             rejectLabel: 'Cancelar',
-            accept: () => {
-                console.log('Eliminar usuario (mock):', user.id);
+            accept: async () => {
+                try {
+                    await remove(user.id)
+                    showSuccess(`Usuario eliminado correctamente`)
+                    refresh()
+                } catch (e: any) {
+                    showError(e?.message || 'Error al eliminar usuario')
+                }
             }
         });
     };
