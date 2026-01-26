@@ -20,7 +20,10 @@ export function EntityFormPage<TEntity, TForm extends Record<string, any>, TPayl
   const { showSuccess, showError } = useAppToast();
 
   const form = useForm<TForm>({
-    resolver: zodResolver(config.schema as any),
+    resolver: zodResolver(
+      // Si el config provee esquemas específicos para crear/editar, elegir según el modo
+      (isEdit ? (config.editSchema ?? config.schema) : (config.createSchema ?? config.schema)) as any
+    ),
     defaultValues: config.defaultValues as any,
   });
 

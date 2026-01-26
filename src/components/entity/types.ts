@@ -27,6 +27,10 @@ export type FieldConfig<TForm> = {
 export type EntityFormConfig<TEntity, TForm, TPayload> = {
   entityName: string; // "Usuario"
   schema: ZodSchema<TForm>;
+  /** Esquema opcional que se usará sólo al crear (validación específica de creación) */
+  createSchema?: ZodSchema<TForm>;
+  /** Esquema opcional que se usará sólo al editar (validación específica de edición) */
+  editSchema?: ZodSchema<TForm>;
   fields: FieldConfig<TForm>[];
 
   getById: (id: string) => Promise<TEntity>;
