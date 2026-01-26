@@ -4,7 +4,8 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  role: 'admin' | 'user';
+  // Permitir múltiples roles dinámicos (ej. 'admin', 'editor', 'manager', ...)
+  role: string;
   createdAt: string;
 }
 
@@ -15,7 +16,8 @@ export interface LoginPayload {
 
 export interface LoginResponse {
   user: User;
-  token: string;
+  token: string; 
+  refreshToken?: string;
 }
 
 export interface ForgotPasswordPayload {
@@ -34,18 +36,3 @@ export interface AuthState {
   isAuthenticated: boolean;
 }
 
-/**
- * 👉 Tipo SOLO para DummyJSON (interno del service)
- * NO se usa en el resto de la app
- */
-export interface DummyJsonLoginResponse {
-  id: number;
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  gender: string;
-  image: string;
-  accessToken: string;
-  refreshToken: string;
-}
