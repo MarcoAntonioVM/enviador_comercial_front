@@ -9,7 +9,7 @@ export default function useSender(id?: string) {
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    sendersService.get(id).then((res) => {
+    sendersService.getById(id).then((res) => {
       setItem(res || null);
       setLoading(false);
     });
@@ -18,6 +18,6 @@ export default function useSender(id?: string) {
   return { 
     item, 
     loading,
-    refresh: () => (id ? sendersService.get(id).then((r) => setItem(r || null)) : Promise.resolve(null)) 
+    refresh: () => (id ? sendersService.getById(id).then((r) => setItem(r || null)) : Promise.resolve(null)) 
   };
 }

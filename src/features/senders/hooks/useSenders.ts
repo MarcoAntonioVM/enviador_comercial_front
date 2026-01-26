@@ -9,7 +9,7 @@ export default function useSenders() {
   const fetchData = async () => {
     setLoading(true);
     const data = await sendersService.list();
-    setItems(data);
+    setItems(data.senders);
     setLoading(false);
   };
 
