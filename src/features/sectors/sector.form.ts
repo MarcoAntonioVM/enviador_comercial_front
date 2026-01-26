@@ -18,7 +18,7 @@ export const sectorFormConfig: EntityFormConfig<Sector, SectorFormValues, Sector
   ],
 
   getById: async (id: string) => {
-    const sector = await sectorsService.get(id);
+    const sector = await sectorsService.getById(id);
     if (!sector) throw new Error("Sector no encontrado");
     return sector;
   },
