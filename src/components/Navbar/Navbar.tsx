@@ -37,6 +37,21 @@ export const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
             .slice(0, 2);
     };
 
+    // Etiqueta legible para roles conocidos 
+    const getRoleLabel = (role?: string) => {
+        if (!role) return 'Usuario';
+        switch (role) {
+            case 'admin':
+                return 'Administrador';
+            case 'commercial':
+                return 'Comercial';
+            case 'viewer':
+                return 'Visualizador';
+            default:
+                return role.charAt(0).toUpperCase() + role.slice(1);
+        }
+    };
+
     // Cerrar dropdown al hacer click fuera
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -71,7 +86,7 @@ export const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
                         {user?.name || 'Usuario'}
                     </span>
                     <span className="text-xs text-slate-500">
-                        {user?.role === 'admin' ? 'Administrador' : 'Usuario'}
+                        {getRoleLabel(user?.role)}
                     </span>
                 </div>
 
