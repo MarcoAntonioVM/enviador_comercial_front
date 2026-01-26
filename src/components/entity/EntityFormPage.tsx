@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +18,7 @@ export function EntityFormPage<TEntity, TForm extends Record<string, any>, TPayl
   const isEdit = Boolean(id);
   const navigate = useNavigate();
   const { showSuccess, showError } = useAppToast();
+  const [isLoading, setIsLoading] = useState(isEdit);
 
   const form = useForm<TForm>({
     resolver: zodResolver(
@@ -30,17 +31,36 @@ export function EntityFormPage<TEntity, TForm extends Record<string, any>, TPayl
   const { handleSubmit, reset, formState: { isSubmitting } } = form;
 
   useEffect(() => {
-    if (!isEdit || !id) return;
+    if (!isEdit || !id) {
+      setIsLoading(false);
+      return;
+    }
+
+    let cancelled = false;
 
     (async () => {
       try {
+        setIsLoading(true);
         const entity = await config.getById(id);
-        reset(config.toForm(entity));
+        if (!cancelled) {
+          reset(config.toForm(entity));
+        }
       } catch (e: any) {
-        showError(e.message || "No se pudo cargar el registro");
+        if (!cancelled) {
+          showError(e.message || "No se pudo cargar el registro");
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
       }
     })();
-  }, [id, isEdit, reset]);
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, isEdit]);
 
   const onSubmit = async (values: TForm) => {
     try {
@@ -83,37 +103,46 @@ export function EntityFormPage<TEntity, TForm extends Record<string, any>, TPayl
       {/* Card principal */}
       <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
         <div className="p-8">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-12 gap-6">
-              {config.fields.map((f) => (
-                <FieldRenderer
-                  key={String(f.name)}
-                  field={f}
-                  form={form}
-                  isEdit={isEdit}
-                />
-              ))}
+          {isLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="flex flex-col items-center gap-3">
+                <i className="pi pi-spin pi-spinner text-3xl text-blue-500"></i>
+                <p className="text-slate-600">Cargando datos...</p>
+              </div>
             </div>
+          ) : (
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid grid-cols-12 gap-6">
+                {config.fields.map((f) => (
+                  <FieldRenderer
+                    key={String(f.name)}
+                    field={f}
+                    form={form}
+                    isEdit={isEdit}
+                  />
+                ))}
+              </div>
 
-            {/* Botones de acción */}
-            <div className="pt-6 flex flex-col-reverse sm:flex-row sm:justify-center gap-3">
-              <button
-                type="button"
-                onClick={() => navigate(config.listPath)}
-                className="px-6 py-2.5 border border-slate-200 text-slate-700 bg-white rounded-lg font-medium hover:bg-slate-50 hover:border-slate-300 transition-colors"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="px-6 py-2.5 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 shadow-md shadow-blue-500/25 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-              >
-                <i className="pi pi-lock text-sm"></i>
-                <span>{isSubmitting ? "Guardando..." : `Guardar ${config.entityName}`}</span>
-              </button>
-            </div>
-          </form>
+              {/* Botones de acción */}
+              <div className="pt-6 flex flex-col-reverse sm:flex-row sm:justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => navigate(config.listPath)}
+                  className="px-6 py-2.5 border border-slate-200 text-slate-700 bg-white rounded-lg font-medium hover:bg-slate-50 hover:border-slate-300 transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-6 py-2.5 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 shadow-md shadow-blue-500/25 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  <i className="pi pi-lock text-sm"></i>
+                  <span>{isSubmitting ? "Guardando..." : `Guardar ${config.entityName}`}</span>
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
 
