@@ -8,3 +8,17 @@ export type Sender = {
   createdAt: string;
   updatedAt?: string;
 };
+
+
+export type SenderPagination = {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+};
+
+
+export type SendersListResponse = {
+  senders: Sender[];
+  pagination: SenderPagination;
+};
