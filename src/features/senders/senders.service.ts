@@ -1,42 +1,213 @@
-import type { Sender } from './senders.types';
-import { sendersMock } from './senders.mock';
+import type { Sender, SenderPagination, SendersListResponse } from './senders.types';
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+type ListParams = {
+  page?: number;
+  limit?: number;
+};
 
 export const sendersService = {
   // Obtener todos los remitentes
-  list: async (): Promise<Sender[]> => {
-    return Promise.resolve(sendersMock);
+  async list(params?: ListParams): Promise<SendersListResponse> {
+    const token = localStorage.getItem("token");
+    const searchParams = new URLSearchParams();
+    if (params?.page) searchParams.set("page", String(params.page));
+    if (params?.limit) searchParams.set("limit", String(params.limit));
+
+    const queryString = searchParams.toString();
+    const url = `${API_URL}/senders${queryString ? `?${queryString}&active=true` : '?active=true'}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al obtener remitentes";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al obtener remitentes";
+      throw new Error(msg);
+    }
+
+    // La API devuelve { data: { senders: [...] } }
+    const data = raw?.data?.senders ?? raw?.data ?? raw;
+
+    if (!Array.isArray(data)) {
+      throw new Error("Respuesta inválida del servidor");
+    }
+
+    const senders: Sender[] = data.map((u: any) => ({
+      id: String(u.id),
+      name: u.name,
+      email: u.email,
+      reply_to: u.reply_to,
+      signature: u.signature,
+      daily_limit: u.daily_limit,
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+    }));
+
+    const pagination: SenderPagination = raw?.pagination ?? {
+      page: 1,
+      limit: 10,
+      total: senders.length,
+      totalPages: 1,
+    };
+
+    return { senders, pagination };
   },
 
-  // Obtener un remitente por ID
-  get: async (id: string): Promise<Sender | undefined> => {
-    return sendersMock.find((s) => s.id === id);
+  async getById(id: string): Promise<Sender> {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/senders/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Remitente no encontrado";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Remitente no encontrado";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data?.sender ?? raw?.data ?? raw;
+
+    return {
+      id: String(u.id),
+      name: u.name,
+      email: u.email,
+      reply_to: u.reply_to ?? u.replyTo ?? undefined,
+      signature: u.signature ?? undefined,
+      daily_limit: typeof u.daily_limit !== 'undefined' ? u.daily_limit : u.dailyLimit,
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+      updatedAt: u.updated_at ?? u.updatedAt,
+    } as Sender;
   },
 
   // Crear un nuevo remitente
   create: async (data: Partial<Sender>): Promise<Sender> => {
-    const newSender: Sender = {
-      id: `snd-${Date.now()}`,
-      name: data.name || 'Sin nombre',
-      email: data.email || '',
-      reply_to: data.reply_to,
-      signature: data.signature,
-      daily_limit: data.daily_limit,
-      createdAt: new Date().toISOString(),
-    };
-    sendersMock.push(newSender);
-    return newSender;
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/senders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify(data),
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al crear remitente";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al crear remitente";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data?.sender ?? raw?.data ?? raw;
+    return {
+      id: String(u.id),
+      name: u.name,
+      email: u.email,
+      reply_to: u.reply_to ?? u.replyTo ?? undefined,
+      signature: u.signature ?? undefined,
+      daily_limit: typeof u.daily_limit !== 'undefined' ? u.daily_limit : u.dailyLimit,
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+      updatedAt: u.updated_at ?? u.updatedAt,
+    } as Sender;
+  },
+  // Actualizar un remitente existente
+  update: async (id: string, data: Partial<Sender>): Promise<Sender> => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/senders/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify(data),
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al actualizar remitente";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al actualizar remitente";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data?.sender ?? raw?.data ?? raw;
+    return {
+      id: String(u.id),
+      name: u.name,
+      email: u.email,
+      reply_to: u.reply_to ?? u.replyTo ?? undefined,
+      signature: u.signature ?? undefined,
+      daily_limit: typeof u.daily_limit !== 'undefined' ? u.daily_limit : u.dailyLimit,
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+      updatedAt: u.updated_at ?? u.updatedAt,
+    } as Sender;
   },
 
-  // Actualizar un remitente existente
-  update: async (id: string, data: Partial<Sender>): Promise<Sender | undefined> => {
-    const idx = sendersMock.findIndex((s) => s.id === id);
-    if (idx === -1) return undefined;
-    const updated = { 
-      ...sendersMock[idx], 
-      ...data, 
-      updatedAt: new Date().toISOString() 
-    };
-    sendersMock[idx] = updated;
-    return updated;
+  async delete(id: string): Promise<Sender> {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/senders/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al eliminar remitente";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al eliminar remitente";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data?.sender ?? raw?.data ?? raw;
+    return {
+      id: String(u.id),
+      name: u.name,
+      email: u.email,
+      reply_to: u.reply_to ?? u.replyTo ?? undefined,
+      signature: u.signature ?? undefined,
+      daily_limit: typeof u.daily_limit !== 'undefined' ? u.daily_limit : u.dailyLimit,
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+      updatedAt: u.updated_at ?? u.updatedAt,
+    } as Sender;
   },
 };
