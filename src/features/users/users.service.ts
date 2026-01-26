@@ -84,7 +84,8 @@ export const usersService = {
       throw new Error(msg);
     }
 
-    const u = raw?.data ?? raw;
+    // La API devuelve { success, message, data: { user: {...} } }
+    const u = raw?.data?.user ?? raw?.data ?? raw;
 
     return {
       id: String(u.id),
