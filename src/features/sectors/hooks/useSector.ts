@@ -7,8 +7,8 @@ export default function useSector(id?: string) {
 
   useEffect(() => {
     if (!id) return;
-    sectorsService.get(id).then((res) => setItem(res || null));
+    sectorsService.getById(id).then((res) => setItem(res || null));
   }, [id]);
 
-  return { item, refresh: () => (id ? sectorsService.get(id).then((r) => setItem(r || null)) : Promise.resolve(null)) };
+  return { item, refresh: () => (id ? sectorsService.getById(id).then((r) => setItem(r || null)) : Promise.resolve(null)) };
 }
