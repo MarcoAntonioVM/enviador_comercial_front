@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { paths } from '@/routes/paths';
 import { confirmDialog } from 'primereact/confirmdialog';
 import useSectors from '../hooks/useSectors';
+import useDeleteSector from '../hooks/useDeleteSector';
+import { useAppToast } from '@/components/Toast/ToastProvider';
 
 const columns: PrimeColumn[] = [
     { field: 'id', header: 'ID' },
@@ -14,7 +16,9 @@ const columns: PrimeColumn[] = [
 
 export const SectorsPage: React.FC = () => {
     const navigate = useNavigate();
-    const { items } = useSectors();
+    const { items, refresh } = useSectors();
+    const { remove } = useDeleteSector();
+    const { showSuccess, showError } = useAppToast();
 
     const handleAdd = () => {
         navigate(paths.SECTORS_NEW);
@@ -33,8 +37,14 @@ export const SectorsPage: React.FC = () => {
             acceptClassName: 'p-button-danger',
             acceptLabel: 'Eliminar',
             rejectLabel: 'Cancelar',
-            accept: () => {
-                console.log('Eliminar sector (mock):', row.id);
+            accept: async () => {
+                try {
+                    await remove(row.id)
+                    showSuccess(`Sector eliminado correctamente`)
+                    refresh()
+                } catch (e: any) {
+                    showError(e?.message || 'Error al eliminar sector')
+                }
             }
         });
     };
