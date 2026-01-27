@@ -6,7 +6,9 @@ import { paths } from '@/routes/paths';
 import { confirmDialog } from 'primereact/confirmdialog';
 import useSenders from '../hooks/useSenders';
 import useDeleteSender from '../hooks/useDeleteSender';
+import useCreateMultipleSenders from '../hooks/useCreateMultipleSenders';
 import { useAppToast } from '@/components/Toast/ToastProvider';
+import { ExcelUploader } from '@/components/ExcelUploader/ExcelUploader';
 
 const columns: PrimeColumn[] = [
     { field: 'id', header: 'ID' },
@@ -18,6 +20,7 @@ export const SendersPage: React.FC = () => {
     const navigate = useNavigate();
     const { items, refresh } = useSenders();
     const { remove } = useDeleteSender();
+    const { createMultiple } = useCreateMultipleSenders();
     const { showSuccess, showError } = useAppToast();
 
     const handleAdd = () => {
@@ -58,7 +61,56 @@ export const SendersPage: React.FC = () => {
                         <h2 className="text-lg font-semibold">Remitentes</h2>
                         <p className="text-sm text-gray-600">Listado de direcciones de email para envío</p>
                     </div>
-                    <div>
+                    <div className="flex items-center gap-2">
+                        <ExcelUploader<{ name: string; email: string }>
+                            config={{ 
+                                columnMapping: { 
+                                    'Nombre': 'name', 
+                                    'Email': 'email'
+                                }, 
+                                hasHeader: true,
+                                transformRow: (row) => ({
+                                    name: String(row.name ?? '').trim(),
+                                    email: String(row.email ?? '').trim()
+                                }),
+                            }}
+                            onFileRead={async (data) => {
+                                try {
+                                    const sendersData = data.map(item => ({
+                                        name: item.name,
+                                        email: item.email
+                                    }));
+                                    const res = await createMultiple(sendersData);
+                                    if (res?.success) {
+                                        showSuccess(res.message ?? `Se importaron ${res.created?.length ?? data.length} remitente(s)`);
+                                    } else {
+                                        showError(res?.message ?? 'Error al importar remitentes');
+                                    }
+                                    refresh();
+                                } catch (e: any) {
+                                    showError(e?.message || 'Error al importar remitentes');
+                                }
+                            }}
+                            onError={(msg) => showError(msg)}
+                            buttonLabel="Importar Excel"
+                            buttonIcon="pi pi-file-excel"
+                            asModal={true}
+                            modalTitle="Importar Remitentes desde Excel"
+                            previewColumns={[
+                                { field: 'name', header: 'Nombre' },
+                                { field: 'email', header: 'Email' }
+                            ]}
+                            modalInfo={
+                                <div className="p-3 bg-blue-50 rounded-lg">
+                                    <h4 className="text-sm font-medium text-blue-800 mb-2">Formato esperado:</h4>
+                                    <ul className="text-xs text-blue-600 space-y-1">
+                                        <li>• Primera fila debe contener los encabezados</li>
+                                        <li>• Columna "Nombre": Nombre del remitente (obligatorio)</li>
+                                        <li>• Columna "Email": Email del remitente (obligatorio)</li>
+                                    </ul>
+                                </div>
+                            }
+                        />
                         <Button 
                             label="Agregar remitente" 
                             icon="pi pi-plus" 
