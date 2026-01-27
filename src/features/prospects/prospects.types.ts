@@ -4,8 +4,23 @@ export type Prospect = {
   name: string;
   company?: string;
   sector_id?: string;
-  status: 'new' | 'contacted' | 'qualified' | 'lost';
+  status: 'active' | 'unsubscribed' | 'unknown';
+  phone?: string | null;
   metadata?: string[];
   createdAt: string;
 };
 
+
+
+export type prospectsPagination = {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+};
+
+
+export type prospectsListResponse = {
+  prospects: Prospect[];
+  pagination: prospectsPagination;
+};

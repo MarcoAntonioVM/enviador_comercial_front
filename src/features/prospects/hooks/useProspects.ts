@@ -6,8 +6,8 @@ export default function useProspects() {
   const [items, setItems] = useState<Prospect[]>([])
 
   useEffect(() => {
-    prospectsService.list().then(setItems)
+    prospectsService.list().then((res) => setItems(res.prospects ?? []))
   }, [])
 
-  return { items, refresh: () => prospectsService.list().then(setItems) }
+  return { items, refresh: () => prospectsService.list().then((res) => setItems(res.prospects ?? [])) }
 }

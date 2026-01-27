@@ -1,7 +1,11 @@
-import React from "react";
 import { EntityFormPage } from "@/components/entity/EntityFormPage";
-import { prospectFormConfig } from "../prospect.form";
+import { buildProspectFormConfig } from "../prospect.form";
+import useSectors from "@/features/sectors/hooks/useSectors";
 
 export default function ProspectFormPage() {
-  return <EntityFormPage config={prospectFormConfig} />;
+  const { items: sectors } = useSectors();
+
+  const config = buildProspectFormConfig(sectors);
+
+  return <EntityFormPage config={config} />;
 }

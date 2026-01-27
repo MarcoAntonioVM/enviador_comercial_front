@@ -1,45 +1,234 @@
-import type { Prospect } from "./prospects.types";
+import type { Prospect, prospectsListResponse, prospectsPagination } from "./prospects.types";
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+type ListParams = {
+  page?: number;
+  limit?: number;
+  status?: string;
+  sector_id?: string | number;
+  consent_status?: string;
+  search?: string;
+  sortBy?: string;
+  sortOrder?: string;
+};
+
 
 export const prospectsService = {
-  async list(): Promise<Prospect[]> {
-    const { prospects } = await import("@/data/prospects");
-    return prospects;
-  },
+ async list(params?: ListParams): Promise<prospectsListResponse> {
+     const token = localStorage.getItem("token");
+     const searchParams = new URLSearchParams();
+    if (params?.page) searchParams.set("page", String(params.page));
+    if (params?.limit) searchParams.set("limit", String(params.limit));
+    if (params?.status) searchParams.set("status", String(params.status));
+    if (params?.sector_id) searchParams.set("sector_id", String(params.sector_id));
+    if (params?.consent_status) searchParams.set("consent_status", String(params.consent_status));
+    if (params?.search) searchParams.set("search", String(params.search));
+    if (params?.sortBy) searchParams.set("sortBy", String(params.sortBy));
+    if (params?.sortOrder) searchParams.set("sortOrder", String(params.sortOrder));
+ 
+    const queryString = searchParams.toString();
+    const url = `${API_URL}/prospects${queryString ? `?${queryString}` : ''}`;
+ 
+     const response = await fetch(url, {
+       method: "GET",
+       headers: {
+         "Content-Type": "application/json",
+         ...(token && { Authorization: `Bearer ${token}` }),
+       },
+     });
+ 
+     const raw = await response.json();
+
+    // DEBUG: mostrar respuesta cruda del backend para investigar discrepancias
+    // (remover este console.log cuando se resuelva el problema)
+    console.debug('prospects.list raw response:', raw);
+ 
+     if (raw?.success === false) {
+       const msg = raw?.error ?? raw?.message ?? "Error al obtener prospectos";
+       throw new Error(msg);
+     }
+ 
+     if (!response.ok) {
+       const msg = raw?.error ?? raw?.message ?? "Error al obtener prospectos";
+       throw new Error(msg);
+     }
+ 
+     // La API devuelve { data: { prospects: [...] } }
+     const data = raw?.data?.prospects ?? raw?.data ?? raw;
+ 
+     if (!Array.isArray(data)) {
+       throw new Error("Respuesta inválida del servidor");
+     }
+ 
+     const prospects: Prospect[] = data.map((u: any) => ({
+       id: String(u.id),
+       name: u.name,
+       emails: u.emails,
+       company: u.company,
+       sector_id: u.sector_id,
+       status: u.status,
+       metadata: u.metadata,
+       createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+     }));
+ 
+     const pagination: prospectsPagination = raw?.pagination ?? {
+       page: 1,
+       limit: 10,
+       total: prospects.length,
+       totalPages: 1,
+     };
+ 
+     return { prospects, pagination };
+   },
 
   async getById(id: string): Promise<Prospect> {
-    const { prospects } = await import("@/data/prospects");
-    const p = prospects.find((x: any) => x.id === id);
-    if (!p) throw new Error("Prospecto no encontrado");
-    return p;
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/prospects/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Prospecto no encontrado";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Prospecto no encontrado";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data?.prospect ?? raw?.data ?? raw;
+
+    return {
+      id: String(u.id),
+      name: u.name,
+      emails: u.emails ?? [],
+      company: u.company,
+      sector_id: u.sector_id ?? u.sector?.id,
+      status: (u.status as any) ?? 'unknown',
+      phone: u.phone ?? null,
+      metadata: u.metadata ?? [],
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+    } as Prospect;
   },
 
-  async create(payload: { name: string; emails: string[]; company?: string; sector_id?: string; status?: Prospect['status']; metadata?: string[] }): Promise<Prospect> {
-    const newP: Prospect = {
-      id: `p-${Date.now()}`,
-      name: payload.name,
-      emails: payload.emails,
-      company: payload.company,
-      sector_id: payload.sector_id,
-      status: payload.status ?? 'new',
-      metadata: payload.metadata ?? [],
-      createdAt: new Date().toISOString(),
-    };
-    console.log('Crear prospecto (mock):', newP);
-    return newP;
+  async create(payload: { name: string; emails: string[]; company?: string; sector_id?: string; status?: Prospect['status']; phone?: string | null; metadata?: string[] }): Promise<Prospect> {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/prospects`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al crear prospecto";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al crear prospecto";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data?.prospect ?? raw?.data ?? raw;
+
+    return {
+      id: String(u.id),
+      name: u.name,
+      emails: u.emails ?? [],
+      company: u.company,
+      sector_id: u.sector_id ?? u.sector?.id,
+      status: (u.status as any) ?? 'unknown',
+      phone: u.phone ?? null,
+      metadata: u.metadata ?? [],
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+    } as Prospect;
   },
 
-  async update(id: string, payload: { name: string; emails: string[]; company?: string; sector_id?: string; status: Prospect['status']; metadata?: string[] }): Promise<Prospect> {
-    const existing = await this.getById(id);
-    const updated: Prospect = {
-      ...existing,
-      name: payload.name,
-      emails: payload.emails,
-      company: payload.company,
-      sector_id: payload.sector_id,
-      status: payload.status,
-      metadata: payload.metadata ?? existing.metadata,
-    };
-    console.log('Actualizar prospecto (mock):', updated);
-    return updated;
+  async update(id: string, payload: { name: string; emails: string[]; company?: string; sector_id?: string; status?: Prospect['status']; phone?: string | null; metadata?: string[] }): Promise<Prospect> {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/prospects/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al actualizar prospecto";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al actualizar prospecto";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data?.prospect ?? raw?.data ?? raw;
+
+    return {
+      id: String(u.id),
+      name: u.name,
+      emails: u.emails ?? [],
+      company: u.company,
+      sector_id: u.sector_id ?? u.sector?.id,
+      status: (u.status as any) ?? 'unknown',
+      phone: u.phone ?? null,
+      metadata: u.metadata ?? [],
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+    } as Prospect;
+  },
+
+  async delete(id: string): Promise<Prospect> {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/prospects/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al eliminar prospecto";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al eliminar prospecto";
+      throw new Error(msg);
+    }
+
+    const u = raw?.data?.prospect ?? raw?.data ?? raw;
+
+    return {
+      id: String(u.id),
+      name: u.name,
+      emails: u.emails ?? [],
+      company: u.company,
+      sector_id: u.sector_id ?? u.sector?.id,
+      status: (u.status as any) ?? 'unknown',
+      phone: u.phone ?? null,
+      metadata: u.metadata ?? [],
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+    } as Prospect;
   },
 };

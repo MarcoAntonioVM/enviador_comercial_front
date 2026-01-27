@@ -1,25 +1,26 @@
 import React from 'react';
 import PrimeDataTable, { type PrimeColumn } from '@/components/PrimeTable/PrimeDataTable';
-import { prospects } from '@/data/prospects';
-import { sectorsMock } from '../../sectors/sectors.mock';
+import useProspects from '../hooks/useProspects';
+import useSectors from '@/features/sectors/hooks/useSectors';
 import { Button } from 'primereact/button';
 import { useAppToast } from '@/components/Toast/ToastProvider';
 import { useNavigate } from 'react-router-dom';
 import { paths } from '@/routes/paths';
 
-const columns: PrimeColumn[] = [
+const columns = (sectors: { id: string; name: string }[]): PrimeColumn[] => [
     { field: 'id', header: 'ID' },
     { field: 'name', header: 'Nombre' },
     { field: 'company', header: 'Empresa' },
-    { field: 'sector_id', header: 'Sector', body: (row: any) => (sectorsMock.find(s => s.id === row.sector_id)?.name ?? row.sector_id ?? '') },
+    { field: 'sector_id', header: 'Sector', body: (row: any) => (sectors.find(s => s.id === row.sector_id)?.name ?? row.sector_id ?? '') },
     { field: 'status', header: 'Estado' },
     { field: 'emails', header: 'Correos', body: (row: any) => (row.emails || []).join(', ') },
     { field: 'metadata', header: 'Metadatos', body: (row: any) => (row.metadata || []).join(', ') },
 ];
 
 export const ProspectsPage: React.FC = () => {
-    useAppToast();
     const navigate = useNavigate();
+    const { items } = useProspects();
+    const { items: sectors } = useSectors();
 
     const handleAdd = () => {
         navigate(paths.PROSPECTS_NEW);
@@ -49,7 +50,7 @@ export const ProspectsPage: React.FC = () => {
                     </div>
                 </div>
 
-                <PrimeDataTable value={prospects} columns={columns} paginator rows={10} showActions onEdit={handleEdit} onDelete={handleDelete} />
+                <PrimeDataTable value={items} columns={columns(sectors)} paginator rows={10} showActions onEdit={handleEdit} onDelete={handleDelete} />
             </div>
         </div>
     );
