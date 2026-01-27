@@ -210,4 +210,56 @@ export const sendersService = {
       updatedAt: u.updated_at ?? u.updatedAt,
     } as Sender;
   },
+
+  // Crear múltiples remitentes (envía los objetos con la misma forma que `create`)
+  createMultiple: async (senders: Partial<Sender>[]): Promise<Sender[]> => {
+    const token = localStorage.getItem("token");
+
+    const payloadSenders = senders.map((s) => ({
+      name: s.name,
+      email: s.email,
+      daily_limit: typeof (s as any).daily_limit !== 'undefined' ? (s as any).daily_limit : (s as any).dailyLimit ?? 100,
+    }));
+
+    const response = await fetch(`${API_URL}/senders/multiple`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify({ senders: payloadSenders }),
+    });
+
+    const raw = await response.json();
+
+    // No lanzar excepción aquí: la API puede devolver created/errors/summary.
+    if (!response.ok && raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al crear remitentes";
+      throw new Error(msg);
+    }
+
+    const createdRaw = raw?.data?.created ?? raw?.data?.senders ?? raw?.data ?? [];
+    const createdArray = Array.isArray(createdRaw) ? createdRaw : [];
+    const errors = raw?.data?.errors ?? [];
+    const summary = raw?.data?.summary ?? null;
+
+    const created = createdArray.map((u: any) => ({
+      id: String(u.id),
+      name: u.name,
+      email: u.email,
+      reply_to: u.reply_to ?? u.replyTo ?? undefined,
+      signature: u.signature ?? undefined,
+      daily_limit: typeof u.daily_limit !== 'undefined' ? u.daily_limit : u.dailyLimit,
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+      updatedAt: u.updated_at ?? u.updatedAt,
+    })) as Sender[];
+
+    return {
+      success: Boolean(raw?.success),
+      message: raw?.message ?? '',
+      created,
+      errors,
+      summary,
+    } as any;
+  },
 };
