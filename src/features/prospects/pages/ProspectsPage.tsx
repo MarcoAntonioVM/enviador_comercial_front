@@ -3,24 +3,27 @@ import PrimeDataTable, { type PrimeColumn } from '@/components/PrimeTable/PrimeD
 import useProspects from '../hooks/useProspects';
 import useSectors from '@/features/sectors/hooks/useSectors';
 import { Button } from 'primereact/button';
+import { confirmDialog } from 'primereact/confirmdialog';
 import { useAppToast } from '@/components/Toast/ToastProvider';
 import { useNavigate } from 'react-router-dom';
 import { paths } from '@/routes/paths';
+import useDeleteProspect from '../hooks/useDeleteProspect';
 
 const columns = (sectors: { id: string; name: string }[]): PrimeColumn[] => [
     { field: 'id', header: 'ID' },
     { field: 'name', header: 'Nombre' },
     { field: 'company', header: 'Empresa' },
     { field: 'sector_id', header: 'Sector', body: (row: any) => (sectors.find(s => s.id === row.sector_id)?.name ?? row.sector_id ?? '') },
-    { field: 'status', header: 'Estado' },
-    { field: 'emails', header: 'Correos', body: (row: any) => (row.emails || []).join(', ') },
-    { field: 'metadata', header: 'Metadatos', body: (row: any) => (row.metadata || []).join(', ') },
+    { field: 'emails', header: 'Correos', body: (row: any) => { const e = row.emails || []; return e.length ? e.join(', ') : 'No hay'; } },
+    { field: 'metadata', header: 'Metadatos', body: (row: any) => { const m = row.metadata || []; return m.length ? m.join(', ') : 'No hay'; } },
 ];
 
 export const ProspectsPage: React.FC = () => {
     const navigate = useNavigate();
-    const { items } = useProspects();
+    const { items, refresh } = useProspects();
+    const { remove } = useDeleteProspect();
     const { items: sectors } = useSectors();
+    const { showSuccess, showError } = useAppToast();
 
     const handleAdd = () => {
         navigate(paths.PROSPECTS_NEW);
@@ -31,19 +34,35 @@ export const ProspectsPage: React.FC = () => {
     };
 
     const handleDelete = (row: any) => {
-        if (!window.confirm(`Eliminar prospecto ${row.name}?`)) return;
-        console.log('Eliminar prospecto (mock):', row.id);
+        confirmDialog({
+            message: `¿Estás seguro de que deseas eliminar el prospecto "${row.name}"?`,
+            header: 'Confirmar eliminación',
+            icon: 'pi pi-exclamation-triangle',
+            defaultFocus: 'reject',
+            acceptClassName: 'p-button-danger',
+            acceptLabel: 'Eliminar',
+            rejectLabel: 'Cancelar',
+            accept: async () => {
+                try {
+                    await remove(row.id);
+                    refresh();
+                    showSuccess(`Prospecto eliminado correctamente`);
+                } catch (e: any) {
+                    showError(e?.message || 'Error al eliminar prospecto');
+                }
+            }
+        });
     };
 
     return (
-        <div>
-            <h1 className="text-2xl font-bold mb-4">Prospectos</h1>
+        <div className="text-gray-900 dark:text-gray-100">
+            <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Prospectos</h1>
 
-            <div className="card bg-white p-6 rounded-lg shadow-sm">
+            <div className="card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-600">
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <h2 className="text-lg font-semibold">Prospectos</h2>
-                        <p className="text-sm text-gray-600">Listado de prospectos</p>
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Prospectos</h2>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">Listado de prospectos</p>
                     </div>
                     <div>
                         <Button label="Agregar prospecto" icon="pi pi-plus" className="p-button-sm" onClick={handleAdd} />
