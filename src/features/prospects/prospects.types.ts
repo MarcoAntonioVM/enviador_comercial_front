@@ -24,3 +24,9 @@ export type prospectsListResponse = {
   prospects: Prospect[];
   pagination: prospectsPagination;
 };
+
+// Payload usado para crear/actualizar prospectos desde el cliente.
+export type ProspectPayload = Omit<Prospect, 'id' | 'createdAt'> & {
+  // El backend espera un solo correo en `email` al crear/actualizar.
+  email?: string;
+};
