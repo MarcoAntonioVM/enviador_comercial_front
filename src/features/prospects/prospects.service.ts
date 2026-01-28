@@ -1,4 +1,4 @@
-import type { Prospect, prospectsListResponse, prospectsPagination } from "./prospects.types";
+import type { Prospect, prospectsListResponse, prospectsPagination, ProspectPayload } from "./prospects.types";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -39,10 +39,6 @@ export const prospectsService = {
      });
  
      const raw = await response.json();
-
-    // DEBUG: mostrar respuesta cruda del backend para investigar discrepancias
-    // (remover este console.log cuando se resuelva el problema)
-    console.debug('prospects.list raw response:', raw);
  
      if (raw?.success === false) {
        const msg = raw?.error ?? raw?.message ?? "Error al obtener prospectos";
@@ -61,16 +57,16 @@ export const prospectsService = {
        throw new Error("Respuesta inválida del servidor");
      }
  
-     const prospects: Prospect[] = data.map((u: any) => ({
-       id: String(u.id),
-       name: u.name,
-       emails: u.emails,
-       company: u.company,
-       sector_id: u.sector_id,
-       status: u.status,
-       metadata: u.metadata,
-       createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
-     }));
+    const prospects: Prospect[] = data.map((u: any) => ({
+      id: String(u.id),
+      name: u.name,
+      emails: u.emails ?? (u.email ? [u.email] : []),
+      company: u.company,
+      sector_id: (u.sector_id ?? u.sector?.id) !== undefined && (u.sector_id ?? u.sector?.id) !== null ? String(u.sector_id ?? u.sector?.id) : undefined,
+      status: u.status,
+      metadata: Array.isArray(u.metadata) ? u.metadata : (u.metadata ? [u.metadata] : []),
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+    }));
  
      const pagination: prospectsPagination = raw?.pagination ?? {
        page: 1,
@@ -109,25 +105,51 @@ export const prospectsService = {
     return {
       id: String(u.id),
       name: u.name,
-      emails: u.emails ?? [],
+      emails: u.emails ?? (u.email ? [u.email] : []),
       company: u.company,
-      sector_id: u.sector_id ?? u.sector?.id,
+      sector_id: (u.sector_id ?? u.sector?.id) !== undefined && (u.sector_id ?? u.sector?.id) !== null ? String(u.sector_id ?? u.sector?.id) : undefined,
       status: (u.status as any) ?? 'unknown',
       phone: u.phone ?? null,
-      metadata: u.metadata ?? [],
+      metadata: Array.isArray(u.metadata) ? u.metadata : (u.metadata ? [u.metadata] : []),
       createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
     } as Prospect;
   },
 
-  async create(payload: { name: string; emails: string[]; company?: string; sector_id?: string; status?: Prospect['status']; phone?: string | null; metadata?: string[] }): Promise<Prospect> {
+  async create(payload: ProspectPayload): Promise<Prospect> {
     const token = localStorage.getItem("token");
+    // Normalizar payload para backend: asegurar que exista `email` (extraer de `emails` si alguien lo envió así)
+    // Normalizar sector_id: si viene como cadena vacía no la enviamos
+    const rawSector = (payload as any).sector_id;
+    let normalizedSector: number | string | undefined = undefined;
+    if (rawSector !== undefined && rawSector !== "") {
+      const n = Number(rawSector);
+      normalizedSector = Number.isNaN(n) ? rawSector : n;
+    }
+
+    const requestBody: any = {
+      name: payload.name,
+      email: (payload as any).email ?? ((payload as any).emails ? (Array.isArray((payload as any).emails) ? (payload as any).emails[0] : undefined) : undefined),
+      company: payload.company,
+      sector_id: normalizedSector,
+      status: payload.status,
+      phone: payload.phone ?? null,
+      metadata: payload.metadata,
+    };
+
+    // Eliminar campos undefined o cadenas vacías para evitar inserciones inválidas
+    Object.keys(requestBody).forEach((k) => {
+      const v = requestBody[k];
+      if (v === undefined || v === "") delete requestBody[k];
+    });
+
+
     const response = await fetch(`${API_URL}/prospects`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         ...(token && { Authorization: `Bearer ${token}` }),
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(requestBody),
     });
 
     const raw = await response.json();
@@ -147,25 +169,47 @@ export const prospectsService = {
     return {
       id: String(u.id),
       name: u.name,
-      emails: u.emails ?? [],
+      emails: u.emails ?? (u.email ? [u.email] : []),
       company: u.company,
-      sector_id: u.sector_id ?? u.sector?.id,
+      sector_id: (u.sector_id ?? u.sector?.id) !== undefined && (u.sector_id ?? u.sector?.id) !== null ? String(u.sector_id ?? u.sector?.id) : undefined,
       status: (u.status as any) ?? 'unknown',
       phone: u.phone ?? null,
-      metadata: u.metadata ?? [],
+      metadata: Array.isArray(u.metadata) ? u.metadata : (u.metadata ? [u.metadata] : []),
       createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
     } as Prospect;
   },
 
-  async update(id: string, payload: { name: string; emails: string[]; company?: string; sector_id?: string; status?: Prospect['status']; phone?: string | null; metadata?: string[] }): Promise<Prospect> {
+  async update(id: string, payload: ProspectPayload): Promise<Prospect> {
     const token = localStorage.getItem("token");
+    const rawSectorUpdate = (payload as any).sector_id;
+    let normalizedSectorUpdate: number | string | undefined = undefined;
+    if (rawSectorUpdate !== undefined && rawSectorUpdate !== "") {
+      const n = Number(rawSectorUpdate);
+      normalizedSectorUpdate = Number.isNaN(n) ? rawSectorUpdate : n;
+    }
+
+    const requestBody: any = {
+      name: payload.name,
+      email: (payload as any).email ?? ((payload as any).emails ? (Array.isArray((payload as any).emails) ? (payload as any).emails[0] : undefined) : undefined),
+      company: payload.company,
+      sector_id: normalizedSectorUpdate,
+      status: payload.status,
+      phone: payload.phone ?? null,
+      metadata: payload.metadata,
+    };
+
+    Object.keys(requestBody).forEach((k) => {
+      const v = requestBody[k];
+      if (v === undefined || v === "") delete requestBody[k];
+    });
+
     const response = await fetch(`${API_URL}/prospects/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         ...(token && { Authorization: `Bearer ${token}` }),
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(requestBody),
     });
 
     const raw = await response.json();
@@ -185,12 +229,12 @@ export const prospectsService = {
     return {
       id: String(u.id),
       name: u.name,
-      emails: u.emails ?? [],
+      emails: u.emails ?? (u.email ? [u.email] : []),
       company: u.company,
       sector_id: u.sector_id ?? u.sector?.id,
       status: (u.status as any) ?? 'unknown',
       phone: u.phone ?? null,
-      metadata: u.metadata ?? [],
+      metadata: Array.isArray(u.metadata) ? u.metadata : (u.metadata ? [u.metadata] : []),
       createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
     } as Prospect;
   },
@@ -224,7 +268,7 @@ export const prospectsService = {
       name: u.name,
       emails: u.emails ?? [],
       company: u.company,
-      sector_id: u.sector_id ?? u.sector?.id,
+      sector_id: (u.sector_id ?? u.sector?.id) !== undefined && (u.sector_id ?? u.sector?.id) !== null ? String(u.sector_id ?? u.sector?.id) : undefined,
       status: (u.status as any) ?? 'unknown',
       phone: u.phone ?? null,
       metadata: u.metadata ?? [],
