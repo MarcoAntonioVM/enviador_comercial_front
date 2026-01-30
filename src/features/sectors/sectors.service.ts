@@ -243,4 +243,37 @@ export const sectorsService = {
       summary,
     } as any;
   },
+
+  // Eliminar múltiples sectores
+  deleteMultiple: async (ids: string[]): Promise<any> => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/sectors/multiple`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify({ ids }),
+    });
+
+    const raw = await response.json();
+
+    if (raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al eliminar sectores";
+      throw new Error(msg);
+    }
+
+    if (!response.ok) {
+      const msg = raw?.error ?? raw?.message ?? "Error al eliminar sectores";
+      throw new Error(msg);
+    }
+
+    return {
+      success: Boolean(raw?.success),
+      message: raw?.message ?? `Se eliminaron ${ids.length} sector(es) correctamente`,
+      deleted: raw?.data?.deleted ?? ids.length,
+      errors: raw?.data?.errors ?? [],
+    };
+  },
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PrimeDataTable, { type PrimeColumn } from '@/components/PrimeTable/PrimeDataTable';
 import { Button } from 'primereact/button';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { confirmDialog } from 'primereact/confirmdialog';
 import useSectors from '../hooks/useSectors';
 import useDeleteSector from '../hooks/useDeleteSector';
 import useCreateMultipleSectors from '../hooks/useCreateMultipleSectors';
+import useDeleteMultipleSectors from '../hooks/useDeleteMultipleSectors';
 import { useAppToast } from '@/components/Toast/ToastProvider';
 import { ExcelUploader } from '@/components/ExcelUploader/ExcelUploader';
 
@@ -22,7 +23,9 @@ export const SectorsPage: React.FC = () => {
     const { items, refresh } = useSectors();
     const { remove } = useDeleteSector();
     const { createMultiple } = useCreateMultipleSectors();
+    const { removeMultiple } = useDeleteMultipleSectors();
     const { showSuccess, showError } = useAppToast();
+    const [selectedSectors, setSelectedSectors] = useState<any[]>([]);
 
     const handleAdd = () => {
         navigate(paths.SECTORS_NEW);
@@ -53,6 +56,38 @@ export const SectorsPage: React.FC = () => {
         });
     };
 
+    const handleDeleteMultiple = () => {
+        if (selectedSectors.length === 0) {
+            showError('Por favor selecciona al menos un sector para eliminar');
+            return;
+        }
+
+        confirmDialog({
+            message: `¿Estás seguro de que deseas eliminar ${selectedSectors.length} sector(es) seleccionado(s)?`,
+            header: 'Confirmar eliminación masiva',
+            icon: 'pi pi-exclamation-triangle',
+            defaultFocus: 'reject',
+            acceptClassName: 'p-button-danger',
+            acceptLabel: 'Eliminar',
+            rejectLabel: 'Cancelar',
+            accept: async () => {
+                try {
+                    const ids = selectedSectors.map(s => s.id);
+                    const res = await removeMultiple(ids);
+                    if (res?.success) {
+                        showSuccess(res.message ?? `Se eliminaron ${ids.length} sector(es) correctamente`);
+                    } else {
+                        showError(res?.message ?? 'Error al eliminar sectores');
+                    }
+                    setSelectedSectors([]);
+                    refresh();
+                } catch (e: any) {
+                    showError(e?.message || 'Error al eliminar sectores');
+                }
+            }
+        });
+    };
+
     return (
         <div className="text-gray-900 dark:text-gray-100">
             <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Sectores</h1>
@@ -64,6 +99,14 @@ export const SectorsPage: React.FC = () => {
                         <p className="text-sm text-gray-600 dark:text-gray-300">Listado de sectores del sistema</p>
                     </div>
                     <div className="flex items-center gap-2">
+                        {selectedSectors.length > 0 && (
+                            <Button 
+                                label={`Eliminar seleccionados (${selectedSectors.length})`} 
+                                icon="pi pi-trash" 
+                                className="p-button-sm p-button-danger" 
+                                onClick={handleDeleteMultiple} 
+                            />
+                        )}
                         <ExcelUploader<{ name: string; description: string }>
                             config={{ 
                                 columnMapping: { 
@@ -127,7 +170,11 @@ export const SectorsPage: React.FC = () => {
                     rows={10} 
                     showActions 
                     onEdit={handleEdit} 
-                    onDelete={handleDelete} 
+                    onDelete={handleDelete}
+                    selectionMode="checkbox"
+                    selection={selectedSectors}
+                    onSelectionChange={setSelectedSectors}
+                    dataKey="id"
                 />
             </div>
         </div>
