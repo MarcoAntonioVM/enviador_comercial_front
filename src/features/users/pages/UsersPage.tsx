@@ -52,7 +52,11 @@ export const UsersPage: React.FC = () => {
             field: 'active', 
             header: 'Estado',
             body: (rowData: any) => (
-                <span className={`px-2 py-1 rounded text-xs font-medium ${rowData.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                <span className={`px-2 py-1 rounded text-xs font-medium ${
+                    rowData.active 
+                        ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200' 
+                        : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
+                }`}>
                     {rowData.active ? 'Activo' : 'Inactivo'}
                 </span>
             )
@@ -62,14 +66,14 @@ export const UsersPage: React.FC = () => {
 
 
     return (
-        <div>
-            <h1 className="text-2xl font-bold mb-4">Usuarios</h1>
+        <div className="text-gray-900 dark:text-gray-100">
+            <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Usuarios</h1>
 
-            <div className="card bg-white p-6 rounded-lg shadow-sm">
+            <div className="card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-600">
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <h2 className="text-lg font-semibold">Usuarios</h2>
-                        <p className="text-sm text-gray-600">Listado de usuarios del sistema</p>
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Usuarios</h2>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">Listado de usuarios del sistema</p>
                     </div>
                     {/* Add button on the right */}
                     <div>

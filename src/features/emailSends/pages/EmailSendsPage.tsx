@@ -69,34 +69,34 @@ export const EmailSendsPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Envíos de Email</h1>
+    <div className="text-gray-900 dark:text-gray-100">
+      <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Envíos de Email</h1>
 
       {/* Estadísticas rápidas */}
       <div className="grid grid-cols-4 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500">
-          <p className="text-sm text-gray-500">Total enviados</p>
-          <p className="text-2xl font-bold text-gray-800">{stats.total}</p>
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border-l-4 border-blue-500 dark:border dark:border-gray-600">
+          <p className="text-sm text-gray-500 dark:text-gray-400">Total enviados</p>
+          <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{stats.total}</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500">
-          <p className="text-sm text-gray-500">Abiertos</p>
-          <p className="text-2xl font-bold text-green-600">{stats.opened}</p>
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border-l-4 border-green-500 dark:border dark:border-gray-600">
+          <p className="text-sm text-gray-500 dark:text-gray-400">Abiertos</p>
+          <p className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.opened}</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-yellow-500">
-          <p className="text-sm text-gray-500">Rebotados</p>
-          <p className="text-2xl font-bold text-yellow-600">{stats.bounced}</p>
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border-l-4 border-yellow-500 dark:border dark:border-gray-600">
+          <p className="text-sm text-gray-500 dark:text-gray-400">Rebotados</p>
+          <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{stats.bounced}</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-500">
-          <p className="text-sm text-gray-500">Fallidos</p>
-          <p className="text-2xl font-bold text-red-600">{stats.failed}</p>
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border-l-4 border-red-500 dark:border dark:border-gray-600">
+          <p className="text-sm text-gray-500 dark:text-gray-400">Fallidos</p>
+          <p className="text-2xl font-bold text-red-600 dark:text-red-400">{stats.failed}</p>
         </div>
       </div>
 
-      <div className="card bg-white p-6 rounded-lg shadow-sm">
+      <div className="card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-600">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-lg font-semibold">Historial de Envíos</h2>
-            <p className="text-sm text-gray-600">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Historial de Envíos</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
               Todos los emails enviados desde la plataforma
             </p>
           </div>
@@ -111,8 +111,8 @@ export const EmailSendsPage: React.FC = () => {
 
         {loading ? (
           <div className="flex items-center justify-center py-8">
-            <i className="pi pi-spin pi-spinner text-2xl text-gray-400"></i>
-            <span className="ml-2 text-gray-500">Cargando envíos...</span>
+            <i className="pi pi-spin pi-spinner text-2xl text-gray-400 dark:text-gray-500"></i>
+            <span className="ml-2 text-gray-500 dark:text-gray-400">Cargando envíos...</span>
           </div>
         ) : (
           <PrimeDataTable 

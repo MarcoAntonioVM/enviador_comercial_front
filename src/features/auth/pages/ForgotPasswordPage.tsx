@@ -20,27 +20,27 @@ export const ForgotPasswordPage: React.FC = () => {
     };
 
     return (
-        <section className="min-h-dvh bg-gray-200">
+        <section className="min-h-dvh bg-gray-200 dark:bg-gray-900">
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto min-h-dvh">
-                <div className="w-full rounded-lg shadow-lg backdrop-blur-lg bg-white/90 border border-white/20 md:mt-0 sm:max-w-md xl:p-0">
+                <div className="w-full rounded-lg shadow-lg backdrop-blur-lg bg-white/90 dark:bg-gray-800/90 border border-white/20 dark:border-gray-700/20 md:mt-0 sm:max-w-md xl:p-0">
                     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                        <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-black md:text-2xl">
+                        <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-black dark:text-white md:text-2xl">
                             Recuperar contraseña
                         </h1>
-                        <p className="text-sm text-gray-600 text-center">
+                        <p className="text-sm text-gray-600 dark:text-gray-300 text-center">
                             Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
                         </p>
 
                         <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onSubmit)}>
                             <div>
-                                <label htmlFor="email" className="block mb-2 text-sm font-medium text-black">
+                                <label htmlFor="email" className="block mb-2 text-sm font-medium text-black dark:text-white">
                                     Correo electrónico
                                 </label>
                                 <input
                                     type="email"
                                     id="email"
                                     placeholder="correo@ejemplo.com"
-                                    className="bg-white border border-gray-300 text-gray-900 rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 placeholder-gray-400"
+                                    className="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-gray-500 dark:focus:ring-gray-400 focus:border-gray-500 dark:focus:border-gray-400 block w-full p-2.5 placeholder-gray-400 dark:placeholder-gray-300"
                                     {...register('email')}
                                 />
                                 {errors.email && (
@@ -50,7 +50,7 @@ export const ForgotPasswordPage: React.FC = () => {
 
                             <button
                                 type="submit"
-                                className="w-full text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                                className="w-full text-white bg-gray-800 hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:focus:ring-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                             >
                                 Enviar enlace
                             </button>
@@ -58,7 +58,7 @@ export const ForgotPasswordPage: React.FC = () => {
                             <div className="text-center">
                                 <Link
                                     to={paths.LOGIN}
-                                    className="text-sm font-medium text-gray-600 hover:underline"
+                                    className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:underline"
                                 >
                                     Volver al inicio de sesión
                                 </Link>

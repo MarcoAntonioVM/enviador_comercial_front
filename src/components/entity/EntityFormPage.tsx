@@ -83,15 +83,15 @@ export function EntityFormPage<TEntity, TForm extends Record<string, any>, TPayl
         <button
           type="button"
           onClick={() => navigate(config.listPath)}
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-colors shadow-sm"
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-600 text-slate-600 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-gray-700 hover:border-slate-300 dark:hover:border-gray-500 transition-colors shadow-sm"
         >
           <i className="pi pi-arrow-left text-sm"></i>
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-gray-100">
             {isEdit ? `Editar ${config.entityName}` : `Crear Nuevo ${config.entityName}`}
           </h1>
-          <p className="text-slate-500">
+          <p className="text-slate-500 dark:text-gray-400">
             {isEdit 
               ? `Modifica la información del ${config.entityName.toLowerCase()}`
               : `Complete los campos para registrar un nuevo integrante al sistema.`
@@ -101,13 +101,13 @@ export function EntityFormPage<TEntity, TForm extends Record<string, any>, TPayl
       </div>
 
       {/* Card principal */}
-      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-600 rounded-2xl shadow-sm overflow-hidden">
         <div className="p-8">
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
               <div className="flex flex-col items-center gap-3">
-                <i className="pi pi-spin pi-spinner text-3xl text-blue-500"></i>
-                <p className="text-slate-600">Cargando datos...</p>
+                <i className="pi pi-spin pi-spinner text-3xl text-blue-500 dark:text-blue-400"></i>
+                <p className="text-slate-600 dark:text-gray-300">Cargando datos...</p>
               </div>
             </div>
           ) : (
@@ -128,14 +128,14 @@ export function EntityFormPage<TEntity, TForm extends Record<string, any>, TPayl
                 <button
                   type="button"
                   onClick={() => navigate(config.listPath)}
-                  className="px-6 py-2.5 border border-slate-200 text-slate-700 bg-white rounded-lg font-medium hover:bg-slate-50 hover:border-slate-300 transition-colors"
+                  className="px-6 py-2.5 border border-slate-200 dark:border-gray-600 text-slate-700 dark:text-gray-300 bg-white dark:bg-gray-800 rounded-lg font-medium hover:bg-slate-50 dark:hover:bg-gray-700 hover:border-slate-300 dark:hover:border-gray-500 transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-6 py-2.5 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 shadow-md shadow-blue-500/25 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="px-6 py-2.5 bg-blue-500 dark:bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-600 dark:hover:bg-blue-700 shadow-md shadow-blue-500/25 dark:shadow-blue-600/25 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   <i className="pi pi-lock text-sm"></i>
                   <span>{isSubmitting ? "Guardando..." : `Guardar ${config.entityName}`}</span>
@@ -147,11 +147,11 @@ export function EntityFormPage<TEntity, TForm extends Record<string, any>, TPayl
       </div>
 
       {/* Información adicional */}
-      <div className="mt-6 flex items-start space-x-3 p-4 rounded-xl bg-blue-50 border border-blue-100">
-        <i className="pi pi-info-circle text-blue-500 mt-0.5"></i>
+      <div className="mt-6 flex items-start space-x-3 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-700">
+        <i className="pi pi-info-circle text-blue-500 dark:text-blue-400 mt-0.5"></i>
         <div>
-          <h4 className="text-sm font-semibold text-blue-900">Información de permisos</h4>
-          <p className="text-sm text-blue-700/80 mt-1">
+          <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-200">Información de permisos</h4>
+          <p className="text-sm text-blue-700/80 dark:text-blue-300/80 mt-1">
             Los administradores tienen acceso total a todas las configuraciones del sistema, mientras que los usuarios solo pueden gestionar sus propias campañas.
           </p>
         </div>

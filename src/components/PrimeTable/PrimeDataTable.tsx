@@ -39,7 +39,7 @@ export const PrimeDataTable: React.FC<PrimeDataTableProps> = ({
                 <Button
                     type="button"
                     icon="pi pi-pencil"
-                    className="p-button-rounded p-button-text"
+                    className="p-button-rounded p-button-text btn-edit"
                     aria-label="Editar"
                     onClick={() => onEdit && onEdit(rowData)}
                     disabled={!onEdit}
@@ -47,7 +47,7 @@ export const PrimeDataTable: React.FC<PrimeDataTableProps> = ({
                 <Button
                     type="button"
                     icon="pi pi-trash"
-                    className="p-button-rounded p-button-text p-button-danger"
+                    className="p-button-rounded p-button-text p-button-danger btn-delete"
                     aria-label="Eliminar"
                     onClick={() => onDelete && onDelete(rowData)}
                     disabled={!onDelete}
@@ -56,8 +56,8 @@ export const PrimeDataTable: React.FC<PrimeDataTableProps> = ({
         );
     };
     return (
-        <div className="card">
-            <DataTable value={value} tableStyle={tableStyle} paginator={paginator} rows={rows}>
+        <div className="card bg-white dark:bg-gray-800 border border-transparent dark:border-gray-600 rounded-lg">
+            <DataTable className="p-datatable-custom" value={value} tableStyle={tableStyle} paginator={paginator} rows={rows}>
                 {columns.map((col) => (
                     <Column key={col.field} field={col.field} header={col.header} body={col.body} style={col.style} />
                 ))}

@@ -70,10 +70,10 @@ export const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
     };
 
     return (
-        <nav className={`h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 flex items-center justify-between ${className}`}>
+        <nav className={`h-16 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-slate-200 dark:border-gray-700 px-8 flex items-center justify-between ${className}`}>
             {/* Lado izquierdo - Título */}
             <div className="flex items-center">
-                <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-widest">
+                <h2 className="text-sm font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-widest">
                     Panel de Control
                 </h2>
             </div>
@@ -82,10 +82,10 @@ export const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
             <div className="relative flex items-center gap-4" ref={dropdownRef}>
                 {/* Nombre y rol */}
                 <div className="hidden sm:flex flex-col items-end">
-                    <span className="text-sm font-semibold text-slate-900">
+                    <span className="text-sm font-semibold text-slate-900 dark:text-gray-100">
                         {user?.name || 'Usuario'}
                     </span>
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-slate-500 dark:text-gray-400">
                         {getRoleLabel(user?.role)}
                     </span>
                 </div>
@@ -104,13 +104,13 @@ export const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
 
                 {/* Dropdown Menu */}
                 {isDropdownOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl shadow-slate-200/50 border border-slate-200 py-1 z-50">
+                    <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl shadow-slate-200/50 dark:shadow-gray-900/50 border border-slate-200 dark:border-gray-600 py-1 z-50">
                         {/* Header del dropdown */}
-                        <div className="px-4 py-3 border-b border-slate-100">
-                            <p className="text-sm font-semibold text-slate-900 truncate">
+                        <div className="px-4 py-3 border-b border-slate-100 dark:border-gray-600">
+                            <p className="text-sm font-semibold text-slate-900 dark:text-gray-100 truncate">
                                 {user?.name || 'Usuario'}
                             </p>
-                            <p className="text-xs text-slate-500 truncate">
+                            <p className="text-xs text-slate-500 dark:text-gray-400 truncate">
                                 {user?.email || 'Sin correo'}
                             </p>
                         </div>
@@ -120,7 +120,7 @@ export const Navbar: React.FC<NavbarProps> = ({ className = '' }) => {
                             <button
                                 onClick={handleLogout}
                                 disabled={isLoggingOut}
-                                className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-500 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <LogOut className="w-4 h-4" />
                                 {isLoggingOut ? 'Cerrando...' : 'Cerrar sesión'}

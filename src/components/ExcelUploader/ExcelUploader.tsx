@@ -220,6 +220,7 @@ export function ExcelUploader<T extends ExcelRow = ExcelRow>({
         />
         
         <Dialog 
+          className="p-dialog-custom"
           header={modalTitle} 
           visible={showModal} 
           style={{ width: '450px' }} 
@@ -253,6 +254,7 @@ export function ExcelUploader<T extends ExcelRow = ExcelRow>({
 
         {/* Modal de vista previa */}
         <Dialog
+          className="p-dialog-custom"
           header="Confirmar Datos a Importar"
           visible={showPreviewDialog}
           style={{ width: '70vw' }}
@@ -280,7 +282,7 @@ export function ExcelUploader<T extends ExcelRow = ExcelRow>({
             </p>
             
             {previewData && (
-              <DataTable value={previewData} scrollable scrollHeight="400px" className="mt-4">
+              <DataTable className="p-datatable-custom mt-4" value={previewData} scrollable scrollHeight="400px">
                 {previewColumns.map((col) => (
                   <Column 
                     key={col.field} 
@@ -326,12 +328,12 @@ export function ExcelUploader<T extends ExcelRow = ExcelRow>({
       className={`
         relative border-2 border-dashed rounded-lg p-4 text-center transition-all duration-200 min-w-[200px]
         ${isDragOver 
-          ? 'border-blue-500 bg-blue-50' 
-          : 'border-gray-300 hover:border-gray-400'
+          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400' 
+          : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 bg-white/0 dark:bg-transparent'
         }
         ${disabled || isProcessing 
           ? 'opacity-50 cursor-not-allowed' 
-          : 'cursor-pointer hover:bg-gray-50'
+          : 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800'
         }
       `}
       onDragOver={handleDragOver}
@@ -349,15 +351,15 @@ export function ExcelUploader<T extends ExcelRow = ExcelRow>({
       />
       
       <div className="space-y-2">
-        <div className="text-3xl text-gray-400">
+        <div className="text-3xl text-gray-400 dark:text-gray-300">
           <i className={isProcessing ? 'pi pi-spin pi-spinner' : 'pi pi-cloud-upload'}></i>
         </div>
         
         <div>
-          <p className="text-sm font-medium text-gray-700">
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-100">
             {isProcessing ? 'Procesando archivo...' : 'Arrastra tu archivo Excel aquí'}
           </p>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-500 dark:text-gray-400">
             o haz clic para seleccionar
           </p>
         </div>

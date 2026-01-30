@@ -24,14 +24,14 @@ export const LoginForm: React.FC = () => {
     return (
         <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div>
-                <label htmlFor="email" className="block mb-2 text-sm font-medium text-black">
+                <label htmlFor="email" className="block mb-2 text-sm font-medium text-black dark:text-white">
                     Correo electrónico o usuario
                 </label>
                 <input
                     type="text"
                     id="email"
                     placeholder="correo@ejemplo.com o usuario"
-                    className="bg-white border border-gray-300 text-gray-900 rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 placeholder-gray-400"
+                    className="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-gray-500 dark:focus:ring-gray-400 focus:border-gray-500 dark:focus:border-gray-400 block w-full p-2.5 placeholder-gray-400 dark:placeholder-gray-300"
                     {...register('email')}
                 />
                 {errors.email && (
@@ -40,14 +40,14 @@ export const LoginForm: React.FC = () => {
             </div>
 
             <div>
-                <label htmlFor="password" className="block mb-2 text-sm font-medium text-black">
+                <label htmlFor="password" className="block mb-2 text-sm font-medium text-black dark:text-white">
                     Contraseña
                 </label>
                 <input
                     type="password"
                     id="password"
                     placeholder="••••••••"
-                    className="bg-white border border-gray-300 text-gray-900 rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 placeholder-gray-400"
+                    className="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:ring-gray-500 dark:focus:ring-gray-400 focus:border-gray-500 dark:focus:border-gray-400 block w-full p-2.5 placeholder-gray-400 dark:placeholder-gray-300"
                     {...register('password')}
                 />
                 {errors.password && (
@@ -58,7 +58,7 @@ export const LoginForm: React.FC = () => {
             <div className="flex items-center justify-between">
                 <Link
                     to={paths.FORGOT_PASSWORD}
-                    className="text-sm font-medium text-gray-600 hover:underline"
+                    className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:underline"
                 >
                     ¿Olvidaste tu contraseña?
                 </Link>
@@ -67,7 +67,7 @@ export const LoginForm: React.FC = () => {
             <button
                 type="submit"
                 disabled={isPending}
-                className="w-full text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full text-white bg-gray-800 hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:focus:ring-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 {isPending ? 'Iniciando sesión...' : 'Iniciar sesión'}
             </button>

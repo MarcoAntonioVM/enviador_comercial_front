@@ -76,12 +76,12 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 text-gray-900 dark:text-gray-100">
       {/* Header */}
       <div className="flex flex-col gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Analytics</h1>
-          <p className="text-slate-600">Métricas y estadísticas de tus campañas de email</p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-gray-100">Analíticas</h1>
+          <p className="text-slate-600 dark:text-gray-300">Métricas y estadísticas de tus campañas de email</p>
         </div>
         
         <DateRangePicker 
@@ -100,27 +100,27 @@ export default function AnalyticsPage() {
 
       {/* KPIs Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg border border-slate-200 p-4">
-          <h3 className="text-sm font-medium text-slate-600">Total Enviados</h3>
-          <p className="text-2xl font-bold text-slate-900">{formatNumber(summary?.totalSent)}</p>
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-600 p-4">
+          <h3 className="text-sm font-medium text-slate-600 dark:text-gray-300">Total Enviados</h3>
+          <p className="text-2xl font-bold text-slate-900 dark:text-gray-100">{formatNumber(summary?.totalSent)}</p>
         </div>
         
-        <div className="bg-white rounded-lg border border-slate-200 p-4">
-          <h3 className="text-sm font-medium text-slate-600">Entrega</h3>
-          <p className="text-2xl font-bold text-green-600">{calculateRate(summary?.totalDelivered, summary?.totalSent)}</p>
-          <p className="text-sm text-slate-500">{formatNumber(summary?.totalDelivered)} entregados</p>
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-600 p-4">
+          <h3 className="text-sm font-medium text-slate-600 dark:text-gray-300">Entrega</h3>
+          <p className="text-2xl font-bold text-green-600 dark:text-green-400">{calculateRate(summary?.totalDelivered, summary?.totalSent)}</p>
+          <p className="text-sm text-slate-500 dark:text-gray-400">{formatNumber(summary?.totalDelivered)} entregados</p>
         </div>
         
-        <div className="bg-white rounded-lg border border-slate-200 p-4">
-          <h3 className="text-sm font-medium text-slate-600">Apertura</h3>
-          <p className="text-2xl font-bold text-blue-600">{calculateRate(summary?.totalOpens, summary?.totalDelivered)}</p>
-          <p className="text-sm text-slate-500">{formatNumber(summary?.totalOpens)} aperturas</p>
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-600 p-4">
+          <h3 className="text-sm font-medium text-slate-600 dark:text-gray-300">Apertura</h3>
+          <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{calculateRate(summary?.totalOpens, summary?.totalDelivered)}</p>
+          <p className="text-sm text-slate-500 dark:text-gray-400">{formatNumber(summary?.totalOpens)} aperturas</p>
         </div>
         
-        <div className="bg-white rounded-lg border border-slate-200 p-4">
-          <h3 className="text-sm font-medium text-slate-600">Click</h3>
-          <p className="text-2xl font-bold text-purple-600">{calculateRate(summary?.totalClicks, summary?.totalOpens)}</p>
-          <p className="text-sm text-slate-500">{formatNumber(summary?.totalClicks)} clicks</p>
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-600 p-4">
+          <h3 className="text-sm font-medium text-slate-600 dark:text-gray-300">Click</h3>
+          <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{calculateRate(summary?.totalClicks, summary?.totalOpens)}</p>
+          <p className="text-sm text-slate-500 dark:text-gray-400">{formatNumber(summary?.totalClicks)} clicks</p>
         </div>
       </div>
 

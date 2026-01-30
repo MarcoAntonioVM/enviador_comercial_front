@@ -15,13 +15,13 @@ export const DashboardLayout: React.FC = () => {
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
     return (
-        <div className="min-h-screen bg-slate-100">
+        <div className="min-h-screen bg-slate-100 dark:bg-gray-900">
             <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
             
             {/* Main content */}
             <div className="sm:ml-64 flex flex-col min-h-screen">
                 {/* Mobile header */}
-                <div className="sticky top-0 z-20 bg-slate-900 border-b border-slate-800 px-4 py-3 sm:hidden">
+                <div className="sticky top-0 z-20 bg-slate-900 dark:bg-gray-800 border-b border-slate-800 dark:border-gray-700 px-4 py-3 sm:hidden">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">
                             <SidebarToggle onClick={toggleSidebar} />
@@ -36,7 +36,7 @@ export const DashboardLayout: React.FC = () => {
                 </div>
 
                 {/* Page content */}
-                <main className="p-8 flex-1">
+                <main className="p-8 flex-1 text-gray-900 dark:text-gray-100">
                     <Outlet />
                 </main>
             </div>

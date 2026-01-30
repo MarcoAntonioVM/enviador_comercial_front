@@ -19,15 +19,15 @@ import { paths } from '../../routes/paths';
 import { useLogout } from '@/features/auth';
 
 const menuItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', path: paths.DASHBOARD },
-    { icon: Megaphone, label: 'Campañas', path: paths.CAMPAIGNS },
+    { icon: BarChart3, label: 'Analíticas', path: paths.ANALYTICS },
+    // { icon: LayoutDashboard, label: 'Dashboard', path: paths.DASHBOARD },
+    // { icon: Megaphone, label: 'Campañas', path: paths.CAMPAIGNS },
     { icon: Users, label: 'Prospectos', path: paths.PROSPECTS },
     { icon: FileText, label: 'Plantillas', path: paths.TEMPLATES },
     { icon: Send, label: 'Remitentes', path: paths.SENDERS },
     { icon: Briefcase, label: 'Sectores', path: paths.SECTORS },
-    { icon: FileBox, label: 'Documentos', path: paths.DOCUMENTS },
+    // { icon: FileBox, label: 'Documentos', path: paths.DOCUMENTS },
     { icon: Mail, label: 'Envíos', path: paths.EMAIL_SENDS },
-    { icon: BarChart3, label: 'Analíticas', path: paths.ANALYTICS },
     { icon: UserCircle, label: 'Usuarios', path: paths.USERS },
 ];
 
@@ -60,7 +60,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
                     isOpen ? 'translate-x-0' : '-translate-x-full'
                 } sm:translate-x-0`}
             >
-                <div className="h-full flex flex-col overflow-y-auto bg-slate-900 border-r border-slate-800">
+                <div className="h-full flex flex-col overflow-y-auto bg-slate-900 dark:bg-gray-900 border-r border-slate-800 dark:border-gray-700">
                     {/* Header con logo */}
                     <div className="p-6">
                         <div className="flex items-center justify-between">
@@ -74,9 +74,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
                             </div>
                             <button 
                                 onClick={onToggle}
-                                className="sm:hidden p-1 rounded-lg hover:bg-white/5"
+                                className="sm:hidden p-1 rounded-lg hover:bg-white/5 dark:hover:bg-gray-800"
                             >
-                                <X className="w-5 h-5 text-slate-400" />
+                                <X className="w-5 h-5 text-slate-400 dark:text-gray-400" />
                             </button>
                         </div>
                     </div>
@@ -92,8 +92,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
                                     onClick={() => window.innerWidth < 640 && onToggle()}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                                         isActive 
-                                            ? 'text-white bg-blue-500/10 border-r-4 border-blue-500' 
-                                            : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                            ? 'text-white bg-blue-500/10 dark:bg-blue-500/20 border-r-4 border-blue-500' 
+                                            : 'text-slate-400 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 hover:bg-white/5 dark:hover:bg-gray-800'
                                     }`}
                                 >
                                     <item.icon className={`w-5 h-5 transition-colors ${
@@ -106,11 +106,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
                     </nav>
 
                     {/* Logout button at bottom */}
-                    <div className="p-4 border-t border-slate-800">
+                    <div className="p-4 border-t border-slate-800 dark:border-gray-700">
                         <button
                             onClick={handleLogout}
                             disabled={isLoggingOut}
-                            className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-400/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-red-400 dark:text-red-300 hover:text-red-300 dark:hover:text-red-200 hover:bg-red-400/10 dark:hover:bg-red-400/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <LogOut className="w-5 h-5" />
                             <span className="font-medium">Cerrar sesión</span>
@@ -128,7 +128,7 @@ export const SidebarToggle: React.FC<{ onClick: () => void }> = ({ onClick }) =>
         <button
             onClick={onClick}
             type="button"
-            className="inline-flex items-center p-2 text-slate-400 rounded-lg sm:hidden hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-700"
+            className="inline-flex items-center p-2 text-slate-400 dark:text-gray-400 rounded-lg sm:hidden hover:bg-slate-800 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-slate-700 dark:focus:ring-gray-600"
         >
             <span className="sr-only">Abrir menú</span>
             <Menu className="w-6 h-6" />

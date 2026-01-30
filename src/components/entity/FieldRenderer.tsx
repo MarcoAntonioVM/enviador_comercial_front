@@ -66,7 +66,7 @@ export function FieldRenderer<TForm extends Record<string, any>>({
     return (
       <div className={colClass}>
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-500">
+          <label className="text-sm font-medium text-slate-500 dark:text-gray-400">
             {field.label}
           </label>
           <div className="flex gap-2">
@@ -75,8 +75,8 @@ export function FieldRenderer<TForm extends Record<string, any>>({
               onClick={() => setValue(field.name as any, true as any)}
               className={`flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl border font-medium transition-all ${
                 currentValue
-                  ? "border-emerald-400 bg-emerald-50 text-emerald-600"
-                  : "border-slate-200 bg-white text-slate-400 hover:border-slate-300"
+                  ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400"
+                  : "border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-slate-400 dark:text-gray-500 hover:border-slate-300 dark:hover:border-gray-500"
               }`}
             >
               <CheckCircle className="w-4 h-4" />
@@ -87,8 +87,8 @@ export function FieldRenderer<TForm extends Record<string, any>>({
               onClick={() => setValue(field.name as any, false as any)}
               className={`flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl border font-medium transition-all ${
                 !currentValue
-                  ? "border-slate-300 bg-white text-slate-600"
-                  : "border-slate-200 bg-white text-slate-400 hover:border-slate-300"
+                  ? "border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-slate-600 dark:text-gray-300"
+                  : "border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-slate-400 dark:text-gray-500 hover:border-slate-300 dark:hover:border-gray-500"
               }`}
             >
               <XCircle className="w-4 h-4" />
@@ -111,18 +111,18 @@ export function FieldRenderer<TForm extends Record<string, any>>({
   return (
     <div className={colClass}>
       <div className="space-y-2">
-        <label className="text-sm font-medium text-slate-600" htmlFor={name}>
+        <label className="text-sm font-medium text-slate-600 dark:text-gray-400" htmlFor={name}>
           {field.label}
         </label>
         
         {field.type === "select" ? (
           <div className="relative">
-            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-gray-400">
               <i className={`pi ${getFieldIcon()} text-sm`}></i>
             </span>
             <select
               id={name}
-              className="w-full pl-12 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-700 appearance-none transition-all outline-none cursor-pointer"
+              className="w-full pl-12 pr-10 py-3 bg-slate-50 dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-slate-700 dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-400 appearance-none transition-all outline-none cursor-pointer"
               {...register(field.name as any)}
             >
               {field.options?.map((opt) => (
@@ -131,30 +131,30 @@ export function FieldRenderer<TForm extends Record<string, any>>({
                 </option>
               ))}
             </select>
-            <span className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
+            <span className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400 dark:text-gray-400">
               <i className="pi pi-chevron-down text-sm"></i>
             </span>
           </div>
         ) : field.type === "textarea" ? (
           <div className="relative">
-            <span className="absolute top-3 left-0 pl-3.5 flex items-center text-slate-400">
+            <span className="absolute top-3 left-0 pl-3.5 flex items-center text-slate-400 dark:text-gray-400">
               <i className={`pi ${getFieldIcon()} text-sm`}></i>
             </span>
             <textarea
               id={name}
               rows={4}
-              className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-700 placeholder:text-slate-400 transition-all outline-none resize-none"
+              className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-slate-700 dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-400 transition-all outline-none resize-none"
               placeholder={field.placeholder}
               {...register(field.name as any)}
             />
           </div>
         ) : field.type === "chips" ? (
           <div className="relative">
-            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-gray-400">
               <i className={`pi ${getFieldIcon()} text-sm`}></i>
             </span>
             <div
-              className="pl-12 pr-4 py-3 field-chips-wrapper bg-slate-50 border border-slate-200 rounded-xl"
+              className="pl-12 pr-4 py-3 field-chips-wrapper w-full bg-slate-50 dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded-xl"
               onPasteCapture={(e: React.ClipboardEvent<HTMLDivElement>) => {
                 try {
                   e.preventDefault();
@@ -198,13 +198,13 @@ export function FieldRenderer<TForm extends Record<string, any>>({
           </div>
         ) : (
           <div className="relative">
-            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-gray-400">
               <i className={`pi ${getFieldIcon()} text-sm`}></i>
             </span>
             <input
               id={name}
               type={field.type}
-              className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-700 placeholder:text-slate-400 transition-all outline-none"
+              className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-slate-700 dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-400 transition-all outline-none"
               placeholder={field.placeholder}
               {...register(field.name as any)}
             />

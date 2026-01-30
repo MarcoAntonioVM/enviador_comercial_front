@@ -64,7 +64,7 @@ export default function DateRangePicker({ value = null, onChange, className = ''
       <div className="flex gap-2 items-center">
         <button
           type="button"
-          className={`px-3 py-1 rounded-md text-sm bg-white text-slate-900 border border-slate-200 hover:bg-slate-50`}
+          className={`px-3 py-1 rounded-md text-sm bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 border border-slate-200 dark:border-gray-600 hover:bg-slate-50 dark:hover:bg-gray-700`}
           onClick={() => applyPreset('last7')}
         >
           Últimos 7 días
@@ -72,7 +72,7 @@ export default function DateRangePicker({ value = null, onChange, className = ''
 
         <button
           type="button"
-          className={`px-3 py-1 rounded-md text-sm bg-white text-slate-900 border border-slate-200 hover:bg-slate-50`}
+          className={`px-3 py-1 rounded-md text-sm bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 border border-slate-200 dark:border-gray-600 hover:bg-slate-50 dark:hover:bg-gray-700`}
           onClick={() => applyPreset('last30')}
         >
           Últimos 30 días
@@ -80,7 +80,7 @@ export default function DateRangePicker({ value = null, onChange, className = ''
 
         <button
           type="button"
-          className={`px-3 py-1 rounded-md text-sm bg-white text-slate-900 border border-slate-200 hover:bg-slate-50`}
+          className={`px-3 py-1 rounded-md text-sm bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 border border-slate-200 dark:border-gray-600 hover:bg-slate-50 dark:hover:bg-gray-700`}
           onClick={() => applyPreset('thisMonth')}
         >
           Este mes
@@ -88,7 +88,7 @@ export default function DateRangePicker({ value = null, onChange, className = ''
 
         <button
           type="button"
-          className={`px-3 py-1 rounded-md text-sm bg-white text-slate-400 border border-slate-200 cursor-not-allowed`}
+          className={`px-3 py-1 rounded-md text-sm bg-white dark:bg-gray-800 text-slate-400 dark:text-gray-500 border border-slate-200 dark:border-gray-600 cursor-not-allowed`}
           title="Rango personalizado: próximamente"
           onClick={() => applyPreset('custom')}
           disabled
@@ -97,13 +97,13 @@ export default function DateRangePicker({ value = null, onChange, className = ''
         </button>
       </div>
 
-      <div className="mt-2 text-sm text-slate-700">
+      <div className="mt-2 text-sm text-slate-700 dark:text-gray-300">
         {selected ? (
           <span>
-            <strong className="text-slate-900">{selected.label}:</strong> {formatDate(selected.startDate)} — {formatDate(selected.endDate)}
+            <strong className="text-slate-900 dark:text-gray-100">{selected.label}:</strong> {formatDate(selected.startDate)} — {formatDate(selected.endDate)}
           </span>
         ) : (
-          <span className="text-slate-500">No seleccionado</span>
+          <span className="text-slate-500 dark:text-gray-400">No seleccionado</span>
         )}
       </div>
     </div>
