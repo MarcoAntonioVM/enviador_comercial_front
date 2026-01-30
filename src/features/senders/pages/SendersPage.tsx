@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PrimeDataTable, { type PrimeColumn } from '@/components/PrimeTable/PrimeDataTable';
 import { Button } from 'primereact/button';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { confirmDialog } from 'primereact/confirmdialog';
 import useSenders from '../hooks/useSenders';
 import useDeleteSender from '../hooks/useDeleteSender';
 import useCreateMultipleSenders from '../hooks/useCreateMultipleSenders';
+import useDeleteMultipleSenders from '../hooks/useDeleteMultipleSenders';
 import { useAppToast } from '@/components/Toast/ToastProvider';
 import { ExcelUploader } from '@/components/ExcelUploader/ExcelUploader';
 
@@ -21,7 +22,9 @@ export const SendersPage: React.FC = () => {
     const { items, refresh } = useSenders();
     const { remove } = useDeleteSender();
     const { createMultiple } = useCreateMultipleSenders();
+    const { removeMultiple } = useDeleteMultipleSenders();
     const { showSuccess, showError } = useAppToast();
+    const [selectedSenders, setSelectedSenders] = useState<any[]>([]);
 
     const handleAdd = () => {
         navigate(paths.SENDERS_NEW);
@@ -52,6 +55,38 @@ export const SendersPage: React.FC = () => {
         });
     };
 
+    const handleDeleteMultiple = () => {
+        if (selectedSenders.length === 0) {
+            showError('Por favor selecciona al menos un remitente para eliminar');
+            return;
+        }
+
+        confirmDialog({
+            message: `¿Estás seguro de que deseas eliminar ${selectedSenders.length} remitente(s) seleccionado(s)?`,
+            header: 'Confirmar eliminación masiva',
+            icon: 'pi pi-exclamation-triangle',
+            defaultFocus: 'reject',
+            acceptClassName: 'p-button-danger',
+            acceptLabel: 'Eliminar',
+            rejectLabel: 'Cancelar',
+            accept: async () => {
+                try {
+                    const ids = selectedSenders.map(s => s.id);
+                    const res = await removeMultiple(ids);
+                    if (res?.success) {
+                        showSuccess(res.message ?? `Se eliminaron ${ids.length} remitente(s) correctamente`);
+                    } else {
+                        showError(res?.message ?? 'Error al eliminar remitentes');
+                    }
+                    setSelectedSenders([]);
+                    refresh();
+                } catch (e: any) {
+                    showError(e?.message || 'Error al eliminar remitentes');
+                }
+            }
+        });
+    };
+
     return (
         <div className="text-gray-900 dark:text-gray-100">
             <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Remitentes</h1>
@@ -62,6 +97,14 @@ export const SendersPage: React.FC = () => {
                         <p className="text-sm text-gray-600 dark:text-gray-300">Listado de direcciones de email para envío</p>
                     </div>
                     <div className="flex items-center gap-2">
+                        {selectedSenders.length > 0 && (
+                            <Button 
+                                label={`Eliminar seleccionados (${selectedSenders.length})`} 
+                                icon="pi pi-trash" 
+                                className="p-button-sm p-button-danger" 
+                                onClick={handleDeleteMultiple} 
+                            />
+                        )}
                         <ExcelUploader<{ name: string; email: string }>
                             config={{ 
                                 columnMapping: { 
@@ -127,6 +170,10 @@ export const SendersPage: React.FC = () => {
                     showActions
                     onEdit={handleEdit}
                     onDelete={handleDelete}
+                    selectionMode="checkbox"
+                    selection={selectedSenders}
+                    onSelectionChange={setSelectedSenders}
+                    dataKey="id"
                 />
             </div>
         </div>
