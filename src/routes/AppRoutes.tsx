@@ -12,6 +12,7 @@ import ProspectFormPage from '../features/prospects/pages/ProspectFormPage';
 import { TemplatesPage } from '../features/templates/pages/TemplatesPage';
 import TemplateFormPage from '../features/templates/pages/TemplateFormPage';
 import { SendersPage } from '../features/senders/pages/SendersPage';
+import SenderFormPage from '../features/senders/pages/SenderFormPage';
 import { DocumentsPage } from '../features/documents/pages/DocumentsPage';
 import { EmailSendsPage } from '../features/emailSends/pages/EmailSendsPage';
 import AnalyticsPage from '../features/analytics/pages/AnalyticsPage';
@@ -31,8 +32,8 @@ export const AppRoutes: React.FC = () => {
             </Route>
 
             <Route element={<DashboardLayout />}>
-                <Route path={paths.DASHBOARD} element={<DashboardHome />} />
-                <Route path={paths.CAMPAIGNS} element={<CampaignsPage />} />
+                <Route path={paths.DASHBOARD} element={<AnalyticsPage />} />
+                {/* <Route path={paths.CAMPAIGNS} element={<CampaignsPage />} /> */}
                 <Route path={paths.PROSPECTS} element={<ProspectsPage />} />
                 <Route path={paths.PROSPECTS_NEW} element={<ProspectFormPage />} />
                 <Route path={paths.PROSPECTS_EDIT} element={<ProspectFormPage />} />
@@ -43,7 +44,9 @@ export const AppRoutes: React.FC = () => {
                 <Route path={paths.TEMPLATES_NEW} element={<TemplateFormPage />} />
                 <Route path={paths.TEMPLATES_EDIT} element={<TemplateFormPage />} />
                 <Route path={paths.SENDERS} element={<SendersPage />} />
-                <Route path={paths.DOCUMENTS} element={<DocumentsPage />} />
+                <Route path={paths.SENDERS_NEW} element={<SenderFormPage />} />
+                <Route path={paths.SENDERS_EDIT} element={<SenderFormPage />} />
+                {/* <Route path={paths.DOCUMENTS} element={<DocumentsPage />} /> */}
                 <Route path={paths.EMAIL_SENDS} element={<EmailSendsPage />} />
                 <Route path={paths.ANALYTICS} element={<AnalyticsPage />} />
                 <Route path={paths.USERS} element={<UsersPage />} />
