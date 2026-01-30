@@ -53,13 +53,13 @@ export const SendersPage: React.FC = () => {
     };
 
     return (
-        <div>
-            <h1 className="text-2xl font-bold mb-4">Remitentes</h1>
-            <div className="card bg-white p-6 rounded-lg shadow-sm">
+        <div className="text-gray-900 dark:text-gray-100">
+            <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Remitentes</h1>
+            <div className="card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-600">
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <h2 className="text-lg font-semibold">Remitentes</h2>
-                        <p className="text-sm text-gray-600">Listado de direcciones de email para envío</p>
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Remitentes</h2>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">Listado de direcciones de email para envío</p>
                     </div>
                     <div className="flex items-center gap-2">
                         <ExcelUploader<{ name: string; email: string }>
@@ -101,9 +101,9 @@ export const SendersPage: React.FC = () => {
                                 { field: 'email', header: 'Email' }
                             ]}
                             modalInfo={
-                                <div className="p-3 bg-blue-50 rounded-lg">
-                                    <h4 className="text-sm font-medium text-blue-800 mb-2">Formato esperado:</h4>
-                                    <ul className="text-xs text-blue-600 space-y-1">
+                                <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg border dark:border-blue-700">
+                                    <h4 className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">Formato esperado:</h4>
+                                    <ul className="text-xs text-blue-600 dark:text-blue-300 space-y-1">
                                         <li>• Primera fila debe contener los encabezados</li>
                                         <li>• Columna "Nombre": Nombre del remitente (obligatorio)</li>
                                         <li>• Columna "Email": Email del remitente (obligatorio)</li>
