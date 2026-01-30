@@ -1,8 +1,46 @@
 @import "tailwindcss";
 
+/* Configuración de dark mode automático basado en preferencia del sistema */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
 .p-toast,
 .p-toast * {
   box-sizing: border-box;
+}
+
+/* Light mode: make our card containers borderless (keep dark mode borders intact) */
+@media (prefers-color-scheme: light) {
+  .card {
+    border-color: transparent !important;
+  }
+
+  /* Ensure tables inside cards also don't show table borders in light mode */
+  .card .p-datatable-custom,
+  .card .p-datatable-custom table {
+    border-color: transparent !important;
+  }
+}
+
+/* PrimeReact DataTable light mode tweaks (target only our tables via .p-datatable-custom)
+   Remove visible borders in light mode while leaving dark-mode overrides intact. */
+.p-datatable-custom,
+.p-datatable-custom table {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+.p-datatable-custom .p-datatable-thead > tr > th,
+.p-datatable-custom .p-datatable-tbody > tr > td {
+  border: none !important;
+  border-color: transparent !important;
+}
+
+.p-datatable-custom .p-datatable-tbody > tr:hover > td {
+  background-color: rgba(2,6,23,0.02) !important;
 }
 
 /* Force PrimeReact Chips to use full width inside our grid */
@@ -29,4 +67,169 @@
   padding: 0 !important;
   height: auto !important;
   color: inherit !important;
+}
+
+/* PrimeReact DataTable dark mode overrides (target only our tables via .p-datatable-custom) */
+@media (prefers-color-scheme: dark) {
+  /* Table container */
+  .p-datatable-custom,
+  .p-datatable-custom table {
+    background-color: #0f1724 !important; /* dark slate */
+    color: #e5e7eb !important; /* gray-100 */
+  }
+
+  /* Header cells */
+  .p-datatable-custom .p-datatable-thead > tr > th {
+    background-color: #0b1220 !important; /* darker header */
+    color: #e6eef8 !important;
+    border-color: #374151 !important;
+  }
+
+  /* Body cells */
+  .p-datatable-custom .p-datatable-tbody > tr > td {
+    background-color: transparent !important;
+    color: #e5e7eb !important;
+    border-color: #1f2937 !important;
+  }
+
+  /* Force row background and hover to be dark (Prime may set td backgrounds) */
+  .p-datatable-custom .p-datatable-tbody > tr {
+    background: transparent !important;
+  }
+
+  .p-datatable-custom .p-datatable-tbody > tr:hover > td {
+    background-color: rgba(255,255,255,0.02) !important;
+  }
+
+  /* Empty message */
+  .p-datatable-custom .p-datatable-emptymessage,
+  .p-datatable-custom .p-datatable-empty-message {
+    color: #cbd5e1 !important;
+    background: transparent !important;
+  }
+
+  /* Paginator */
+  .p-datatable-custom .p-paginator,
+  .p-datatable-custom .p-paginator .p-paginator-pages {
+    background: transparent !important;
+    color: #cbd5e1 !important;
+  }
+
+  /* Paginator page buttons: normal and active */
+  .p-datatable-custom .p-paginator .p-paginator-pages .p-paginator-page {
+    color: #cbd5e1 !important;
+    background: transparent !important;
+    border-radius: 9999px !important;
+    border: none !important;
+  }
+
+  .p-datatable-custom .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background-color: #0ea5e9 !important; /* blue-500 */
+    color: #ffffff !important;
+    box-shadow: none !important;
+  }
+
+  /* Action icon colors: edit (green) and delete (red) for our tables */
+  .p-datatable-custom .btn-edit .pi,
+  .p-datatable-custom .btn-edit .p-button-icon {
+    color: #10b981 !important; /* green-500 */
+  }
+
+  .p-datatable-custom .btn-delete .pi,
+  .p-datatable-custom .btn-delete .p-button-icon {
+    color: #ef4444 !important; /* red-500 */
+  }
+
+  /* Slightly brighten icons on hover for affordance */
+  .p-datatable-custom .btn-edit:hover .pi,
+  .p-datatable-custom .btn-edit:hover .p-button-icon {
+    color: #34d399 !important; /* green-400 */
+  }
+
+  .p-datatable-custom .btn-delete:hover .pi,
+  .p-datatable-custom .btn-delete:hover .p-button-icon {
+    color: #f87171 !important; /* red-400 */
+  }
+
+  /* Toolbar / header inside table (if any) */
+  .p-datatable-custom .p-toolbar,
+  .p-datatable-custom .p-datatable-header {
+    background: transparent !important;
+    color: #e5e7eb !important;
+  }
+
+  /* Buttons inside table (text buttons) */
+  .p-datatable-custom .p-button-text,
+  .p-datatable-custom .p-button:not(.p-button-outlined) {
+    color: inherit !important;
+  }
+
+  /* PrimeReact Dialog (scoped) - dark mode for our custom dialogs */
+  .p-dialog-custom .p-dialog-titlebar {
+    background-color: #0b1220 !important;
+    color: #e6eef8 !important;
+    border-bottom: 1px solid #1f2937 !important;
+  }
+
+  .p-dialog-custom .p-dialog-title {
+    color: inherit !important;
+  }
+
+  .p-dialog-custom .p-dialog-content {
+    background-color: #0f1724 !important;
+    color: #e5e7eb !important;
+  }
+
+  .p-dialog-custom .p-dialog-footer {
+    background-color: #0f1724 !important;
+    border-top: 1px solid #1f2937 !important;
+    color: #cbd5e1 !important;
+  }
+
+  /* Close button / titlebar buttons */
+  .p-dialog-custom .p-dialog-titlebar .p-button,
+  .p-dialog-custom .p-dialog-titlebar .p-button-icon {
+    color: #cbd5e1 !important;
+  }
+
+  /* Make inputs, paragraphs and small text inside dialogs readable */
+  .p-dialog-custom input,
+  .p-dialog-custom textarea,
+  .p-dialog-custom select,
+  .p-dialog-custom .p-inputtext,
+  .p-dialog-custom p,
+  .p-dialog-custom small {
+    color: #e5e7eb !important;
+  }
+
+  /* Ensure dialog shadow / overlay feels darker */
+  .p-dialog-mask {
+    background-color: rgba(2,6,23,0.6) !important;
+  }
+
+  /* Additional selectors to match PrimeReact header markup (.p-dialog-header) seen in the app */
+  .p-dialog-header,
+  .p-dialog .p-dialog-header,
+  .p-dialog-custom .p-dialog-header,
+  .p-dialog.p-dialog-custom .p-dialog-header {
+    background-color: #071026 !important;
+    color: #e6eef8 !important;
+    border-bottom: 1px solid #172033 !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+
+  .p-dialog-header .p-dialog-title,
+  .p-dialog .p-dialog-header .p-dialog-title,
+  .p-dialog-custom .p-dialog-header .p-dialog-title {
+    color: #e6eef8 !important;
+    font-weight: 600 !important;
+  }
+
+  /* Header icons / header icons container */
+  .p-dialog-header .p-dialog-header-icons,
+  .p-dialog .p-dialog-header .p-dialog-header-icons,
+  .p-dialog-custom .p-dialog-header .p-dialog-header-icons {
+    color: #cbd5e1 !important;
+  }
 }
