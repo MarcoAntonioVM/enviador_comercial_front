@@ -194,4 +194,53 @@ export const sectorsService = {
       updatedAt: u.updated_at ?? u.updatedAt,
     } as Sector;
   },
+
+  // Crear múltiples sectores (envía los objetos con la misma forma que `create`)
+  createMultiple: async (sectors: Partial<Sector>[]): Promise<any> => {
+    const token = localStorage.getItem("token");
+
+    const payloadSectors = sectors.map((s) => ({
+      name: s.name,
+      description: s.description ?? '',
+      active: typeof (s as any).active !== 'undefined' ? (s as any).active : true,
+    }));
+
+    const response = await fetch(`${API_URL}/sectors/bulk-import`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify({ sectors: payloadSectors }),
+    });
+
+    const raw = await response.json();
+
+    // No lanzar excepción aquí: la API puede devolver created/errors/summary.
+    if (!response.ok && raw?.success === false) {
+      const msg = raw?.error ?? raw?.message ?? "Error al crear sectores";
+      throw new Error(msg);
+    }
+
+    const createdRaw = raw?.data?.created ?? raw?.data?.sectors ?? raw?.data ?? [];
+    const createdArray = Array.isArray(createdRaw) ? createdRaw : [];
+    const errors = raw?.data?.errors ?? [];
+    const summary = raw?.data?.summary ?? null;
+
+    const created = createdArray.map((u: any) => ({
+      id: String(u.id),
+      name: u.name,
+      description: u.description ?? '',
+      createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+      updatedAt: u.updated_at ?? u.updatedAt,
+    })) as Sector[];
+
+    return {
+      success: Boolean(raw?.success),
+      message: raw?.message ?? '',
+      created,
+      errors,
+      summary,
+    } as any;
+  },
 };
