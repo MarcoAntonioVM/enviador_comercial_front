@@ -20,6 +20,11 @@ interface PrimeDataTableProps {
     showActions?: boolean;
     onEdit?: (row: any) => void;
     onDelete?: (row: any) => void;
+    // Selection
+    selectionMode?: 'single' | 'multiple' | 'checkbox';
+    selection?: any[];
+    onSelectionChange?: (selection: any[]) => void;
+    dataKey?: string;
 }
 
 export const PrimeDataTable: React.FC<PrimeDataTableProps> = ({
@@ -31,6 +36,10 @@ export const PrimeDataTable: React.FC<PrimeDataTableProps> = ({
     showActions = true,
     onEdit,
     onDelete,
+    selectionMode,
+    selection,
+    onSelectionChange,
+    dataKey = 'id',
 }) => {
 
     const actionsBody = (rowData: any) => {
@@ -55,9 +64,42 @@ export const PrimeDataTable: React.FC<PrimeDataTableProps> = ({
             </div>
         );
     };
+    const handleSelectionChange = (e: any) => {
+        if (onSelectionChange) {
+            onSelectionChange(e.value);
+        }
+    };
+
+    const dataTableProps: any = {
+        className: "p-datatable-custom",
+        value: value,
+        tableStyle: tableStyle,
+        paginator: paginator,
+        rows: rows,
+    };
+
+    if (selectionMode) {
+        if (selectionMode === 'checkbox') {
+            dataTableProps.selectionMode = 'checkbox';
+            dataTableProps.cellSelection = false;
+        } else {
+            dataTableProps.selectionMode = selectionMode;
+        }
+        dataTableProps.selection = selection;
+        dataTableProps.onSelectionChange = handleSelectionChange;
+        dataTableProps.dataKey = dataKey;
+    }
+
     return (
         <div className="card bg-white dark:bg-gray-800 border border-transparent dark:border-gray-600 rounded-lg">
-            <DataTable className="p-datatable-custom" value={value} tableStyle={tableStyle} paginator={paginator} rows={rows}>
+            <DataTable {...dataTableProps}>
+                {selectionMode && (
+                    <Column 
+                        selectionMode={selectionMode === 'checkbox' ? 'multiple' : selectionMode}
+                        headerStyle={{ width: '3rem' }}
+                        style={{ width: '3rem' }}
+                    />
+                )}
                 {columns.map((col) => (
                     <Column key={col.field} field={col.field} header={col.header} body={col.body} style={col.style} />
                 ))}
