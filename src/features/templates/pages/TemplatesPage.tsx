@@ -40,14 +40,14 @@ export const TemplatesPage: React.FC = () => {
     };
 
     return (
-        <div>
-            <h1 className="text-2xl font-bold mb-4">Plantillas</h1>
+        <div className="text-gray-900 dark:text-gray-100">
+            <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Plantillas</h1>
 
-            <div className="card bg-white p-6 rounded-lg shadow-sm">
+            <div className="card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-600">
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <h2 className="text-lg font-semibold">Plantillas</h2>
-                        <p className="text-sm text-gray-600">Listado de plantillas de email</p>
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Plantillas</h2>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">Listado de plantillas de email</p>
                     </div>
                     <div>
                         <Button label="Agregar plantilla" icon="pi pi-plus" className="p-button-sm" onClick={handleAdd} />
