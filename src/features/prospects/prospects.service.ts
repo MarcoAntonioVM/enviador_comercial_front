@@ -6,7 +6,7 @@ type ListParams = {
   page?: number;
   limit?: number;
   status?: string;
-  sector_id?: string | number;
+  sector_name?: string;
   consent_status?: string;
   search?: string;
   sortBy?: string;
@@ -21,7 +21,7 @@ export const prospectsService = {
     if (params?.page) searchParams.set("page", String(params.page));
     if (params?.limit) searchParams.set("limit", String(params.limit));
     if (params?.status) searchParams.set("status", String(params.status));
-    if (params?.sector_id) searchParams.set("sector_id", String(params.sector_id));
+    if (params?.sector_name) searchParams.set("sector_name", String(params.sector_name));
     if (params?.consent_status) searchParams.set("consent_status", String(params.consent_status));
     if (params?.search) searchParams.set("search", String(params.search));
     if (params?.sortBy) searchParams.set("sortBy", String(params.sortBy));
@@ -62,7 +62,7 @@ export const prospectsService = {
       name: u.name,
       emails: u.emails ?? (u.email ? [u.email] : []),
       company: u.company,
-      sector_id: (u.sector_id ?? u.sector?.id) !== undefined && (u.sector_id ?? u.sector?.id) !== null ? String(u.sector_id ?? u.sector?.id) : undefined,
+      sector_name: u.sector_name ?? u.sector?.name ?? undefined,
       status: u.status,
       metadata: Array.isArray(u.metadata) ? u.metadata : (u.metadata ? [u.metadata] : []),
       createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
@@ -107,8 +107,8 @@ export const prospectsService = {
       name: u.name,
       emails: u.emails ?? (u.email ? [u.email] : []),
       company: u.company,
-      sector_id: (u.sector_id ?? u.sector?.id) !== undefined && (u.sector_id ?? u.sector?.id) !== null ? String(u.sector_id ?? u.sector?.id) : undefined,
-      status: (u.status as any) ?? 'unknown',
+      sector_name: u.sector_name ?? u.sector?.name ?? undefined,
+      status: (u.status as any) ?? "unknown",
       phone: u.phone ?? null,
       metadata: Array.isArray(u.metadata) ? u.metadata : (u.metadata ? [u.metadata] : []),
       createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
@@ -117,31 +117,16 @@ export const prospectsService = {
 
   async create(payload: ProspectPayload): Promise<Prospect> {
     const token = localStorage.getItem("token");
-    // Normalizar payload para backend: asegurar que exista `email` (extraer de `emails` si alguien lo envió así)
-    // Normalizar sector_id: si viene como cadena vacía no la enviamos
-    const rawSector = (payload as any).sector_id;
-    let normalizedSector: number | string | undefined = undefined;
-    if (rawSector !== undefined && rawSector !== "") {
-      const n = Number(rawSector);
-      normalizedSector = Number.isNaN(n) ? rawSector : n;
-    }
-
-    const requestBody: any = {
-      name: payload.name,
-      email: (payload as any).email ?? ((payload as any).emails ? (Array.isArray((payload as any).emails) ? (payload as any).emails[0] : undefined) : undefined),
+    const email = (payload as any).email ?? ((payload as any).emails?.[0]);
+    const requestBody: Record<string, unknown> = {
       company: payload.company,
-      sector_id: normalizedSector,
-      status: payload.status,
-      phone: payload.phone ?? null,
-      metadata: payload.metadata,
+      sector_name: (payload as any).sector_name ?? "",
+      name: payload.name,
+      email: email ?? "",
     };
-
-    // Eliminar campos undefined o cadenas vacías para evitar inserciones inválidas
     Object.keys(requestBody).forEach((k) => {
-      const v = requestBody[k];
-      if (v === undefined || v === "") delete requestBody[k];
+      if (requestBody[k] === undefined) delete requestBody[k];
     });
-
 
     const response = await fetch(`${API_URL}/prospects`, {
       method: "POST",
@@ -171,8 +156,8 @@ export const prospectsService = {
       name: u.name,
       emails: u.emails ?? (u.email ? [u.email] : []),
       company: u.company,
-      sector_id: (u.sector_id ?? u.sector?.id) !== undefined && (u.sector_id ?? u.sector?.id) !== null ? String(u.sector_id ?? u.sector?.id) : undefined,
-      status: (u.status as any) ?? 'unknown',
+      sector_name: u.sector_name ?? u.sector?.name ?? undefined,
+      status: (u.status as any) ?? "unknown",
       phone: u.phone ?? null,
       metadata: Array.isArray(u.metadata) ? u.metadata : (u.metadata ? [u.metadata] : []),
       createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
@@ -181,26 +166,16 @@ export const prospectsService = {
 
   async update(id: string, payload: ProspectPayload): Promise<Prospect> {
     const token = localStorage.getItem("token");
-    const rawSectorUpdate = (payload as any).sector_id;
-    let normalizedSectorUpdate: number | string | undefined = undefined;
-    if (rawSectorUpdate !== undefined && rawSectorUpdate !== "") {
-      const n = Number(rawSectorUpdate);
-      normalizedSectorUpdate = Number.isNaN(n) ? rawSectorUpdate : n;
-    }
-
-    const requestBody: any = {
-      name: payload.name,
-      email: (payload as any).email ?? ((payload as any).emails ? (Array.isArray((payload as any).emails) ? (payload as any).emails[0] : undefined) : undefined),
+    const email = (payload as any).email ?? (payload as any).emails?.[0];
+    const requestBody: Record<string, unknown> = {
       company: payload.company,
-      sector_id: normalizedSectorUpdate,
-      status: payload.status,
-      phone: payload.phone ?? null,
-      metadata: payload.metadata,
+      sector_name: (payload as any).sector_name ?? "",
+      name: payload.name,
+      email: email ?? "",
+      active: true,
     };
-
     Object.keys(requestBody).forEach((k) => {
-      const v = requestBody[k];
-      if (v === undefined || v === "") delete requestBody[k];
+      if (requestBody[k] === undefined) delete requestBody[k];
     });
 
     const response = await fetch(`${API_URL}/prospects/${id}`, {
@@ -231,8 +206,8 @@ export const prospectsService = {
       name: u.name,
       emails: u.emails ?? (u.email ? [u.email] : []),
       company: u.company,
-      sector_id: u.sector_id ?? u.sector?.id,
-      status: (u.status as any) ?? 'unknown',
+      sector_name: u.sector_name ?? u.sector?.name ?? undefined,
+      status: (u.status as any) ?? "unknown",
       phone: u.phone ?? null,
       metadata: Array.isArray(u.metadata) ? u.metadata : (u.metadata ? [u.metadata] : []),
       createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
@@ -268,8 +243,8 @@ export const prospectsService = {
       name: u.name,
       emails: u.emails ?? [],
       company: u.company,
-      sector_id: (u.sector_id ?? u.sector?.id) !== undefined && (u.sector_id ?? u.sector?.id) !== null ? String(u.sector_id ?? u.sector?.id) : undefined,
-      status: (u.status as any) ?? 'unknown',
+      sector_name: u.sector_name ?? u.sector?.name ?? undefined,
+      status: (u.status as any) ?? "unknown",
       phone: u.phone ?? null,
       metadata: u.metadata ?? [],
       createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),

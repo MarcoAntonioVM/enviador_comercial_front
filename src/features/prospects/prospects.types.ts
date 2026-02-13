@@ -3,7 +3,7 @@ export type Prospect = {
   emails: string[];
   name: string;
   company?: string;
-  sector_id?: string;
+  sector_name?: string;
   status: 'active' | 'unsubscribed' | 'unknown';
   phone?: string | null;
   metadata?: string[];
