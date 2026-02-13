@@ -31,12 +31,6 @@ export const userFormConfig: EntityFormConfig<User, UserFormValues, UserPayload>
       ],
     },
     { name: "password", label: "Contraseña", type: "password", colSpan: 6, placeholder: "Ingrese una contraseña", hiddenWhenEdit: true },
-    {
-      name: "active",
-      label: "Estado de la cuenta", 
-      type: "status-toggle",
-      colSpan: 6,
-    },
   ],
 
   getById: usersService.getById,
@@ -44,7 +38,7 @@ export const userFormConfig: EntityFormConfig<User, UserFormValues, UserPayload>
   update: usersService.update,
 
   toForm: (u) => ({ name: u.name, email: u.email, role: u.role, active: u.active ?? true }),
-  toPayload: (f) => ({ ...f }),
+  toPayload: (f) => ({ ...f, active: true }),
 
   listPath: paths.USERS,
 
