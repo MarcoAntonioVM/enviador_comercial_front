@@ -1,7 +1,6 @@
 import React from 'react';
 import PrimeDataTable, { type PrimeColumn } from '@/components/PrimeTable/PrimeDataTable';
 import useProspects from '../hooks/useProspects';
-import useSectors from '@/features/sectors/hooks/useSectors';
 import { Button } from 'primereact/button';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { useAppToast } from '@/components/Toast/ToastProvider';
@@ -9,11 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import { paths } from '@/routes/paths';
 import useDeleteProspect from '../hooks/useDeleteProspect';
 
-const columns = (sectors: { id: string; name: string }[]): PrimeColumn[] => [
+const columns: PrimeColumn[] = [
     { field: 'id', header: 'ID' },
     { field: 'name', header: 'Nombre' },
     { field: 'company', header: 'Empresa' },
-    { field: 'sector_id', header: 'Sector', body: (row: any) => (sectors.find(s => s.id === row.sector_id)?.name ?? row.sector_id ?? '') },
+    { field: 'sector_name', header: 'Sector', body: (row: any) => row.sector_name ?? '' },
     { field: 'emails', header: 'Correos', body: (row: any) => { const e = row.emails || []; return e.length ? e.join(', ') : 'No hay'; } },
     { field: 'metadata', header: 'Metadatos', body: (row: any) => { const m = row.metadata || []; return m.length ? m.join(', ') : 'No hay'; } },
 ];
@@ -22,7 +21,6 @@ export const ProspectsPage: React.FC = () => {
     const navigate = useNavigate();
     const { items, refresh } = useProspects();
     const { remove } = useDeleteProspect();
-    const { items: sectors } = useSectors();
     const { showSuccess, showError } = useAppToast();
 
     const handleAdd = () => {
@@ -69,7 +67,7 @@ export const ProspectsPage: React.FC = () => {
                     </div>
                 </div>
 
-                <PrimeDataTable value={items} columns={columns(sectors)} paginator rows={10} showActions onEdit={handleEdit} onDelete={handleDelete} />
+                <PrimeDataTable value={items} columns={columns} paginator rows={10} showActions onEdit={handleEdit} onDelete={handleDelete} />
             </div>
         </div>
     );
