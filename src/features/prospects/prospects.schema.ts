@@ -5,7 +5,6 @@ export const prospectFormSchema = z.object({
   company: z.string().optional(),
   sector_name: z.string().optional(),
   emails: z.array(z.string().email("Email inválido")).min(1, "Al menos un email es requerido"),
-  metadata: z.array(z.string()).optional(),
 });
 
 export type ProspectFormValues = z.infer<typeof prospectFormSchema>;

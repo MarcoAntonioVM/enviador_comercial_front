@@ -14,7 +14,6 @@ const columns: PrimeColumn[] = [
     { field: 'company', header: 'Empresa' },
     { field: 'sector_name', header: 'Sector', body: (row: any) => row.sector_name ?? '' },
     { field: 'emails', header: 'Correos', body: (row: any) => { const e = row.emails || []; return e.length ? e.join(', ') : 'No hay'; } },
-    { field: 'metadata', header: 'Metadatos', body: (row: any) => { const m = row.metadata || []; return m.length ? m.join(', ') : 'No hay'; } },
 ];
 
 export const ProspectsPage: React.FC = () => {
