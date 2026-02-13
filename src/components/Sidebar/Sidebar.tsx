@@ -25,7 +25,7 @@ const menuItems = [
     { icon: Users, label: 'Prospectos', path: paths.PROSPECTS },
     { icon: FileText, label: 'Plantillas', path: paths.TEMPLATES },
     { icon: Send, label: 'Remitentes', path: paths.SENDERS },
-    { icon: Briefcase, label: 'Sectores', path: paths.SECTORS },
+    // { icon: Briefcase, label: 'Sectores', path: paths.SECTORS },
     // { icon: FileBox, label: 'Documentos', path: paths.DOCUMENTS },
     { icon: Mail, label: 'Envíos', path: paths.EMAIL_SENDS },
     { icon: UserCircle, label: 'Usuarios', path: paths.USERS },
