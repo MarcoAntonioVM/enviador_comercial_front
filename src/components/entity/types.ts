@@ -8,6 +8,7 @@ export type FieldType =
   | "number"
   | "select"
   | "textarea"
+  | "richtext"
   | "switch"
   | "status-toggle";
 
