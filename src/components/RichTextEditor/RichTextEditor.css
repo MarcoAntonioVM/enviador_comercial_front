@@ -1,0 +1,102 @@
+/* ──────────────────────────────────────────────────────
+   Estilos del contenido generado por TipTap
+   Aplica a .rich-editor-content y su HTML interno
+────────────────────────────────────────────────────── */
+
+/* Placeholder */
+.rich-editor-content p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--p-text-muted-color, #9ca3af);
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+/* Párrafo */
+.rich-editor-content p {
+  margin: 0 0 0.5rem 0;
+  line-height: 1.6;
+}
+.rich-editor-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Encabezados */
+.rich-editor-content h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1rem 0 0.4rem;
+  line-height: 1.3;
+}
+.rich-editor-content h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0.8rem 0 0.3rem;
+  line-height: 1.3;
+}
+
+/* Listas */
+.rich-editor-content ul {
+  list-style: disc;
+  padding-left: 1.4rem;
+  margin: 0.4rem 0 0.6rem;
+}
+.rich-editor-content ol {
+  list-style: decimal;
+  padding-left: 1.4rem;
+  margin: 0.4rem 0 0.6rem;
+}
+.rich-editor-content li {
+  margin: 0.15rem 0;
+  line-height: 1.6;
+}
+
+/* Cita */
+.rich-editor-content blockquote {
+  border-left: 3px solid var(--p-primary-color, #6366f1);
+  padding: 0.3rem 0.75rem;
+  margin: 0.6rem 0;
+  color: var(--p-text-muted-color, #6b7280);
+  font-style: italic;
+}
+
+/* Código en línea */
+.rich-editor-content code {
+  background: var(--p-surface-200, #f3f4f6);
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.35rem;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.875em;
+}
+
+/* Bloque de código */
+.rich-editor-content pre {
+  background: var(--p-surface-800, #1f2937);
+  color: var(--p-surface-100, #f3f4f6);
+  border-radius: 0.4rem;
+  padding: 0.75rem 1rem;
+  margin: 0.6rem 0;
+  overflow-x: auto;
+}
+.rich-editor-content pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+/* Negrita / Cursiva / Tachado */
+.rich-editor-content strong { font-weight: 700; }
+.rich-editor-content em     { font-style: italic; }
+.rich-editor-content s      { text-decoration: line-through; }
+
+/* Línea horizontal */
+.rich-editor-content hr {
+  border: none;
+  border-top: 1px solid var(--p-surface-300, #e5e7eb);
+  margin: 0.8rem 0;
+}
+
+/* Evita que el editor salte de tamaño al enfocar */
+.rich-editor-content .tiptap {
+  outline: none;
+}
