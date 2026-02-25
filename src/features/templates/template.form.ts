@@ -3,6 +3,7 @@ import { templateFormSchema, type TemplateFormValues } from "./templates.schema"
 import type { Template } from "./templates.types";
 import { templatesService } from "./templates.service";
 import { paths } from "@/routes/paths";
+import TemplatePreviewField from "./components/TemplatePreviewField";
 
 type TemplatePayload = {
   name: string;
@@ -17,7 +18,7 @@ export const templateFormConfig: EntityFormConfig<Template, TemplateFormValues, 
   fields: [
     { name: "name", label: "Nombre", type: "text", colSpan: 6, placeholder: "Ej. Bienvenida" },
     { name: "subject", label: "Asunto", type: "text", colSpan: 6, placeholder: "Asunto del email" },
-    { name: "body", label: "Contenido", type: "richtext", colSpan: 12, placeholder: "Escribe el contenido de la plantilla..." },
+    { name: "body", label: "Contenido", type: "custom", colSpan: 12, component: TemplatePreviewField },
   ],
 
   getById: async (id: string) => {
