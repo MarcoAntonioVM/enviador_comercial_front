@@ -1,7 +1,7 @@
-﻿import { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import RichTextEditor from "@/components/RichTextEditor/RichTextEditor";
 import EmailPreview from "./EmailPreview";
-import { processEmailHtml } from "@/utils/processEmailHtml";
+import { processEmailHtml, sanitizeEditorHtml } from "@/utils/processEmailHtml";
 
 interface Props {
   value: string;
@@ -224,7 +224,18 @@ export default function TemplatePreviewField({ value, onChange }: Props) {
                 onLoad={() => {
                   try {
                     const doc = iframeRef.current?.contentDocument;
-                    if (doc) doc.designMode = "on";
+                    if (!doc) return;
+                    doc.designMode = "on";
+                    doc.addEventListener("paste", (e: ClipboardEvent) => {
+                      e.preventDefault();
+                      const html = e.clipboardData?.getData("text/html");
+                      if (html) {
+                        doc.execCommand("insertHTML", false, sanitizeEditorHtml(html));
+                      } else {
+                        const text = e.clipboardData?.getData("text/plain") ?? "";
+                        doc.execCommand("insertText", false, text);
+                      }
+                    });
                   } catch (_) {}
                 }}
               />
