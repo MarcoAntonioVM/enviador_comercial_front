@@ -1,3 +1,4 @@
+import type React from "react";
 import type { ZodSchema } from "zod";
 
 export type FieldType =
@@ -10,7 +11,8 @@ export type FieldType =
   | "textarea"
   | "richtext"
   | "switch"
-  | "status-toggle";
+  | "status-toggle"
+  | "custom";
 
 export type FieldOption = { label: string; value: string | number };
 
@@ -23,6 +25,8 @@ export type FieldConfig<TForm> = {
   colSpan?: number;           // layout (1,2,3,4…)
   hiddenWhenEdit?: boolean;
   hiddenWhenCreate?: boolean;
+  /** Componente custom (solo cuando type === "custom") */
+  component?: React.ComponentType<{ value: string; onChange: (val: string) => void }>;
 };
 
 export type EntityFormConfig<TEntity, TForm, TPayload> = {

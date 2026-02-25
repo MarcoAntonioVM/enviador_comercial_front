@@ -140,8 +140,11 @@ export function FieldRenderer<TForm extends Record<string, any>>({
           <RichTextEditor
             value={watch(field.name as any) ?? ""}
             onChange={(html) => setValue(field.name as any, html as any, { shouldValidate: true })}
-            placeholder={field.placeholder}
-            minHeight={240}
+          />
+        ) : field.type === "custom" && field.component ? (
+          <field.component
+            value={watch(field.name as any) ?? ""}
+            onChange={(val: string) => setValue(field.name as any, val as any, { shouldValidate: true })}
           />
         ) : field.type === "textarea" ? (
           <div className="relative">
