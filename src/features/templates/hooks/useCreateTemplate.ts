@@ -1,19 +1,24 @@
-import { useState } from 'react'
-import type { Template } from '../templates.types'
-import { templatesService } from '../templates.service'
+import { useState } from 'react';
+import { templatesService } from '../templates.service';
+
+type CreateTemplatePayload = {
+  name: string;
+  subject?: string;
+  html_content: string;
+  active?: boolean;
+};
 
 export default function useCreateTemplate() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const create = async (data: Partial<Template>) => {
-    setLoading(true)
+  const create = async (data: CreateTemplatePayload) => {
+    setLoading(true);
     try {
-      const res = await templatesService.create(data)
-      return res
+      return await templatesService.create(data);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  return { create, loading }
+  return { create, loading };
 }

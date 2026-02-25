@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { paths } from '@/routes/paths';
 import { confirmDialog } from 'primereact/confirmdialog';
 import useTemplates from '../hooks/useTemplates';
+import useDeleteTemplate from '../hooks/useDeleteTemplate';
+import { useAppToast } from '@/components/Toast/ToastProvider';
 
 const columns: PrimeColumn[] = [
     { field: 'id', header: 'ID' },
@@ -14,7 +16,9 @@ const columns: PrimeColumn[] = [
 
 export const TemplatesPage: React.FC = () => {
     const navigate = useNavigate();
-    const { items } = useTemplates();
+    const { items, refresh } = useTemplates();
+    const { remove } = useDeleteTemplate();
+    const { showSuccess, showError } = useAppToast();
 
     const handleAdd = () => {
         navigate(paths.TEMPLATES_NEW);
@@ -33,9 +37,15 @@ export const TemplatesPage: React.FC = () => {
             acceptClassName: 'p-button-danger',
             acceptLabel: 'Eliminar',
             rejectLabel: 'Cancelar',
-            accept: () => {
-                console.log('Eliminar plantilla (mock):', row.id);
-            }
+            accept: async () => {
+                try {
+                    await remove(row.id);
+                    showSuccess(`Plantilla eliminada correctamente`);
+                    refresh();
+                } catch (e: any) {
+                    showError(e?.message || 'Error al eliminar plantilla');
+                }
+            },
         });
     };
 
@@ -54,14 +64,14 @@ export const TemplatesPage: React.FC = () => {
                     </div>
                 </div>
 
-                <PrimeDataTable 
-                    value={items} 
-                    columns={columns} 
-                    paginator 
-                    rows={10} 
-                    showActions 
-                    onEdit={handleEdit} 
-                    onDelete={handleDelete} 
+                <PrimeDataTable
+                    value={items}
+                    columns={columns}
+                    paginator
+                    rows={10}
+                    showActions
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
                 />
             </div>
         </div>

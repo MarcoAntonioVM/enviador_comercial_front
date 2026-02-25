@@ -1,14 +1,19 @@
-import { useEffect, useState } from 'react'
-import type { Template } from '../templates.types'
-import { templatesService } from '../templates.service'
+import { useEffect, useState } from 'react';
+import type { Template } from '../templates.types';
+import { templatesService } from '../templates.service';
 
 export default function useTemplate(id?: string) {
-  const [item, setItem] = useState<Template | null>(null)
+  const [item, setItem] = useState<Template | null>(null);
+
+  const load = async () => {
+    if (!id) return;
+    const res = await templatesService.getById(id);
+    setItem(res);
+  };
 
   useEffect(() => {
-    if (!id) return
-    templatesService.get(id).then((res) => setItem(res || null))
-  }, [id])
+    load();
+  }, [id]);
 
-  return { item, refresh: () => (id ? templatesService.get(id).then((r) => setItem(r || null)) : Promise.resolve(null)) }
+  return { item, refresh: load };
 }

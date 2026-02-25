@@ -7,7 +7,8 @@ import { paths } from "@/routes/paths";
 type TemplatePayload = {
   name: string;
   subject?: string;
-  body: string;
+  html_content: string;
+  active: true;
 };
 
 export const templateFormConfig: EntityFormConfig<Template, TemplateFormValues, TemplatePayload> = {
@@ -16,23 +17,26 @@ export const templateFormConfig: EntityFormConfig<Template, TemplateFormValues, 
   fields: [
     { name: "name", label: "Nombre", type: "text", colSpan: 6, placeholder: "Ej. Bienvenida" },
     { name: "subject", label: "Asunto", type: "text", colSpan: 6, placeholder: "Asunto del email" },
-    { name: "body", label: "Contenido", type: "textarea", colSpan: 12, placeholder: "Escribe el contenido de la plantilla..." },
+    { name: "body", label: "Contenido", type: "richtext", colSpan: 12, placeholder: "Escribe el contenido de la plantilla..." },
   ],
 
   getById: async (id: string) => {
-    const template = await templatesService.get(id);
-    if (!template) throw new Error("Plantilla no encontrada");
-    return template;
+    return templatesService.getById(id);
   },
-  create: templatesService.create,
-  update: async (id: string, payload: TemplatePayload) => {
-    const result = await templatesService.update(id, payload);
-    if (!result) throw new Error("Error al actualizar");
-    return result;
-  },
+  create: (payload: TemplatePayload) => templatesService.create(payload),
+  update: (id: string, payload: TemplatePayload) => templatesService.update(id, payload),
 
-  toForm: (t) => ({ name: t.name, subject: t.subject || "", body: t.body }),
-  toPayload: (f) => ({ ...f }),
+  toForm: (t) => ({
+    name: t.name,
+    subject: t.subject ?? "",
+    body: t.body,
+  }),
+  toPayload: (f) => ({
+    name: f.name,
+    subject: f.subject,
+    html_content: f.body,
+    active: true,
+  }),
 
   listPath: paths.TEMPLATES,
 };
