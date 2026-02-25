@@ -3,6 +3,7 @@ import type React from 'react';
 import { Chips } from 'primereact/chips';
 import type { FieldConfig } from "./types";
 import { CheckCircle, XCircle } from "lucide-react";
+import { RichTextEditor } from "@/components/RichTextEditor";
 
 type Props<TForm extends Record<string, any>> = {
   field: FieldConfig<TForm>;
@@ -135,6 +136,13 @@ export function FieldRenderer<TForm extends Record<string, any>>({
               <i className="pi pi-chevron-down text-sm"></i>
             </span>
           </div>
+        ) : field.type === "richtext" ? (
+          <RichTextEditor
+            value={watch(field.name as any) ?? ""}
+            onChange={(html) => setValue(field.name as any, html as any, { shouldValidate: true })}
+            placeholder={field.placeholder}
+            minHeight={240}
+          />
         ) : field.type === "textarea" ? (
           <div className="relative">
             <span className="absolute top-3 left-0 pl-3.5 flex items-center text-slate-400 dark:text-gray-400">
