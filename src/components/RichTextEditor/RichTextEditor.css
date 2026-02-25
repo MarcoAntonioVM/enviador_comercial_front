@@ -96,6 +96,31 @@
   margin: 0.8rem 0;
 }
 
+/* Tablas (pegado desde Word/Excel/Gmail, etc.) */
+.rich-editor-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.6rem 0;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.rich-editor-content thead,
+.rich-editor-content tbody,
+.rich-editor-content tfoot {
+  border: 1px solid var(--p-surface-300, #e5e7eb);
+}
+.rich-editor-content th,
+.rich-editor-content td {
+  border: 1px solid var(--p-surface-300, #e5e7eb);
+  padding: 0.35rem 0.6rem;
+  text-align: left;
+  vertical-align: top;
+}
+.rich-editor-content th {
+  font-weight: 600;
+  background: var(--p-surface-100, #f3f4f6);
+}
+
 /* Evita que el editor salte de tamaño al enfocar */
 .rich-editor-content .tiptap {
   outline: none;
