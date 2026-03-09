@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import DateRangePicker from '../../../components/filters/DateRangePicker'
 import { DeliveryDonut } from '../components/DeliveryDonut'
 import { OpensClicksLine } from '../components/OpensClicksLine'

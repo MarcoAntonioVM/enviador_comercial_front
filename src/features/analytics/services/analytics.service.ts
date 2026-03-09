@@ -54,7 +54,7 @@ export const analyticsService = {
   },
 
   async getFullAnalytics(range: Range): Promise<AnalyticsApiResponse> {
-    if (useMocks) return Promise.resolve(analyticsFullMock)
+    if (useMocks) return Promise.resolve(analyticsFullMock as unknown as AnalyticsApiResponse)
     const url = `${API_URL}/analytics/full${qs(range)}`
     const res = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin' })
     return handleResponse<AnalyticsApiResponse>(res)
