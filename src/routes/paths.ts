@@ -21,7 +21,10 @@ export const paths = {
     USERS: '/users',
     USERS_NEW: '/users/new',
     USERS_EDIT: '/users/edit/:id',
-    // SECTORS: '/sectors',
-    // SECTORS_NEW: '/sectors/new',
-    // SECTORS_EDIT: '/sectors/edit/:id',
+    PRECONFIGURATIONS: '/preconfigurations',
+    PRECONFIGURATIONS_NEW: '/preconfigurations/new',
+    PRECONFIGURATIONS_EDIT: '/preconfigurations/edit/:id',
+    SECTORS: '/sectors',
+    SECTORS_NEW: '/sectors/new',
+    SECTORS_EDIT: '/sectors/edit/:id',
 };

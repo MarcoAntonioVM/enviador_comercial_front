@@ -5,21 +5,23 @@ import { AuthLayout } from '../layouts/AuthLayout';
 import { LoginPage } from '../features/auth/pages/LoginPage';
 import { ForgotPasswordPage } from '../features/auth/pages/ForgotPasswordPage';
 import { ResetPasswordPage } from '../features/auth/pages/ResetPasswordPage';
-import { DashboardHome } from '../pages/DashboardHome';
-import { CampaignsPage } from '../features/campaigns/pages/CampaignsPage';
+// import { DashboardHome } from '../pages/DashboardHome';
+// import { CampaignsPage } from '../features/campaigns/pages/CampaignsPage';
 import { ProspectsPage } from '../features/prospects/pages/ProspectsPage';
 import ProspectFormPage from '../features/prospects/pages/ProspectFormPage';
 import { TemplatesPage } from '../features/templates/pages/TemplatesPage';
 import TemplateFormPage from '../features/templates/pages/TemplateFormPage';
 import { SendersPage } from '../features/senders/pages/SendersPage';
 import SenderFormPage from '../features/senders/pages/SenderFormPage';
-import { DocumentsPage } from '../features/documents/pages/DocumentsPage';
+// import { DocumentsPage } from '../features/documents/pages/DocumentsPage';
 import { EmailSendsPage } from '../features/emailSends/pages/EmailSendsPage';
 import AnalyticsPage from '../features/analytics/pages/AnalyticsPage';
 import { UsersPage } from '../features/users/pages/UsersPage';
 import UserFormPage from '../features/users/pages/UserFormPage';
-import { SectorsPage } from '../features/sectors/pages/SectorsPage';
-import SectorFormPage from '../features/sectors/pages/SectorFormPage';
+// import { SectorsPage } from '../features/sectors/pages/SectorsPage';
+// import SectorFormPage from '../features/sectors/pages/SectorFormPage';
+import { PreconfigurationsPage } from '../features/preconfiguration/pages/PreconfigurationPage';
+import PreconfigurationFormPage from '../features/preconfiguration/pages/PreconfigurationFomPage';
 import { paths } from './paths';
 
 export const AppRoutes: React.FC = () => {
@@ -52,6 +54,9 @@ export const AppRoutes: React.FC = () => {
                 <Route path={paths.USERS} element={<UsersPage />} />
                 <Route path={paths.USERS_NEW} element={<UserFormPage />} />
                 <Route path={paths.USERS_EDIT} element={<UserFormPage />} />
+                <Route path={paths.PRECONFIGURATIONS} element={<PreconfigurationsPage />} />
+                <Route path={paths.PRECONFIGURATIONS_NEW} element={<PreconfigurationFormPage />} />
+                <Route path={paths.PRECONFIGURATIONS_EDIT} element={<PreconfigurationFormPage />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />
