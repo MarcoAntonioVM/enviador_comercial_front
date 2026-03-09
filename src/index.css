@@ -232,4 +232,95 @@
   .p-dialog-custom .p-dialog-header .p-dialog-header-icons {
     color: #cbd5e1 !important;
   }
+
+  /* MultiSelect */
+  .p-multiselect,
+  .multiselect-field.p-multiselect {
+    background-color: #374151 !important;
+    border-color: #4b5563 !important;
+    color: #f3f4f6 !important;
+  }
+
+  .p-multiselect .p-multiselect-label,
+  .p-multiselect .p-placeholder {
+    color: #9ca3af !important;
+  }
+
+  .p-multiselect .p-multiselect-token {
+    background-color: #1f2937 !important;
+    color: #e5e7eb !important;
+    border-color: #374151 !important;
+  }
+
+  .p-multiselect .p-multiselect-trigger {
+    background: transparent !important;
+    color: #9ca3af !important;
+  }
+
+  .p-multiselect:hover,
+  .p-multiselect.p-focus,
+  .multiselect-field.p-multiselect:hover {
+    background-color: #374151 !important;
+    border-color: #4b5563 !important;
+  }
+
+  .p-multiselect-panel {
+    background-color: #1f2937 !important;
+    border: 1px solid #374151 !important;
+    color: #e5e7eb !important;
+  }
+
+  .p-multiselect-panel .p-multiselect-header,
+  .p-multiselect-panel .p-multiselect-filter-container {
+    background-color: #111827 !important;
+    border-color: #374151 !important;
+    color: #e5e7eb !important;
+  }
+
+  .p-multiselect-panel .p-multiselect-filter-input {
+    background-color: #374151 !important;
+    border-color: #4b5563 !important;
+    color: #f3f4f6 !important;
+  }
+
+  .p-multiselect-panel .p-multiselect-filter-input::placeholder {
+    color: #9ca3af !important;
+  }
+
+  .p-multiselect-panel .p-multiselect-items {
+    background-color: #1f2937 !important;
+  }
+
+  .p-multiselect-panel .p-multiselect-item {
+    color: #e5e7eb !important;
+    background-color: transparent !important;
+  }
+
+  .p-multiselect-panel .p-multiselect-item:hover,
+  .p-multiselect-panel .p-multiselect-item.p-highlight,
+  .p-multiselect-panel .p-multiselect-item.p-focus,
+  .p-multiselect-panel .p-multiselect-list .p-multiselect-item:hover,
+  .p-multiselect-panel .p-multiselect-list .p-multiselect-item.p-highlight,
+  .p-component-overlay.p-multiselect-panel .p-multiselect-item:hover,
+  .p-component-overlay.p-multiselect-panel .p-multiselect-item.p-highlight {
+    background-color: #374151 !important;
+    color: #f3f4f6 !important;
+  }
+
+  .p-multiselect-panel .p-multiselect-item:hover .p-checkbox-box,
+  .p-multiselect-panel .p-multiselect-item.p-highlight .p-checkbox-box {
+    background-color: #4b5563 !important;
+    border-color: #6b7280 !important;
+    color: #e5e7eb !important;
+  }
+
+  .p-multiselect-panel .p-checkbox-box {
+    background-color: #374151 !important;
+    border-color: #4b5563 !important;
+  }
+
+  .p-multiselect-panel .p-checkbox-box.p-highlight {
+    background-color: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+  }
 }
