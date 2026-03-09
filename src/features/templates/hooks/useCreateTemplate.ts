@@ -1,12 +1,6 @@
 import { useState } from 'react';
 import { templatesService } from '../templates.service';
-
-type CreateTemplatePayload = {
-  name: string;
-  subject?: string;
-  html_content: string;
-  active?: boolean;
-};
+import type { CreateTemplatePayload } from '../templates.types';
 
 export default function useCreateTemplate() {
   const [loading, setLoading] = useState(false);

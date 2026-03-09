@@ -1,12 +1,6 @@
 import { useState } from 'react';
 import { templatesService } from '../templates.service';
-
-type UpdateTemplatePayload = {
-  name?: string;
-  subject?: string;
-  html_content?: string;
-  active?: boolean;
-};
+import type { UpdateTemplatePayload } from '../templates.types';
 
 export default function useUpdateTemplate() {
   const [loading, setLoading] = useState(false);

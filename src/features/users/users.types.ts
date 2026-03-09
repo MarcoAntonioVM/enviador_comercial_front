@@ -18,3 +18,11 @@ export type UsersListResponse = {
   users: User[];
   pagination: UsersPagination;
 };
+
+export type UserPayload = {
+  name: string;
+  email: string;
+  role: 'admin' | 'user' | 'viewer' | 'commercial';
+  active: boolean;
+  password?: string;
+};

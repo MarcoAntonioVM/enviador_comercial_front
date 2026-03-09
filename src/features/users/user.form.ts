@@ -1,16 +1,8 @@
 import type { EntityFormConfig } from "@/components/entity/types";
 import { userFormSchema, userCreateSchema, type UserFormValues } from "./users.schema";
-import type { User } from "./users.types";
+import type { User, UserPayload } from "./users.types";
 import { usersService } from "./users.service";
 import { paths } from "@/routes/paths";
-
-type UserPayload = {
-  name: string;
-  email: string;
-  role: "admin" | "user" | "viewer" | "commercial";
-  active: boolean;
-  password?: string;
-};
 
 export const userFormConfig: EntityFormConfig<User, UserFormValues, UserPayload> = {
   entityName: "Usuario",
