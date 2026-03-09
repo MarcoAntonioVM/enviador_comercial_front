@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { User, ChevronDown, LogOut } from 'lucide-react';
+import { User, LogOut } from 'lucide-react';
 import { useLogout } from '@/features/auth';
 import type { User as UserType } from '@/features/auth/auth.types';
 
