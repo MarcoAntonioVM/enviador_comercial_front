@@ -1,7 +1,6 @@
 import React from 'react';
 import PrimeDataTable, { type PrimeColumn } from '@/components/PrimeTable/PrimeDataTable';
 import { Tag } from 'primereact/tag';
-import { Button } from 'primereact/button';
 import useEmailSends from '../hooks/useEmailSends';
 import type { EmailSendStatus } from '../emailSends.types';
 
@@ -22,43 +21,67 @@ const StatusTag: React.FC<{ status: EmailSendStatus }> = ({ status }) => {
   return <Tag value={label} severity={severity} icon={icon} />;
 };
 
-// Formato de fecha amigable
+// Formato de fecha: día/mes/año (dd/MM/yyyy)
 const formatDate = (dateStr?: string) => {
   if (!dateStr) return '-';
   const date = new Date(dateStr);
-  return date.toLocaleString('es-MX', {
+  return date.toLocaleDateString('es-ES', {
     day: '2-digit',
-    month: 'short',
+    month: '2-digit',
     year: 'numeric',
+  });
+};
+
+// Función para formatear la hora (HH:mm)
+const formatTime = (dateStr?: string) => {
+  if (!dateStr) return '-';
+  const date = new Date(dateStr);
+  return date.toLocaleTimeString('es-ES', {
     hour: '2-digit',
     minute: '2-digit',
   });
 };
 
-const columns: PrimeColumn[] = [
-  { field: 'id', header: 'ID' },
-  { field: 'recipientEmail', header: 'Destinatario' },
-  { field: 'subject', header: 'Asunto' },
-  { field: 'campaignName', header: 'Campaña' },
-  { 
-    field: 'status', 
-    header: 'Estado',
-    body: (row: any) => <StatusTag status={row.status} />
-  },
-  { 
-    field: 'sentAt', 
-    header: 'Enviado',
-    body: (row: any) => formatDate(row.sentAt)
-  },
-  { 
-    field: 'openedAt', 
-    header: 'Abierto',
-    body: (row: any) => formatDate(row.openedAt)
-  },
-];
-
 export const EmailSendsPage: React.FC = () => {
   const { items, loading, refresh } = useEmailSends();
+
+  const handleSendNow = (row: any) => {
+    const confirmSend = window.confirm(`Enviar ahora a ${row.recipientEmail}?`);
+    if (!confirmSend) return;
+    // Placeholder: aquí deberías llamar al servicio real para enviar el email inmediatamente
+    console.log('Enviar ahora:', row);
+    // Refrescar la lista para reflejar cambios si aplica
+    refresh();
+  };
+
+  const columns: PrimeColumn[] = [
+    { field: 'recipientEmail', header: 'Destinatario' },
+    { field: 'subject', header: 'Asunto' },
+    {
+      field: 'nextSendAt',
+      header: 'Próximo envío',
+      body: (row: any) => {
+        const nextAt = row.nextSendAt || row.scheduledAt || null;
+        if (!nextAt) return '-';
+        return `${formatDate(nextAt)} ${formatTime(nextAt)}`;
+      }
+    },
+    { 
+      field: 'status', 
+      header: 'Estado',
+      body: (row: any) => <StatusTag status={row.status} />
+    },
+    { 
+      field: 'sentAt', 
+      header: 'Enviado',
+      body: (row: any) => formatDate(row.sentAt)
+    },
+    { 
+      field: 'openedAt', 
+      header: 'Abierto',
+      body: (row: any) => formatDate(row.openedAt)
+    },
+  ];
 
   // Estadísticas rápidas
   const stats = {
@@ -100,13 +123,6 @@ export const EmailSendsPage: React.FC = () => {
               Todos los emails enviados desde la plataforma
             </p>
           </div>
-          <Button 
-            label="Actualizar" 
-            icon="pi pi-refresh" 
-            className="p-button-sm p-button-outlined"
-            onClick={refresh}
-            loading={loading}
-          />
         </div>
 
         {loading ? (
@@ -120,6 +136,7 @@ export const EmailSendsPage: React.FC = () => {
             columns={columns} 
             paginator 
             rows={10}
+            onSendNow={handleSendNow}
           />
         )}
       </div>
