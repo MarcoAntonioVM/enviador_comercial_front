@@ -90,7 +90,7 @@ export function useExcelReader<T extends ExcelRow = ExcelRow>() {
 
             // Mapear las filas según la configuración
             const mappedRows: T[] = dataRows
-              .map((row, index) => {
+              .map((row, _index) => {
                 const mappedRow: ExcelRow = {};
                 
                 headers.forEach((header, colIndex) => {
