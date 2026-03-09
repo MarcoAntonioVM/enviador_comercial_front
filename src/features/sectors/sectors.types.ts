@@ -19,3 +19,8 @@ export type SectorsListResponse = {
   sectors: Sector[];
   pagination: SectorsPagination;
 };
+
+export type SectorPayload = {
+  name: string;
+  description?: string;
+};

@@ -22,3 +22,11 @@ export type SendersListResponse = {
   senders: Sender[];
   pagination: SenderPagination;
 };
+
+export type SenderPayload = {
+  name: string;
+  email: string;
+  reply_to?: string;
+  signature?: string;
+  daily_limit?: number;
+};
