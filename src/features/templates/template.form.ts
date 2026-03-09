@@ -1,18 +1,11 @@
 import type { EntityFormConfig } from "@/components/entity/types";
 import { templateFormSchema, type TemplateFormValues } from "./templates.schema";
-import type { Template } from "./templates.types";
+import type { Template, CreateTemplatePayload } from "./templates.types";
 import { templatesService } from "./templates.service";
 import { paths } from "@/routes/paths";
 import TemplatePreviewField from "./components/TemplatePreviewField";
 
-type TemplatePayload = {
-  name: string;
-  subject?: string;
-  html_content: string;
-  active: true;
-};
-
-export const templateFormConfig: EntityFormConfig<Template, TemplateFormValues, TemplatePayload> = {
+export const templateFormConfig: EntityFormConfig<Template, TemplateFormValues, CreateTemplatePayload> = {
   entityName: "Plantilla",
   schema: templateFormSchema,
   fields: [

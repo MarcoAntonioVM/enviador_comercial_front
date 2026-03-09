@@ -20,3 +20,12 @@ export type TemplatesListResponse = {
   templates: Template[];
   pagination: TemplatesPagination;
 };
+
+export type CreateTemplatePayload = {
+  name: string;
+  subject?: string;
+  html_content: string;
+  active?: boolean;
+};
+
+export type UpdateTemplatePayload = Partial<CreateTemplatePayload>;
