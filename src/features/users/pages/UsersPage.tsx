@@ -11,7 +11,7 @@ import { paths } from '@/routes/paths';
 export const UsersPage: React.FC = () => {
     const navigate = useNavigate();
     const { items: users, refresh } = useUsers();
-    const { remove, loading: deleting } = useDeleteUser();
+    const { remove } = useDeleteUser();
     const { showSuccess, showError } = useAppToast();
 
     const handleAdd = () => {
