@@ -1,34 +1,33 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
-    LayoutDashboard,
-    Megaphone,
     Users,
-    Briefcase,
     FileText,
     Send,
-    FileBox,
     BarChart3,
     UserCircle,
     LogOut,
     Mail,
     Menu,
-    X
+    X,
+    Settings,
 } from 'lucide-react';
 import { paths } from '../../routes/paths';
 import { useLogout } from '@/features/auth';
 
 const menuItems = [
-    { icon: BarChart3, label: 'Analíticas', path: paths.ANALYTICS },
     // { icon: LayoutDashboard, label: 'Dashboard', path: paths.DASHBOARD },
     // { icon: Megaphone, label: 'Campañas', path: paths.CAMPAIGNS },
+    { icon: UserCircle, label: 'Usuarios', path: paths.USERS },
     { icon: Users, label: 'Prospectos', path: paths.PROSPECTS },
     { icon: FileText, label: 'Plantillas', path: paths.TEMPLATES },
     { icon: Send, label: 'Remitentes', path: paths.SENDERS },
+    { icon: Settings, label: 'Preconfiguraciones', path: paths.PRECONFIGURATIONS },
     // { icon: Briefcase, label: 'Sectores', path: paths.SECTORS },
     // { icon: FileBox, label: 'Documentos', path: paths.DOCUMENTS },
     { icon: Mail, label: 'Envíos', path: paths.EMAIL_SENDS },
-    { icon: UserCircle, label: 'Usuarios', path: paths.USERS },
+    { icon: BarChart3, label: 'Analíticas', path: paths.ANALYTICS },
+
 ];
 
 interface SidebarProps {
@@ -48,17 +47,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
         <>
             {/* Overlay para móvil */}
             {isOpen && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black/50 z-30 sm:hidden"
                     onClick={onToggle}
                 />
             )}
 
             {/* Sidebar */}
-            <aside 
-                className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform ${
-                    isOpen ? 'translate-x-0' : '-translate-x-full'
-                } sm:translate-x-0`}
+            <aside
+                className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform ${isOpen ? 'translate-x-0' : '-translate-x-full'
+                    } sm:translate-x-0`}
             >
                 <div className="h-full flex flex-col overflow-y-auto bg-slate-900 dark:bg-gray-900 border-r border-slate-800 dark:border-gray-700">
                     {/* Header con logo */}
@@ -72,7 +70,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
                                     Enviador
                                 </h1>
                             </div>
-                            <button 
+                            <button
                                 onClick={onToggle}
                                 className="sm:hidden p-1 rounded-lg hover:bg-white/5 dark:hover:bg-gray-800"
                             >
@@ -90,15 +88,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
                                     key={item.path}
                                     to={item.path}
                                     onClick={() => window.innerWidth < 640 && onToggle()}
-                                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                                        isActive 
-                                            ? 'text-white bg-blue-500/10 dark:bg-blue-500/20 border-r-4 border-blue-500' 
+                                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive
+                                            ? 'text-white bg-blue-500/10 dark:bg-blue-500/20 border-r-4 border-blue-500'
                                             : 'text-slate-400 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 hover:bg-white/5 dark:hover:bg-gray-800'
-                                    }`}
+                                        }`}
                                 >
-                                    <item.icon className={`w-5 h-5 transition-colors ${
-                                        isActive ? 'text-blue-500' : ''
-                                    }`} />
+                                    <item.icon className={`w-5 h-5 transition-colors ${isActive ? 'text-blue-500' : ''
+                                        }`} />
                                     <span className="font-medium">{item.label}</span>
                                 </Link>
                             );
