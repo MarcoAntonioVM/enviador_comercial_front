@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Prospect, ProspectPayload } from '../prospects.types'
+import type { ProspectPayload } from '../prospects.types'
 import { prospectsService } from '../prospects.service'
 
 export default function useCreateProspect() {
