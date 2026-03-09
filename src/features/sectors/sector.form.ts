@@ -1,13 +1,8 @@
 import type { EntityFormConfig } from "@/components/entity/types";
 import { sectorFormSchema, type SectorFormValues } from "./sectors.schema";
-import type { Sector } from "./sectors.types";
+import type { Sector, SectorPayload } from "./sectors.types";
 import { sectorsService } from "./sectors.service";
 import { paths } from "@/routes/paths";
-
-type SectorPayload = {
-  name: string;
-  description?: string;
-};
 
 export const sectorFormConfig: EntityFormConfig<Sector, SectorFormValues, SectorPayload> = {
   entityName: "Sector",
