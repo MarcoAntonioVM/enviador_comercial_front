@@ -8,6 +8,8 @@ export type FieldType =
   | "chips"
   | "number"
   | "select"
+  | "time"
+  | "days"
   | "textarea"
   | "richtext"
   | "switch"

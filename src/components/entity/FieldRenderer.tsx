@@ -1,9 +1,21 @@
 import type { UseFormReturn } from "react-hook-form";
 import type React from 'react';
 import { Chips } from 'primereact/chips';
+import { MultiSelect } from 'primereact/multiselect';
+import { Controller } from 'react-hook-form';
 import type { FieldConfig } from "./types";
 import { CheckCircle, XCircle } from "lucide-react";
 import { RichTextEditor } from "@/components/RichTextEditor";
+
+const WEEKDAYS_OPTIONS = [
+  { label: 'Lunes', value: 'Monday' },
+  { label: 'Martes', value: 'Tuesday' },
+  { label: 'Miércoles', value: 'Wednesday' },
+  { label: 'Jueves', value: 'Thursday' },
+  { label: 'Viernes', value: 'Friday' },
+  { label: 'Sábado', value: 'Saturday' },
+  { label: 'Domingo', value: 'Sunday' },
+];
 
 type Props<TForm extends Record<string, any>> = {
   field: FieldConfig<TForm>;
@@ -208,18 +220,52 @@ export function FieldRenderer<TForm extends Record<string, any>>({
             <input type="hidden" {...register(field.name as any)} />
           </div>
         ) : (
-          <div className="relative">
-            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-gray-400">
-              <i className={`pi ${getFieldIcon()} text-sm`}></i>
-            </span>
-            <input
-              id={name}
-              type={field.type}
-              className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-slate-700 dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-400 transition-all outline-none"
-              placeholder={field.placeholder}
-              {...register(field.name as any)}
-            />
-          </div>
+          // default input handling
+          field.type === 'time' ? (
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-gray-400">
+                <i className={`pi ${getFieldIcon()} text-sm`}></i>
+              </span>
+              <input
+                id={name}
+                type="time"
+                className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-slate-700 dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-400 transition-all outline-none"
+                {...register(field.name as any)}
+              />
+            </div>
+          ) : field.type === 'days' ? (
+            <div className="relative">
+              <div className="pl-3.5 pr-4 py-2 bg-slate-50 dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded-xl">
+                <Controller
+                  control={form.control}
+                  name={field.name as any}
+                  render={({ field: controllerField }) => (
+                    <MultiSelect
+                      value={controllerField.value ?? []}
+                      options={WEEKDAYS_OPTIONS}
+                      onChange={(e) => controllerField.onChange(e.value)}
+                      display="chip"
+                      placeholder={field.placeholder ?? 'Selecciona días'}
+                      className="multiselect-field w-full"
+                    />
+                  )}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-gray-400">
+                <i className={`pi ${getFieldIcon()} text-sm`}></i>
+              </span>
+              <input
+                id={name}
+                type={field.type}
+                className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-slate-700 dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-400 transition-all outline-none"
+                placeholder={field.placeholder}
+                {...register(field.name as any)}
+              />
+            </div>
+          )
         )}
         
         {errorMsg && (
