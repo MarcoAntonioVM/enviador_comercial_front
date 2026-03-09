@@ -20,6 +20,7 @@ interface PrimeDataTableProps {
     showActions?: boolean;
     onEdit?: (row: any) => void;
     onDelete?: (row: any) => void;
+    onSendNow?: (row: any) => void;
     // Selection
     selectionMode?: 'single' | 'multiple' | 'checkbox';
     selection?: any[];
@@ -36,6 +37,7 @@ export const PrimeDataTable: React.FC<PrimeDataTableProps> = ({
     showActions = true,
     onEdit,
     onDelete,
+    onSendNow,
     selectionMode,
     selection,
     onSelectionChange,
@@ -45,11 +47,24 @@ export const PrimeDataTable: React.FC<PrimeDataTableProps> = ({
     const actionsBody = (rowData: any) => {
         return (
             <div className="flex items-center gap-2">
+                 {onSendNow && (
+                    <Button
+                        type="button"
+                        icon="pi pi-send"
+                        className="p-button-rounded p-button-text p-button-info btn-send-now"
+                        aria-label="Enviar ahora"
+                        tooltip="Enviar ahora"
+                        tooltipOptions={{ position: 'top' }}
+                        onClick={() => onSendNow(rowData)}
+                    />
+                )}
                 <Button
                     type="button"
                     icon="pi pi-pencil"
                     className="p-button-rounded p-button-text btn-edit"
                     aria-label="Editar"
+                    tooltip="Editar"
+                    tooltipOptions={{ position: 'top' }}
                     onClick={() => onEdit && onEdit(rowData)}
                     disabled={!onEdit}
                 />
@@ -58,9 +73,12 @@ export const PrimeDataTable: React.FC<PrimeDataTableProps> = ({
                     icon="pi pi-trash"
                     className="p-button-rounded p-button-text p-button-danger btn-delete"
                     aria-label="Eliminar"
+                    tooltip="Eliminar"
+                    tooltipOptions={{ position: 'top' }}
                     onClick={() => onDelete && onDelete(rowData)}
                     disabled={!onDelete}
                 />
+               
             </div>
         );
     };
