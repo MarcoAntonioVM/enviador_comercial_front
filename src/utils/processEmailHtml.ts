@@ -1,11 +1,8 @@
-import DOMPurify from "dompurify";
+import DOMPurify, { type Config } from "dompurify";
 import juice from "juice";
 
 /** Configuración de sanitización para contenido de email/editor: permite tablas y estilos seguros */
-const SANITIZE_CONFIG: DOMPurify.Config & {
-  ADD_TAGS?: string[];
-  ADD_ATTR?: string[];
-} = {
+const SANITIZE_CONFIG: Config = {
   USE_PROFILES: { html: true },
   // Asegurar que tablas y celdas se conserven (algunos perfiles los omiten)
   ADD_TAGS: ["table", "thead", "tbody", "tfoot", "tr", "td", "th"],
@@ -30,7 +27,7 @@ const SANITIZE_CONFIG: DOMPurify.Config & {
  */
 export function sanitizeEditorHtml(html: string): string {
   if (!html) return "";
-  return DOMPurify.sanitize(html, SANITIZE_CONFIG);
+  return DOMPurify.sanitize(html, SANITIZE_CONFIG) as string;
 }
 
 export const processEmailHtml = (html: string) => {
