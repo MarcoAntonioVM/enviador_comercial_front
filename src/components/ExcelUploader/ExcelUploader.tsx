@@ -84,7 +84,7 @@ export function ExcelUploader<T extends ExcelRow = ExcelRow>({
   asModal = false,
   modalTitle = 'Importar desde Excel',
   modalInfo,
-  showPreview = false,
+  showPreview: _showPreview = false,
   previewColumns = [],
 }: ExcelUploaderProps<T>) {
   const fileInputRef = useRef<HTMLInputElement>(null);
