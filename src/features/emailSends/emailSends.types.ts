@@ -7,6 +7,29 @@ export type EmailSendStatus =
   | 'bounced'    // Rebotado (email no existe)
   | 'failed';    // Falló el envío
 
+export type EmailSendsPagination = {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+};
+
+export type EmailSendsListResponse = {
+  emailSends: EmailSend[];
+  pagination: EmailSendsPagination;
+};
+
+export type EmailSendsStats = {
+  total: number;
+  sent: number;
+  delivered: number;
+  opened: number;
+  clicked: number;
+  bounced: number;
+  failed: number;
+  pending: number;
+};
+
 export type EmailSend = {
   id: string;
   campaignId?: string;       // ID de la campaña (si aplica)
