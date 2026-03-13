@@ -12,6 +12,15 @@ function normalizePreconfiguration(u: any) {
   const prospectName = u.prospect_name ?? u.prospect?.name ?? u.prospect?.title ?? (typeof u.prospect === 'string' ? u.prospect : undefined);
   const days_week = (u.days_week ?? u.days ?? []).map((d: string) => toCapitalizedDay(String(d)));
 
+  const recipient_email =
+    u.recipient_email
+    ?? u.recipient?.email
+    ?? u.recipient?.reply_to
+    ?? u.prospect?.email
+    ?? u.prospect?.emails?.[0]
+    ?? undefined;
+
+
   const dayMapEs: Record<string, string> = {
     Monday: 'Lun',
     Tuesday: 'Mar',
@@ -42,6 +51,7 @@ function normalizePreconfiguration(u: any) {
     hour: u.hour,
     hour_display,
     createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
+    recipient_email
   };
 }
 
@@ -172,4 +182,21 @@ export const preconfigurationsService = {
     if (!response.ok) throw new Error(raw?.error ?? raw?.message ?? 'Error al eliminar Preconfiguración');
     return { success: true } as { success: boolean };
   },
+
+
+  //Envio de mail ahora
+  async sendNow(id: number): Promise<{ success: boolean }> {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_URL}/email/send-by-preconfiguration`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify({ preconfiguration_id: id }),
+    });
+    const raw = await response.json();
+    if (!response.ok) throw new Error(raw?.error ?? raw?.message ?? 'Error al enviar mail ahora');
+    return { success: true } as { success: boolean };
+  }
 };
