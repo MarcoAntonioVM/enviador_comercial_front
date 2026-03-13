@@ -22,15 +22,13 @@ const StatusTag: React.FC<{ status: EmailSendStatus }> = ({ status }) => {
   return <Tag value={label} severity={severity} icon={icon} />;
 };
 
-// Formato de fecha: día/mes/año (dd/MM/yyyy)
+// Formato: HH:mm DD/MM/YYYY
 const formatDate = (dateStr?: string) => {
   if (!dateStr) return '-';
   const date = new Date(dateStr);
-  return date.toLocaleDateString('es-ES', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
+  const time = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+  const day = date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  return `${time} ${day}`;
 };
 
 export const EmailSendsPage: React.FC = () => {
