@@ -16,6 +16,11 @@ interface PrimeDataTableProps {
     tableStyle?: React.CSSProperties;
     paginator?: boolean;
     rows?: number;
+    // Server-side (lazy) pagination
+    lazy?: boolean;
+    totalRecords?: number;
+    first?: number;
+    onPage?: (event: { first: number; rows: number; page: number }) => void;
     // Actions
     showActions?: boolean;
     onEdit?: (row: any) => void;
@@ -34,6 +39,10 @@ export const PrimeDataTable: React.FC<PrimeDataTableProps> = ({
     tableStyle,
     paginator = false,
     rows = 10,
+    lazy = false,
+    totalRecords,
+    first = 0,
+    onPage,
     showActions = true,
     onEdit,
     onDelete,
@@ -95,6 +104,13 @@ export const PrimeDataTable: React.FC<PrimeDataTableProps> = ({
         paginator: paginator,
         rows: rows,
     };
+
+    if (lazy) {
+        dataTableProps.lazy = true;
+        dataTableProps.totalRecords = totalRecords;
+        dataTableProps.first = first;
+        dataTableProps.onPage = onPage;
+    }
 
     if (selectionMode) {
         if (selectionMode === 'checkbox') {
