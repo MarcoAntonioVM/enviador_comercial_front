@@ -3,6 +3,7 @@ export type Weekday = typeof WEEKDAYS[number];
 
 export type Preconfiguration = {
   id: string;
+  recipient_email: string;
   sender_id: string;       // ID of the sender
   sender_name?: string;    // sender display name (optional)
   template_id: string;     // ID of the template
