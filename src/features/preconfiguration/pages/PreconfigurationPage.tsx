@@ -7,8 +7,15 @@ import { confirmDialog } from 'primereact/confirmdialog';
 import usePreconfigurations from '../hooks/usePreconfigurations';
 import useDeletePreconfiguration from '../hooks/useDeletePreconfiguration';
 import { useAppToast } from '@/components/Toast/ToastProvider';
+import { preconfigurationsService } from '../preconfiguration.service';
+
 
 const columns: PrimeColumn[] = [
+    {
+        field: 'recipient_email',
+        header: 'Destinatario',
+        body: (row: any) => row.recipient_email ?? row.prospect_name ?? '-',
+      },
     {
         field: 'sender_email',
         header: 'Remitente',
@@ -32,6 +39,18 @@ export const PreconfigurationsPage: React.FC = () => {
 
     const handleEdit = (row: any) => {
         navigate(paths.PRECONFIGURATIONS_EDIT.replace(':id', row.id));
+    };
+
+    const handleSendNow = async (row: any) => {
+        try{
+            await preconfigurationsService.sendNow(row.id);
+            showSuccess('Mail enviado correctamente');
+            refresh();
+        } catch (e: any) {
+            showError(e?.message || 'Error al enviar mail ahora');
+        }
+   
+        
     };
 
     const handleDelete = (row: any) => {
@@ -87,6 +106,7 @@ export const PreconfigurationsPage: React.FC = () => {
                     selection={selectedItems}
                     onSelectionChange={setSelectedItems}
                     dataKey="id"
+                    onSendNow={handleSendNow}
                 />
             </div>
         </div>
