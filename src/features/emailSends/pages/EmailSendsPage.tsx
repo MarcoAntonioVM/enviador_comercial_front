@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PrimeDataTable, { type PrimeColumn } from '@/components/PrimeTable/PrimeDataTable';
 import { Tag } from 'primereact/tag';
 import useEmailSends from '../hooks/useEmailSends';
+import useEmailSendsStats from '../hooks/useEmailSendsStats';
 import type { EmailSendStatus } from '../emailSends.types';
 
 // Componente para mostrar el estado con colores
@@ -32,40 +33,28 @@ const formatDate = (dateStr?: string) => {
   });
 };
 
-// Función para formatear la hora (HH:mm)
-const formatTime = (dateStr?: string) => {
-  if (!dateStr) return '-';
-  const date = new Date(dateStr);
-  return date.toLocaleTimeString('es-ES', {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-};
-
 export const EmailSendsPage: React.FC = () => {
-  const { items, loading, refresh } = useEmailSends();
+  const { items, loading, pagination, setPage } = useEmailSends();
+  const { stats } = useEmailSendsStats();
+  const [first, setFirst] = useState(0);
 
-  const handleSendNow = (row: any) => {
-    const confirmSend = window.confirm(`Enviar ahora a ${row.recipientEmail}?`);
-    if (!confirmSend) return;
-    // Placeholder: aquí deberías llamar al servicio real para enviar el email inmediatamente
-    console.log('Enviar ahora:', row);
-    // Refrescar la lista para reflejar cambios si aplica
-    refresh();
+  const handlePage = (e: { first: number; rows: number; page: number }) => {
+    setFirst(e.first);
+    setPage(e.page + 1); // PrimeReact paginea en base 0, la API en base 1
   };
 
   const columns: PrimeColumn[] = [
     { field: 'recipientEmail', header: 'Destinatario' },
     { field: 'subject', header: 'Asunto' },
-    {
-      field: 'nextSendAt',
-      header: 'Próximo envío',
-      body: (row: any) => {
-        const nextAt = row.nextSendAt || row.scheduledAt || null;
-        if (!nextAt) return '-';
-        return `${formatDate(nextAt)} ${formatTime(nextAt)}`;
-      }
-    },
+    // {
+    //   field: 'nextSendAt',
+    //   header: 'Próximo envío',
+    //   body: (row: any) => {
+    //     const nextAt = row.nextSendAt || row.scheduledAt || null;
+    //     if (!nextAt) return '-';
+    //     return `${formatDate(nextAt)} ${formatTime(nextAt)}`;
+    //   }
+    // },
     { 
       field: 'status', 
       header: 'Estado',
@@ -82,14 +71,6 @@ export const EmailSendsPage: React.FC = () => {
       body: (row: any) => formatDate(row.openedAt)
     },
   ];
-
-  // Estadísticas rápidas
-  const stats = {
-    total: items.length,
-    opened: items.filter(i => i.status === 'opened' || i.status === 'clicked').length,
-    bounced: items.filter(i => i.status === 'bounced').length,
-    failed: items.filter(i => i.status === 'failed').length,
-  };
 
   return (
     <div className="text-gray-900 dark:text-gray-100">
@@ -131,12 +112,16 @@ export const EmailSendsPage: React.FC = () => {
             <span className="ml-2 text-gray-500 dark:text-gray-400">Cargando envíos...</span>
           </div>
         ) : (
-          <PrimeDataTable 
-            value={items} 
-            columns={columns} 
-            paginator 
+          <PrimeDataTable
+            value={items}
+            columns={columns}
+            paginator
             rows={10}
-            onSendNow={handleSendNow}
+            showActions={false}
+            lazy
+            totalRecords={pagination.total}
+            first={first}
+            onPage={handlePage}
           />
         )}
       </div>
