@@ -1,22 +1,19 @@
 import type { EmailSend, EmailSendsStats, EmailSendsListResponse } from './emailSends.types';
+import { authorizedFetch } from '@/lib/authorizedFetch';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const emailSendsService = {
   list: async (params?: { page?: number; limit?: number; campaignId?: string }): Promise<EmailSendsListResponse> => {
-    const token = localStorage.getItem('token');
     const sp = new URLSearchParams();
 
     if (params?.page) sp.set('page', String(params.page));
     if (params?.limit) sp.set('limit', String(params.limit));
     if (params?.campaignId) sp.set('campaignId', String(params.campaignId));
     const url = `${API_URL}/email-sends${sp.toString() ? `?${sp.toString()}` : ''}`;
-    const response = await fetch(url, {
+    const response = await authorizedFetch(url, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { 'Content-Type': 'application/json' },
     });
 
     let raw: any;
@@ -67,13 +64,9 @@ export const emailSendsService = {
   },
 
   getStats: async (): Promise<EmailSendsStats> => {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/email-sends/stats`, {
+    const response = await authorizedFetch(`${API_URL}/email-sends/stats`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { 'Content-Type': 'application/json' },
     });
 
     const raw = await response.json();
@@ -100,13 +93,9 @@ export const emailSendsService = {
   },
 
   get: async (id: string): Promise<EmailSend | undefined> => {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/email-sends/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/email-sends/${id}`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { 'Content-Type': 'application/json' },
     });
 
     const raw = await response.json();

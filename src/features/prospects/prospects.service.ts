@@ -1,4 +1,5 @@
 import type { Prospect, prospectsListResponse, prospectsPagination, ProspectPayload } from "./prospects.types";
+import { authorizedFetch } from "@/lib/authorizedFetch";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -16,7 +17,6 @@ type ListParams = {
 
 export const prospectsService = {
  async list(params?: ListParams): Promise<prospectsListResponse> {
-     const token = localStorage.getItem("token");
      const searchParams = new URLSearchParams();
     if (params?.page) searchParams.set("page", String(params.page));
     if (params?.limit) searchParams.set("limit", String(params.limit));
@@ -30,12 +30,9 @@ export const prospectsService = {
     const queryString = searchParams.toString();
     const url = `${API_URL}/prospects${queryString ? `?${queryString}` : ''}`;
  
-     const response = await fetch(url, {
+     const response = await authorizedFetch(url, {
        method: "GET",
-       headers: {
-         "Content-Type": "application/json",
-         ...(token && { Authorization: `Bearer ${token}` }),
-       },
+       headers: { "Content-Type": "application/json" },
      });
  
      const raw = await response.json();
@@ -79,13 +76,9 @@ export const prospectsService = {
    },
 
   async getById(id: string): Promise<Prospect> {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/prospects/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/prospects/${id}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     const raw = await response.json();
@@ -116,7 +109,6 @@ export const prospectsService = {
   },
 
   async create(payload: ProspectPayload): Promise<Prospect> {
-    const token = localStorage.getItem("token");
     const email = (payload as any).email ?? ((payload as any).emails?.[0]);
     const requestBody: Record<string, unknown> = {
       company: payload.company,
@@ -128,12 +120,9 @@ export const prospectsService = {
       if (requestBody[k] === undefined) delete requestBody[k];
     });
 
-    const response = await fetch(`${API_URL}/prospects`, {
+    const response = await authorizedFetch(`${API_URL}/prospects`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
     });
 
@@ -165,7 +154,6 @@ export const prospectsService = {
   },
 
   async update(id: string, payload: ProspectPayload): Promise<Prospect> {
-    const token = localStorage.getItem("token");
     const email = (payload as any).email ?? (payload as any).emails?.[0];
     const requestBody: Record<string, unknown> = {
       company: payload.company,
@@ -178,12 +166,9 @@ export const prospectsService = {
       if (requestBody[k] === undefined) delete requestBody[k];
     });
 
-    const response = await fetch(`${API_URL}/prospects/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/prospects/${id}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
     });
 
@@ -215,13 +200,9 @@ export const prospectsService = {
   },
 
   async delete(id: string): Promise<Prospect> {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/prospects/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/prospects/${id}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     const raw = await response.json();

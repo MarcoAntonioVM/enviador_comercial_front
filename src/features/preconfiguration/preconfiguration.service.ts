@@ -1,4 +1,6 @@
 import type { Preconfiguration, PreconfigurationPagination, PreconfigurationsListResponse } from './preconfiguration.types';
+import { authorizedFetch } from '@/lib/authorizedFetch';
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 
@@ -62,7 +64,6 @@ type ListParams = {
 
 export const preconfigurationsService = {
   async list(params?: ListParams): Promise<PreconfigurationsListResponse> {
-    const token = localStorage.getItem("token");
     const searchParams = new URLSearchParams();
     if (params?.page) searchParams.set("page", String(params.page));
     if (params?.limit) searchParams.set("limit", String(params.limit));
@@ -70,12 +71,9 @@ export const preconfigurationsService = {
     const queryString = searchParams.toString();
     const url = `${API_URL}/preconfigurations${queryString ? `?${queryString}` : ''}`;
 
-    const response = await fetch(url, {
+    const response = await authorizedFetch(url, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     const raw = await response.json();
@@ -110,13 +108,9 @@ export const preconfigurationsService = {
   },
 
   async getById(id: string): Promise<Preconfiguration> {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/preconfigurations/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/preconfigurations/${id}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
     });
     const raw = await response.json();
     if (!response.ok) throw new Error('Preconfiguración no encontrada');
@@ -134,13 +128,9 @@ export const preconfigurationsService = {
       hour: data.hour,
       createdAt: new Date().toISOString(),
     };
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/preconfigurations`, {
+    const response = await authorizedFetch(`${API_URL}/preconfigurations`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newItem),
     });
     const raw = await response.json();
@@ -155,13 +145,9 @@ export const preconfigurationsService = {
       prospect_id: data.prospect_id ?? null,
       days_week: daysWeek,
     };
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/preconfigurations/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/preconfigurations/${id}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
     const raw = await response.json();
@@ -170,13 +156,9 @@ export const preconfigurationsService = {
   },
 
   async delete(id: string): Promise<{ success: boolean }> {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/preconfigurations/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/preconfigurations/${id}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
     });
     const raw = await response.json();
     if (!response.ok) throw new Error(raw?.error ?? raw?.message ?? 'Error al eliminar Preconfiguración');
@@ -186,13 +168,9 @@ export const preconfigurationsService = {
 
   //Envio de mail ahora
   async sendNow(id: number): Promise<{ success: boolean }> {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/email/send-by-preconfiguration`, {
+    const response = await authorizedFetch(`${API_URL}/email/send-by-preconfiguration`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ preconfiguration_id: id }),
     });
     const raw = await response.json();

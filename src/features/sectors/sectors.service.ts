@@ -1,4 +1,5 @@
 import type { Sector, SectorsListResponse, SectorsPagination } from './sectors.types';
+import { authorizedFetch } from '@/lib/authorizedFetch';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -9,7 +10,6 @@ type ListParams = {
 
 export const sectorsService = {
   async list(params?: ListParams): Promise<SectorsListResponse> {
-    const token = localStorage.getItem("token");
     const searchParams = new URLSearchParams();
     if (params?.page) searchParams.set("page", String(params.page));
     if (params?.limit) searchParams.set("limit", String(params.limit));
@@ -17,12 +17,9 @@ export const sectorsService = {
     const queryString = searchParams.toString();
     const url = `${API_URL}/sectors${queryString ? `?${queryString}&active=true` : '?active=true'}`;
 
-    const response = await fetch(url, {
+    const response = await authorizedFetch(url, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     const raw = await response.json();
@@ -62,13 +59,9 @@ export const sectorsService = {
   },
 
   async getById(id: string): Promise<Sector> {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/sectors/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/sectors/${id}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     const raw = await response.json();
@@ -95,13 +88,9 @@ export const sectorsService = {
   },
 
   create: async (data: Partial<Sector>): Promise<Sector> => {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/sectors`, {
+    const response = await authorizedFetch(`${API_URL}/sectors`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
 
@@ -129,13 +118,9 @@ export const sectorsService = {
   },
 
   update: async (id: string, data: Partial<Sector>): Promise<Sector> => {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/sectors/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/sectors/${id}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
 
@@ -163,13 +148,9 @@ export const sectorsService = {
   },
 
   async delete(id: string): Promise<Sector> {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/sectors/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/sectors/${id}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     const raw = await response.json();
@@ -197,20 +178,15 @@ export const sectorsService = {
 
   // Crear múltiples sectores (envía los objetos con la misma forma que `create`)
   createMultiple: async (sectors: Partial<Sector>[]): Promise<any> => {
-    const token = localStorage.getItem("token");
-
     const payloadSectors = sectors.map((s) => ({
       name: s.name,
       description: s.description ?? '',
       active: typeof (s as any).active !== 'undefined' ? (s as any).active : true,
     }));
 
-    const response = await fetch(`${API_URL}/sectors/bulk-import`, {
+    const response = await authorizedFetch(`${API_URL}/sectors/bulk-import`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ sectors: payloadSectors }),
     });
 
@@ -246,14 +222,9 @@ export const sectorsService = {
 
   // Eliminar múltiples sectores
   deleteMultiple: async (ids: string[]): Promise<any> => {
-    const token = localStorage.getItem("token");
-
-    const response = await fetch(`${API_URL}/sectors/multiple`, {
+    const response = await authorizedFetch(`${API_URL}/sectors/multiple`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ids }),
     });
 

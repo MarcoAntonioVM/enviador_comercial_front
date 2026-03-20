@@ -1,4 +1,5 @@
 import type { Template, TemplatesListResponse, TemplatesPagination } from './templates.types';
+import { authorizedFetch } from '@/lib/authorizedFetch';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -22,7 +23,6 @@ function mapTemplate(u: any): Template {
 
 export const templatesService = {
   async list(params?: ListParams): Promise<TemplatesListResponse> {
-    const token = localStorage.getItem('token');
     const searchParams = new URLSearchParams();
     if (params?.page) searchParams.set('page', String(params.page));
     if (params?.limit) searchParams.set('limit', String(params.limit));
@@ -30,12 +30,9 @@ export const templatesService = {
     const queryString = searchParams.toString();
     const url = `${API_URL}/templates${queryString ? `?${queryString}` : ''}`;
 
-    const response = await fetch(url, {
+    const response = await authorizedFetch(url, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { 'Content-Type': 'application/json' },
     });
 
     const raw = await response.json();
@@ -66,13 +63,9 @@ export const templatesService = {
   },
 
   async getById(id: string): Promise<Template> {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/templates/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/templates/${id}`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { 'Content-Type': 'application/json' },
     });
 
     const raw = await response.json();
@@ -99,13 +92,9 @@ export const templatesService = {
     html_content: string;
     active?: boolean;
   }): Promise<Template> => {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/templates`, {
+    const response = await authorizedFetch(`${API_URL}/templates`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
 
@@ -131,13 +120,9 @@ export const templatesService = {
       active?: boolean;
     }
   ): Promise<Template> => {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/templates/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/templates/${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
 
@@ -155,13 +140,9 @@ export const templatesService = {
   },
 
   async delete(id: string): Promise<void> {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/templates/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/templates/${id}`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { 'Content-Type': 'application/json' },
     });
 
     const raw = await response.json();

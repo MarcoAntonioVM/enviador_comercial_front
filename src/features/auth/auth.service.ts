@@ -52,6 +52,34 @@ export const authService = {
     } as LoginResponse;
   },
 
+  /**
+   * Renueva el access token usando `refreshToken` en localStorage.
+   * Espera POST `${API_URL}/auth/refresh` con body `{ refreshToken }` y respuesta tipo login (`data.accessToken`, etc.).
+   */
+  async refreshSession(): Promise<boolean> {
+    const rt = localStorage.getItem('refreshToken');
+    if (!rt) return false;
+
+    const response = await fetch(`${API_URL}/auth/refresh`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refreshToken: rt }),
+    });
+
+    const raw = await response.json().catch(() => null);
+    if (!response.ok || raw?.success === false) return false;
+
+    const data = raw?.data ?? raw;
+    const access = data.accessToken ?? data.access_token ?? data.token;
+    if (!access || typeof access !== 'string') return false;
+
+    localStorage.setItem('token', access);
+    const newRt = data.refreshToken ?? data.refresh_token;
+    if (newRt) localStorage.setItem('refreshToken', newRt);
+
+    return true;
+  },
+
   async logout(): Promise<void> {
     // Notificar al backend para invalidar tokens 
     try {

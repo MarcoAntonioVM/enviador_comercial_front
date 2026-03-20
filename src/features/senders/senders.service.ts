@@ -1,4 +1,5 @@
 import type { Sender, SenderPagination, SendersListResponse } from './senders.types';
+import { authorizedFetch } from '@/lib/authorizedFetch';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -10,7 +11,6 @@ type ListParams = {
 export const sendersService = {
   // Obtener todos los remitentes
   async list(params?: ListParams): Promise<SendersListResponse> {
-    const token = localStorage.getItem("token");
     const searchParams = new URLSearchParams();
     if (params?.page) searchParams.set("page", String(params.page));
     if (params?.limit) searchParams.set("limit", String(params.limit));
@@ -18,12 +18,9 @@ export const sendersService = {
     const queryString = searchParams.toString();
     const url = `${API_URL}/senders${queryString ? `?${queryString}&active=true` : '?active=true'}`;
 
-    const response = await fetch(url, {
+    const response = await authorizedFetch(url, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     const raw = await response.json();
@@ -66,13 +63,9 @@ export const sendersService = {
   },
 
   async getById(id: string): Promise<Sender> {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/senders/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/senders/${id}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     const raw = await response.json();
@@ -103,14 +96,9 @@ export const sendersService = {
 
   // Crear un nuevo remitente
   create: async (data: Partial<Sender>): Promise<Sender> => {
-    const token = localStorage.getItem("token");
-
-    const response = await fetch(`${API_URL}/senders`, {
+    const response = await authorizedFetch(`${API_URL}/senders`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
 
@@ -140,14 +128,9 @@ export const sendersService = {
   },
   // Actualizar un remitente existente
   update: async (id: string, data: Partial<Sender>): Promise<Sender> => {
-    const token = localStorage.getItem("token");
-
-    const response = await fetch(`${API_URL}/senders/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/senders/${id}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
 
@@ -177,13 +160,9 @@ export const sendersService = {
   },
 
   async delete(id: string): Promise<Sender> {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`${API_URL}/senders/${id}`, {
+    const response = await authorizedFetch(`${API_URL}/senders/${id}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     const raw = await response.json();
@@ -213,20 +192,15 @@ export const sendersService = {
 
   // Crear múltiples remitentes (envía los objetos con la misma forma que `create`)
   createMultiple: async (senders: Partial<Sender>[]): Promise<Sender[]> => {
-    const token = localStorage.getItem("token");
-
     const payloadSenders = senders.map((s) => ({
       name: s.name,
       email: s.email,
       daily_limit: typeof (s as any).daily_limit !== 'undefined' ? (s as any).daily_limit : (s as any).dailyLimit ?? 100,
     }));
 
-    const response = await fetch(`${API_URL}/senders/multiple`, {
+    const response = await authorizedFetch(`${API_URL}/senders/multiple`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ senders: payloadSenders }),
     });
 
@@ -265,14 +239,9 @@ export const sendersService = {
 
   // Eliminar múltiples remitentes
   deleteMultiple: async (ids: string[]): Promise<any> => {
-    const token = localStorage.getItem("token");
-
-    const response = await fetch(`${API_URL}/senders/multiple`, {
+    const response = await authorizedFetch(`${API_URL}/senders/multiple`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ids }),
     });
 
