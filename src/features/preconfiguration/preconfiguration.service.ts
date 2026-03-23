@@ -8,6 +8,7 @@ function toCapitalizedDay(d: string): string {
   return d.charAt(0).toUpperCase() + d.slice(1).toLowerCase();
 }
 
+
 function normalizePreconfiguration(u: any) {
   const senderName = u.sender_name ?? u.sender?.name ?? u.sender?.title ?? (typeof u.sender === 'string' ? u.sender : undefined);
   const templateName = u.template_name ?? u.template?.name ?? u.template?.title ?? (typeof u.template === 'string' ? u.template : undefined);
@@ -40,12 +41,12 @@ function normalizePreconfiguration(u: any) {
 
   return {
     id: String(u.id),
-    sender_id: u.sender_id ?? u.sender?.id ?? u.sender_id,
+    sender_id: u.sender_id ?? u.sender?.id ?? 0,
     sender_name: senderName,
     sender_email,
-    template_id: u.template_id ?? u.template?.id ?? u.template_id,
+    template_id: u.template_id ?? u.template?.id ?? 0,
     template_name: templateName,
-    prospect_id: u.prospect_id ?? u.prospect?.id ?? u.prospect_id,
+    prospect_id: u.prospect_id ?? u.prospect?.id ?? 0,
     prospect_name: prospectName,
     days_week,
     days_week_es,
