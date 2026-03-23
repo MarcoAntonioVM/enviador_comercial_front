@@ -89,7 +89,7 @@ export function getPreconfigurationFormConfig(
     toPayload: (formValues) => ({
       sender_id: formValues.sender_id,
       template_id: formValues.template_id,
-      prospect_id: formValues.prospect_id || undefined,
+      prospect_id: formValues.prospect_id,
       days_week: formValues.days_week?.length ? formValues.days_week : undefined,
       hour: formValues.hour || undefined,
     }),
