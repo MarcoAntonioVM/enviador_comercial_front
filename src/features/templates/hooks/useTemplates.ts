@@ -11,26 +11,31 @@ export default function useTemplates() {
     totalPages: 1,
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const load = async (page = 1, limit = 10) => {
     setLoading(true);
+    setError(null);
     try {
       const res = await templatesService.list({ page, limit });
       setItems(res.templates ?? []);
       setPagination(res.pagination);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Error al cargar plantillas');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    load();
+    void load();
   }, []);
 
   return {
     items,
     pagination,
     loading,
+    error,
     refresh: () => load(pagination.page, pagination.limit),
   };
 }
