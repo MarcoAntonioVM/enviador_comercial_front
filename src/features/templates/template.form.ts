@@ -1,6 +1,6 @@
 import type { EntityFormConfig } from "@/components/entity/types";
 import { templateFormSchema, type TemplateFormValues } from "./templates.schema";
-import type { Template, CreateTemplatePayload } from "./templates.types";
+import type { Template, CreateTemplatePayload, UpdateTemplatePayload } from "./templates.types";
 import { templatesService } from "./templates.service";
 import { paths } from "@/routes/paths";
 import TemplatePreviewField from "./components/TemplatePreviewField";
@@ -17,8 +17,8 @@ export const templateFormConfig: EntityFormConfig<Template, TemplateFormValues, 
   getById: async (id: string) => {
     return templatesService.getById(id);
   },
-  create: (payload: TemplatePayload) => templatesService.create(payload),
-  update: (id: string, payload: TemplatePayload) => templatesService.update(id, payload),
+  create: (payload: CreateTemplatePayload) => templatesService.create(payload),
+  update: (id: string, payload: UpdateTemplatePayload) => templatesService.update(id, payload),
 
   toForm: (t) => ({
     name: t.name,
