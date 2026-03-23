@@ -1,5 +1,6 @@
 import React from 'react';
 import PrimeDataTable, { type PrimeColumn } from '@/components/PrimeTable/PrimeDataTable';
+import { Message } from 'primereact/message';
 import { Button } from 'primereact/button';
 import { useNavigate } from 'react-router-dom';
 import { paths } from '@/routes/paths';
@@ -16,7 +17,7 @@ const columns: PrimeColumn[] = [
 
 export const TemplatesPage: React.FC = () => {
     const navigate = useNavigate();
-    const { items, refresh } = useTemplates();
+    const { items, refresh, error } = useTemplates();
     const { remove } = useDeleteTemplate();
     const { showSuccess, showError } = useAppToast();
 
@@ -52,6 +53,10 @@ export const TemplatesPage: React.FC = () => {
     return (
         <div className="text-gray-900 dark:text-gray-100">
             <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Plantillas</h1>
+
+            {error ? (
+                <Message severity="error" text={error} className="mb-4 w-full" />
+            ) : null}
 
             <div className="card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border dark:border-gray-600">
                 <div className="flex items-center justify-between mb-4">
