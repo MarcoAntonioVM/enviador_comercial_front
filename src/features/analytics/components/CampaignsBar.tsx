@@ -1,14 +1,9 @@
+import { ChartCard } from '@/components/charts/ChartCard'
+import { BaseChart } from '@/components/charts/BaseChart'
+import { toCampaignsBar } from '../analytics.mappers'
+import type { CampaignsBarProps } from '../analytics.types'
 
-import { ChartCard } from '../../../components/charts/ChartCard'
-import { BaseChart } from '../../../components/charts/BaseChart'
-import { toCampaignsBar } from '../mappers/chartData.mappers'
-
-type Props = {
-  campaigns: any[] | null
-  loading?: boolean
-}
-
-export function CampaignsBar({ campaigns, loading }: Props) {
+export function CampaignsBar({ campaigns, loading }: CampaignsBarProps) {
   if (!campaigns || campaigns.length === 0) {
     return (
       <ChartCard

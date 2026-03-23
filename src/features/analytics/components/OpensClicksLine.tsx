@@ -1,19 +1,13 @@
+import { ChartCard } from '@/components/charts/ChartCard'
+import { BaseChart } from '@/components/charts/BaseChart'
+import { toOpensClicksLine } from '../analytics.mappers'
+import type { OpensClicksLineProps } from '../analytics.types'
 
-import { ChartCard } from '../../../components/charts/ChartCard'
-import { BaseChart } from '../../../components/charts/BaseChart'
-import { toOpensClicksLine } from '../mappers/chartData.mappers'
-import type { AnalyticsSeries } from '../types/analytics.types'
-
-type Props = {
-  series: AnalyticsSeries[] | null
-  loading?: boolean
-}
-
-export function OpensClicksLine({ series, loading }: Props) {
+export function OpensClicksLine({ series, loading }: OpensClicksLineProps) {
   if (!series || series.length === 0) {
     return (
       <ChartCard
-        title="Aperturas y Clicks"
+        title="Aperturas, Clicks y Entregas"
         subtitle="Evolución temporal de engagement"
         loading={loading}
         empty={!loading}
@@ -27,7 +21,7 @@ export function OpensClicksLine({ series, loading }: Props) {
 
   return (
     <ChartCard
-      title="Aperturas y Clicks"
+      title="Aperturas, Clicks y Entregas"
       subtitle="Evolución temporal de engagement"
       loading={loading}
     >

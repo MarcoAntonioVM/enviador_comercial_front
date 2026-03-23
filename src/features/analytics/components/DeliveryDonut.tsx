@@ -1,15 +1,9 @@
+import { ChartCard } from '@/components/charts/ChartCard'
+import { BaseChart } from '@/components/charts/BaseChart'
+import { toDeliveryDonut } from '../analytics.mappers'
+import type { DeliveryDonutProps } from '../analytics.types'
 
-import { ChartCard } from '../../../components/charts/ChartCard'
-import { BaseChart } from '../../../components/charts/BaseChart'
-import { toDeliveryDonut } from '../mappers/chartData.mappers'
-import type { AnalyticsSummary } from '../types/analytics.types'
-
-type Props = {
-  summary: AnalyticsSummary | null
-  loading?: boolean
-}
-
-export function DeliveryDonut({ summary, loading }: Props) {
+export function DeliveryDonut({ summary, loading }: DeliveryDonutProps) {
   if (!summary) {
     return (
       <ChartCard
