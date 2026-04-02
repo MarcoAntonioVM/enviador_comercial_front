@@ -10,6 +10,8 @@ export const preconfigurationFormSchema = z.object({
   prospect_id: z.coerce.number().optional(),
   days_week: z.array(z.enum(WEEKDAYS)).optional(),
   hour: z.string().optional(),
+  cc: z.array(z.string().email("Email inválido")).optional(),
+  bcc: z.array(z.string().email("Email inválido")).optional(),
 });
 
 export type PreconfigurationFormValues = z.infer<typeof preconfigurationFormSchema>;
