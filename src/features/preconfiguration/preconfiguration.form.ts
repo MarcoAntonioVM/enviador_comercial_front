@@ -53,18 +53,39 @@ export function getPreconfigurationFormConfig(
         options: prospectOptions,
       },
       {
-        name: "days_week",
-        label: "Días de envío",
-        type: "days",
-        colSpan: 6,
-      },
-      {
         name: "hour",
         label: "Hora de envío",
         type: "time",
         colSpan: 6,
       },
+      {
+        name: "days_week",
+        label: "Días de envío",
+        type: "days",
+        colSpan: 12,
+      },
+      {
+        name: "cc",
+        label: "CC (copia)",
+        type: "chips",
+        colSpan: 12,
+        placeholder: "correo1@ejemplo.com",
+      },
+      {
+        name: "bcc",
+        label: "CCO / BCC (copia oculta)",
+        type: "chips",
+        colSpan: 12,
+        placeholder: "correo1@ejemplo.com",
+      },
     ],
+
+    defaultValues: {
+      days_week: [],
+      hour: "",
+      cc: [],
+      bcc: [],
+    },
 
     getById: async (id: string) => {
       const item = await preconfigurationsService.getById(id);
@@ -84,6 +105,8 @@ export function getPreconfigurationFormConfig(
       prospect_id: item.prospect_id,
       days_week: item.days_week ?? [],
       hour: item.hour ?? "",
+      cc: Array.isArray(item.cc) ? item.cc : [],
+      bcc: Array.isArray(item.bcc) ? item.bcc : [],
     }),
 
     toPayload: (formValues) => ({
@@ -92,6 +115,8 @@ export function getPreconfigurationFormConfig(
       prospect_id: formValues.prospect_id,
       days_week: formValues.days_week?.length ? formValues.days_week : undefined,
       hour: formValues.hour || undefined,
+      cc: formValues.cc?.length ? formValues.cc : undefined,
+      bcc: formValues.bcc?.length ? formValues.bcc : undefined,
     }),
 
     listPath: paths.PRECONFIGURATIONS,
