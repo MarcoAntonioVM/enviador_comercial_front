@@ -12,6 +12,8 @@ export type Preconfiguration = {
   prospect_name?: string;  // prospect display name (optional)
   days_week?: Weekday[];   // days of week
   hour?: string;           // send time in HH:mm format
+  cc?: string[];
+  bcc?: string[];
   createdAt: string;
   updatedAt?: string;
 };
