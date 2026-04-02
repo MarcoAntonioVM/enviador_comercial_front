@@ -1,4 +1,8 @@
-import type { Preconfiguration, PreconfigurationPagination, PreconfigurationsListResponse } from './preconfiguration.types';
+import type {
+  Preconfiguration,
+  PreconfigurationPagination,
+  PreconfigurationsListResponse,
+} from './preconfiguration.types';
 import { authorizedFetch } from '@/lib/authorizedFetch';
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -6,6 +10,24 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 function toCapitalizedDay(d: string): string {
   return d.charAt(0).toUpperCase() + d.slice(1).toLowerCase();
+}
+
+/** CC / CCO: solo correos; acepta strings o objetos legacy `{ email }` de la API. */
+function normalizeCcBccEmailsFromApi(raw: unknown): string[] | undefined {
+  if (!Array.isArray(raw) || raw.length === 0) return undefined;
+  const out: string[] = [];
+  for (const item of raw) {
+    if (typeof item === 'string') {
+      const email = item.trim();
+      if (email) out.push(email);
+      continue;
+    }
+    if (item && typeof item === 'object' && 'email' in item) {
+      const email = String((item as { email?: string }).email ?? '').trim();
+      if (email) out.push(email);
+    }
+  }
+  return out.length ? out : undefined;
 }
 
 
@@ -38,6 +60,8 @@ function normalizePreconfiguration(u: any) {
   const days_week_display = days_week_es.join(', ');
   const hour_display = u.hour ?? u.time ?? '-';
   const sender_email = u.sender_email ?? u.sender?.email ?? u.sender?.reply_to ?? undefined;
+  const cc = normalizeCcBccEmailsFromApi(u.cc);
+  const bcc = normalizeCcBccEmailsFromApi(u.bcc ?? u.cco);
 
   return {
     id: String(u.id),
@@ -54,7 +78,9 @@ function normalizePreconfiguration(u: any) {
     hour: u.hour,
     hour_display,
     createdAt: u.created_at ?? u.createdAt ?? new Date().toISOString(),
-    recipient_email
+    recipient_email,
+    cc: cc ?? [],
+    bcc: bcc ?? [],
   };
 }
 
@@ -127,6 +153,8 @@ export const preconfigurationsService = {
       prospect_id: data.prospect_id ?? null,
       days_week: daysWeek,
       hour: data.hour,
+      cc: data.cc,
+      bcc: data.bcc,
       createdAt: new Date().toISOString(),
     };
     const response = await authorizedFetch(`${API_URL}/preconfigurations`, {
@@ -145,6 +173,8 @@ export const preconfigurationsService = {
       ...data,
       prospect_id: data.prospect_id ?? null,
       days_week: daysWeek,
+      cc: data.cc ?? null,
+      bcc: data.bcc ?? null,
     };
     const response = await authorizedFetch(`${API_URL}/preconfigurations/${id}`, {
       method: "PUT",
